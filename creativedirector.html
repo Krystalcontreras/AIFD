@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Director — Image Generation Sequence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <style>
+        @keyframes bgShift {
+            0% { background-color: #FFFAFA; }
+            50% { background-color: #FAE6FA; }
+            100% { background-color: #FFFAFA; }
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            color: #4A3B45;
+            margin: 0;
+            padding: 0;
+            animation: bgShift 25s ease infinite;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 96px 48px;
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            text-align: center;
+            letter-spacing: -0.02em;
+            margin-bottom: 64px;
+            color: #2D232A;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .poster-card {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid #FAE6FA;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        .poster-card:hover {
+            border-color: #DDA7DD;
+        }
+
+        .poster-image-container {
+            width: 100%;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .poster-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .poster-content {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .poster-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.25rem;
+            margin: 0;
+            color: #2D232A;
+        }
+
+        .poster-prompt {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            max-width: 70ch;
+            margin: 0;
+            color: #5C4A55;
+        }
+
+        .btn-outline {
+            display: inline-block;
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            padding: 12px 24px;
+            border-radius: 0px;
+            border: 2px solid #FAE6FA;
+            background: transparent;
+            color: #2D232A;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-top: 12px;
+            align-self: flex-start;
+        }
+
+        .btn-outline:hover {
+            background: #FAE6FA;
+            text-decoration: underline;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1023px) and (min-width: 768px) {
+            .grid-layout {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .container {
+                padding: 64px 32px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .container {
+                padding: 56px 20px;
+            }
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <h1>Sequence of Image Generations</h1>
+
+        <div class="grid-layout">
+            <!-- Poster 1 -->
+            <article class="poster-card">
+                <div>
+                    <div class="poster-image-container">
+                        <img src="poster1.jpg" alt="Poster 1 Generation">
+                    </div>
+                    <div class="poster-content">
+                        <h2 class="poster-title">Poster 01</h2>
+                        <p class="poster-prompt">Initial concept draft for LE SSERAFIM's promotional poster for "MADE MY NIGHT." Set up a futuristic cyberpunk skyscraper background, with circles representing the artists cutouts featuring each group member. I also want to add flying cars somewhere in the background flying above the buildings.</p>
+                    </div>
+                </div>
+                <a href="poster1.jpg" target="_blank" class="btn-outline">View Full Asset</a>
+            </article>
+
+            <!-- Poster 2 -->
+            <article class="poster-card">
+                <div>
+                    <div class="poster-image-container">
+                        <img src="poster2.jpg" alt="Poster 2 Generation">
+                    </div>
+                    <div class="poster-content">
+                        <h2 class="poster-title">Poster 02</h2>
+                        <p class="poster-prompt"> I want to get rid of the circular frames entirely. Replace them by featuring full-body silhouettes of the artists integrated directly into the poster, and clean up the typeface.</p>
+                    </div>
+                </div>
+                <a href="poster2.jpg" target="_blank" class="btn-outline">View Full Asset</a>
+            </article>
+
+            <!-- Poster 3 -->
+            <article class="poster-card">
+                <div>
+                    <div class="poster-image-container">
+                        <img src="poster3.jpg" alt="Poster 3 Generation">
+                    </div>
+                    <div class="poster-content">
+                        <h2 class="poster-title">Poster 03</h2>
+                        <p class="poster-prompt">The extra 'G' is still showing up, so make sure to get rid of it this time. Let's make the girls a bit smaller in the composition and bump up the size of the "MADE MY NIGHT" text.</p>
+                    </div>
+                </div>
+                <a href="poster3.jpg" target="_blank" class="btn-outline">View Full Asset</a>
+            </article>
+
+            <!-- Poster 4 -->
+            <article class="poster-card">
+                <div>
+                    <div class="poster-image-container">
+                        <img src="poster4.jpg" alt="Poster 4 Generation">
+                    </div>
+                    <div class="poster-content">
+                        <h2 class="poster-title">Poster 04</h2>
+                        <p class="poster-prompt">I want to re-integrate the full group lineup prominently back into the lower frame and adjust the primary title typeface directly beneath their visual logo.</p>
+                    </div>
+                </div>
+                <a href="poster4.jpg" target="_blank" class="btn-outline">View Full Asset</a>
+            </article>
+
+            <!-- Poster 5 -->
+            <article class="poster-card">
+                <div>
+                    <div class="poster-image-container">
+                        <img src="poster5.jpg" alt="Poster 5 Generation">
+                    </div>
+                    <div class="poster-content">
+                        <h2 class="poster-title">Poster 05</h2>
+                        <p class="poster-prompt"> Here is my final poster design.</p>
+                    </div>
+                </div>
+                <a href="poster5.jpg" target="_blank" class="btn-outline">View Full Asset</a>
+            </article>
+        </div>
+    </main>
+
+</body>
+</html>
