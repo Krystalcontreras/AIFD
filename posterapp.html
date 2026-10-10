@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customizable Global City Comic Poster Generator</title>
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- html2canvas Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Carter+One&family=Changa+One&family=Cutive+Mono&family=Fredoka+One&family=Inter:wght@400;700;900&family=Pacifico&family=Permanent+Marker&family=Space+Grotesk:wght@700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0e0e11;
+            color: #f0f0f2;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Control Panel */
+        .sidebar {
+            width: 440px;
+            background: #18181f;
+            border-right: 1px solid #2a2a35;
+            padding: 24px;
+            height: 100vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sidebar h2 {
+            font-size: 1.3rem;
+            color: #ff3366;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .sidebar p.subtitle {
+            font-size: 0.8rem;
+            color: #888899;
+            margin-bottom: 6px;
+        }
+
+        .control-section {
+            border-top: 1px solid #2a2a35;
+            padding-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-section-title {
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: #ff3366;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .control-group label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #b0b0c0;
+        }
+
+        .control-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        input[type="text"], textarea, select {
+            background: #22222b;
+            border: 1px solid #363645;
+            color: #fff;
+            padding: 9px 11px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus, textarea:focus, select:focus {
+            border-color: #ff3366;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 60px;
+        }
+
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+            width: 100%;
+            height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #22222b;
+            padding: 2px;
+        }
+
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        input[type="color"]::-webkit-color-swatch {
+            border: 1px solid #363645;
+            border-radius: 4px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: #ff3366;
+            cursor: pointer;
+        }
+
+        .layout-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .layout-btn {
+            background: #22222b;
+            color: #b0b0c0;
+            border: 1px solid #363645;
+            padding: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .layout-btn:hover { background: #2a2a35; color: #fff; }
+        .layout-btn.active {
+            background: #ff3366;
+            color: white;
+            border-color: #ff1950;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        button {
+            flex: 1;
+            background: #ff3366;
+            color: white;
+            border: none;
+            padding: 11px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        button:hover { background: #ff1950; }
+        button:active { transform: scale(0.98); }
+        button.secondary { background: #2a2a35; color: #fff; }
+        button.secondary:hover { background: #353545; }
+        button.download-btn { background: #00f0ff; color: #111; width: 100%; }
+        button.download-btn:hover { background: #00d2df; }
+
+        /* Project Specs & Gallery Styles */
+        .docs-links {
+            display: flex;
+            gap: 8px;
+        }
+        .doc-link-btn {
+            flex: 1;
+            background: #22222b;
+            color: #00f0ff;
+            border: 1px solid #363645;
+            padding: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-align: center;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .doc-link-btn:hover { background: #2a2a35; color: #fff; }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            margin-top: 5px;
+        }
+        .gallery-thumb {
+            width: 100%;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #363645;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .gallery-thumb:hover {
+            transform: scale(1.05);
+            border-color: #ff3366;
+        }
+
+        /* Modal Viewer for Docs & Gallery */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            padding: 40px;
+            overflow-y: auto;
+        }
+        .modal-content {
+            background: #18181f;
+            border: 1px solid #363645;
+            max-width: 700px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 8px;
+            color: #f0f0f2;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-modal:hover { color: #fff; }
+        .modal-content h3 { color: #ff3366; margin-bottom: 12px; font-size: 1.2rem; }
+        .modal-content pre { background: #22222b; padding: 12px; border-radius: 6px; white-space: pre-wrap; font-size: 0.8rem; color: #00f0ff; line-height: 1.4; overflow-x: auto; }
+        .modal-content img { max-width: 100%; height: auto; border-radius: 6px; display: block; margin: auto; }
+
+        /* Main Canvas Preview Area */
+        .preview-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background: radial-gradient(circle at center, #1e1e28 0%, #111116 100%);
+            overflow: auto;
+        }
+
+        /* Poster Frame */
+        .poster-container {
+            width: 600px;
+            height: 840px;
+            background-color: #8ac926;
+            position: relative;
+            overflow: hidden;
+            border: 8px solid #111;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            flex-shrink: 0;
+            transition: background-color 0.3s;
+        }
+
+        /* Comic Halftone Overlay */
+        .comic-bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(0,0,0,0.15) 1px, transparent 1px);
+            background-size: 12px 12px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Sunburst Background Rays */
+        .sunburst {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1200px;
+            height: 1200px;
+            margin-top: -600px;
+            margin-left: -600px;
+            background: repeating-conic-gradient(
+                from 0deg,
+                rgba(255, 255, 255, 0.2) 0deg 15deg,
+                transparent 15deg 30deg
+            );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Skyline / Image Layer */
+        .skyline-layer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 380px;
+            z-index: 2;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .skyline-layer img {
+            max-width: 100%;
+            object-fit: contain;
+            transition: height 0.1s ease;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            left: 25px;
+            right: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            z-index: 10;
+        }
+
+        .fm-tag {
+            font-family: 'Pacifico', cursive;
+            font-size: 22px;
+            color: #111;
+            background: #fff;
+            padding: 4px 12px;
+            border-radius: 4px;
+            transform: rotate(-3deg);
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.8);
+        }
+
+        .date-tag {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 12px;
+            color: #111;
+            text-align: right;
+            line-height: 1.2;
+            background: rgba(255,255,255,0.85);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        /* Main Typography Header */
+        .main-header {
+            position: absolute;
+            z-index: 15;
+            word-break: break-word;
+            line-height: 0.95;
+            color: #ff2020;
+            -webkit-text-stroke: 3px #111;
+            text-shadow: 5px 5px 0px #111;
+            transition: all 0.3s ease;
+        }
+
+        /* Eye Test Chart Area */
+        .eye-chart {
+            position: absolute;
+            width: 220px;
+            background: #fff;
+            border: 4px solid #111;
+            padding: 12px 10px;
+            box-shadow: 5px 5px 0px #111;
+            z-index: 12;
+            transition: all 0.3s ease;
+        }
+
+        .eye-row {
+            text-align: center;
+            color: #111;
+            line-height: 1.05;
+            margin-bottom: 3px;
+            letter-spacing: 1px;
+            white-space: pre-wrap;
+        }
+
+        .eye-row-1 { font-size: 22px; font-weight: 900; }
+        .eye-row-2 { font-size: 18px; font-weight: 900; }
+        .eye-row-3 { font-size: 14px; font-weight: 900; }
+        .eye-row-4 { font-size: 11px; font-weight: 900; }
+        .eye-row-5 { font-size: 9px; font-weight: 900; }
+
+        .eye-footer {
+            margin-top: 8px;
+            border-top: 2px solid #111;
+            padding-top: 4px;
+            font-size: 8px;
+            text-align: center;
+            letter-spacing: 0.5px;
+            color: #111;
+            font-weight: bold;
+        }
+
+        /* Real-World QR Hub */
+        .qr-badge-container {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: #fff;
+            border: 4px solid #111;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            box-shadow: 5px 5px 0px #111;
+            z-index: 13;
+            transition: all 0.3s ease;
+        }
+
+        #qrcode {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #qrcode img, #qrcode canvas {
+            width: 70px !important;
+            height: 70px !important;
+        }
+
+        .qr-label {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 7px;
+            color: #ff3366;
+            margin-top: 3px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        /* Comic Speech Bubble Callout Accent */
+        .cartoon-accent {
+            position: absolute;
+            background: #ffe600;
+            border: 3px solid #111;
+            padding: 8px 14px;
+            border-radius: 18px;
+            font-size: 20px;
+            color: #ff2020;
+            -webkit-text-stroke: 1.2px #111;
+            box-shadow: 4px 4px 0px #111;
+            z-index: 14;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        /* --- INTENTIONAL LAYOUT POSITIONS (NO OVERLAPS) --- */
+        
+        /* 1. Header Top */
+        .poster-container.layout-header .main-header { top: 75px; left: 20px; right: 20px; font-size: 56px; text-align: center; transform: none; }
+        .poster-container.layout-header .eye-chart { top: 230px; right: 25px; left: auto; transform: rotate(2deg); }
+        .poster-container.layout-header .cartoon-accent { top: 250px; left: 25px; bottom: auto; right: auto; transform: rotate(-6deg); }
+        .poster-container.layout-header .qr-badge-container { bottom: 25px; left: 25px; top: auto; right: auto; transform: rotate(-2deg); }
+
+        /* 2. Center Stage */
+        .poster-container.layout-center .eye-chart { top: 75px; left: 50%; transform: translateX(-50%); right: auto; }
+        .poster-container.layout-center .main-header { top: 310px; left: 20px; right: 20px; font-size: 52px; text-align: center; transform: none; }
+        .poster-container.layout-center .cartoon-accent { bottom: 160px; right: 25px; top: auto; left: auto; transform: rotate(-8deg); }
+        .poster-container.layout-center .qr-badge-container { bottom: 25px; left: 25px; top: auto; right: auto; transform: rotate(-2deg); }
+
+        /* 3. Side Vertical */
+        .poster-container.layout-side .main-header { top: 450px; left: 30px; font-size: 48px; transform: translateY(-50%) rotate(-90deg); transform-origin: left center; text-align: left; width: 480px; }
+        .poster-container.layout-side .eye-chart { top: 80px; right: 25px; left: auto; transform: rotate(2deg); }
+        .poster-container.layout-side .cartoon-accent { top: 320px; right: 25px; bottom: auto; left: auto; transform: rotate(-5deg); }
+        .poster-container.layout-side .qr-badge-container { bottom: 25px; right: 25px; left: auto; top: auto; transform: rotate(2deg); }
+
+        /* 4. Corner Accent */
+        .poster-container.layout-corner .main-header { top: 80px; right: 25px; left: 200px; font-size: 46px; text-align: right; transform: none; }
+        .poster-container.layout-corner .eye-chart { top: 80px; left: 25px; right: auto; transform: rotate(-2deg); }
+        .poster-container.layout-corner .cartoon-accent { top: 290px; right: 25px; bottom: auto; left: auto; transform: rotate(-6deg); }
+        .poster-container.layout-corner .qr-badge-container { bottom: 25px; left: 25px; right: auto; top: auto; transform: rotate(-2deg); }
+
+        /* 5. Footer Anchor */
+        .poster-container.layout-footer .eye-chart { top: 80px; left: 50%; transform: translateX(-50%); right: auto; }
+        .poster-container.layout-footer .cartoon-accent { top: 90px; right: 25px; bottom: auto; left: auto; transform: rotate(6deg); }
+        .poster-container.layout-footer .main-header { bottom: 165px; left: 20px; right: 20px; top: auto; font-size: 50px; text-align: center; transform: none; }
+        .poster-container.layout-footer .qr-badge-container { bottom: 25px; left: 25px; top: auto; right: auto; transform: rotate(-2deg); }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Control Panel -->
+    <div class="sidebar">
+        <div>
+            <h2>Global City Poster Studio</h2>
+            <p class="subtitle">Customize posters, layouts, and export seamlessly.</p>
+        </div>
+
+        <!-- Project Links & Gallery Section -->
+        <div class="control-section">
+            <div class="control-section-title">Project Docs & Reference Gallery</div>
+            <div class="docs-links">
+                <a href="javascript:void(0)" class="doc-link-btn" onclick="openModal('skillsModal')">View skills.md</a>
+                <a href="javascript:void(0)" class="doc-link-btn" onclick="openModal('handoffModal')">View handoff.md</a>
+            </div>
+            <div class="gallery-grid">
+                <img src="posterapp1.jpg" class="gallery-thumb" alt="Poster Ref 1" onclick="openImageModal('posterapp1.jpg')">
+                <img src="posterapp2.jpg" class="gallery-thumb" alt="Poster Ref 2" onclick="openImageModal('posterapp2.jpg')">
+                <img src="posterapp3.jpg" class="gallery-thumb" alt="Poster Ref 3" onclick="openImageModal('posterapp3.jpg')">
+                <img src="posterapp4.jpg" class="gallery-thumb" alt="Poster Ref 4" onclick="openImageModal('posterapp4.jpg')">
+                <img src="posterapp5.jpg" class="gallery-thumb" alt="Poster Ref 5" onclick="openImageModal('posterapp5.jpg')">
+            </div>
+        </div>
+
+        <button class="secondary" style="background: #8e44ad; font-weight: bold; width: 100%; margin-top: 5px;" onclick="randomizeAllVariations()">🎲 Auto-Generate Random Poster</button>
+
+        <div class="control-group" style="margin-top: 10px;">
+            <label>Select City Asset (.png)</label>
+            <select id="citySelector" onchange="loadCityPreset()">
+                <option value="nyc" selected>New York City (newyork.png)</option>
+                <option value="tokyo">Tokyo, Japan (tokyo.png)</option>
+                <option value="london">London, UK (london.png)</option>
+                <option value="sydney">Sydney, AUS (sydney.png)</option>
+                <option value="paris">Paris, France (eiffeltower.png)</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>Poster Layout Composition</label>
+            <div class="layout-buttons">
+                <button class="layout-btn active" id="btn-layout-header" onclick="setLayout('header')">Header Top</button>
+                <button class="layout-btn" id="btn-layout-center" onclick="setLayout('center')">Center Stage</button>
+                <button class="layout-btn" id="btn-layout-side" onclick="setLayout('side')">Side Vertical</button>
+                <button class="layout-btn" id="btn-layout-corner" onclick="setLayout('corner')">Corner Accent</button>
+                <button class="layout-btn" id="btn-layout-footer" onclick="setLayout('footer')">Footer Anchor</button>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <div class="control-section-title">Image Sizing Control</div>
+            <div class="control-group">
+                <label>Asset Height Size: <span id="sizeVal">350</span>px</label>
+                <input type="range" id="imageSizeRange" min="200" max="500" value="350" oninput="updatePoster()">
+            </div>
+        </div>
+
+        <div class="control-section">
+            <div class="control-section-title">Color Customization Palette</div>
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Background</label>
+                    <input type="color" id="colorBg" value="#8ac926" oninput="updatePoster()">
+                </div>
+                <div class="control-group">
+                    <label>Headline</label>
+                    <input type="color" id="colorHeader" value="#ff2020" oninput="updatePoster()">
+                </div>
+            </div>
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Badge Card</label>
+                    <input type="color" id="colorBadge" value="#ffffff" oninput="updatePoster()">
+                </div>
+                <div class="control-group">
+                    <label>Speech Bubble</label>
+                    <input type="color" id="colorAccent" value="#ffe600" oninput="updatePoster()">
+                </div>
+            </div>
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Eye Chart Box</label>
+                    <input type="color" id="colorEyeBox" value="#ffffff" oninput="updatePoster()">
+                </div>
+                <div class="control-group">
+                    <label>Eye Chart Text</label>
+                    <input type="color" id="colorEyeText" value="#111111" oninput="updatePoster()">
+                </div>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <div class="control-section-title">Text & Typography</div>
+            <div class="control-group">
+                <label>Main Headline</label>
+                <input type="text" id="inputHeadline" value="NEW YORK CITY" oninput="updatePoster()">
+            </div>
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Headline Font</label>
+                    <select id="selectFontHeadline" onchange="updatePoster()">
+                        <option value="Carter One" selected>Carter One</option>
+                        <option value="Fredoka One">Fredoka One</option>
+                        <option value="Permanent Marker">Permanent Marker</option>
+                        <option value="Archivo Black">Archivo Black</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Eye Chart Font</label>
+                    <select id="selectFontEye" onchange="updatePoster()">
+                        <option value="Changa One" selected>Changa One</option>
+                        <option value="Archivo Black">Archivo Black</option>
+                        <option value="Space Grotesk">Space Grotesk</option>
+                        <option value="Cutive Mono">Cutive Mono</option>
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label>Top-Left Tag Text ("USA 01")</label>
+                <input type="text" id="inputFmTag" value="USA #01" oninput="updatePoster()">
+            </div>
+            <div class="control-group">
+                <label>Top-Right Tag Text ("October...")</label>
+                <textarea id="inputDateTag" oninput="updatePoster()">OCTOBER 2026 ISSUE
+MANHATTAN & BROOKLYN</textarea>
+            </div>
+            <div class="control-group">
+                <label>Eye-Test Chart Landmarks</label>
+                <textarea id="inputEyeChart" oninput="updatePoster()">EMPIRE STATE
+CHRYSLER
+TIMES SQUARE
+CENTRAL PARK
+BROOKLYN BRIDGE</textarea>
+            </div>
+            <div class="control-group">
+                <label>Real-World QR URL</label>
+                <input type="text" id="inputQrUrl" value="https://maps.google.com" oninput="updatePoster()">
+            </div>
+            <div class="control-group">
+                <label>Speech Bubble Callout</label>
+                <input type="text" id="inputAccent" value="BOOM! NYC" oninput="updatePoster()">
+            </div>
+        </div>
+
+        <div class="control-section">
+            <div class="control-section-title">Download File</div>
+            <button class="download-btn" onclick="exportPoster()">Download Poster (PNG)</button>
+        </div>
+
+        <div class="btn-container">
+            <button class="secondary" onclick="loadCityPreset()">Reset Preset</button>
+        </div>
+    </div>
+
+    <!-- Live Preview Area -->
+    <div class="preview-area">
+        <div class="poster-container layout-header" id="poster">
+            <div class="sunburst"></div>
+            <div class="comic-bg-overlay"></div>
+
+            <div class="top-bar">
+                <div class="fm-tag" id="previewFmTag">USA #01</div>
+                <div class="date-tag" id="previewDateTag">OCTOBER 2026 ISSUE<br><span style="font-size:9.5px;">MANHATTAN & BROOKLYN</span></div>
+            </div>
+
+            <div class="main-header" id="previewHeadline">NEW YORK CITY</div>
+
+            <div class="eye-chart" id="previewEyeChartContainer">
+                <div id="previewEyeRows">
+                    <div class="eye-row eye-row-1">EMPIRE STATE</div>
+                    <div class="eye-row eye-row-2">CHRYSLER</div>
+                    <div class="eye-row eye-row-3">TIMES SQUARE</div>
+                    <div class="eye-row eye-row-4">CENTRAL PARK</div>
+                    <div class="eye-row eye-row-5">BROOKLYN BRIDGE</div>
+                </div>
+                <div class="eye-footer" id="previewEyeFooter">SCAN QR CODE FOR REAL CITY MAPS & GUIDE</div>
+            </div>
+
+            <div class="skyline-layer" id="skylineLayer"></div>
+
+            <div class="qr-badge-container" id="previewQrBadge">
+                <div id="qrcode"></div>
+                <div class="qr-label">Scan for Map</div>
+            </div>
+
+            <div class="cartoon-accent" id="previewAccent">BOOM! NYC</div>
+        </div>
+    </div>
+
+    <!-- Modals for Documentation & Gallery -->
+    <div id="skillsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('skillsModal')">&times;</span>
+            <h3>skills.md Configuration</h3>
+            <pre>---
+name: user:vintage-poster-generator-tool
+description: Generate customizable vintage global city comic posters and graphic design variations inspired by classic 1970s Swiss typography, eye-test grids, and comic art layouts with multi-composition modes.
+---
+
+# Customizable Global City Comic Poster Generator
+
+## Core Design Rules
+1. **Masthead Style:** Bold display header with flexible positioning (Header Top, Center Stage, Side Vertical, Corner Accent, Footer Anchor).
+2. **Eye-Test Grid Integration:** Vertical progressive scale element stepping down size row-by-row.
+3. **Color Palette:** Acid chartreuse/lime green or high-contrast retro primaries with custom color pickers.
+4. **Illustration & Framing:** Landmark asset integration (New York, Tokyo, London, Sydney, Paris), bold black line art, and dynamic QR code map hubs.</pre>
+        </div>
+    </div>
+
+    <div id="handoffModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('handoffModal')">&times;</span>
+            <h3>handoff.md Summary</h3>
+            <pre># Project Handoff: Global City Poster Generator
+
+## Accomplishments
+1. **Feature Expansion:** Converted generator into Global City Comic Poster Generator supporting multiple cities (New York, Tokyo, London, Sydney, Paris).
+2. **Intentional Layout Modes:** Implemented 5 distinct layout composition modes preventing overlaps.
+3. **Robust Local Export Fix:** Integrated automatic Base64 local image converter with html2canvas for seamless downloads under `file://`.
+4. **Interactive Controls:** Added custom color pickers, font selectors, live QR code generation via qrcode.js, and auto-randomizer.</pre>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <span class="close-modal" onclick="closeModal('imageModal')">&times;</span>
+            <h3 id="modalImageTitle">Reference Asset</h3>
+            <img id="modalImgSrc" src="" alt="Reference Preview" style="max-height: 70vh; margin-top: 10px;">
+        </div>
+    </div>
+
+    <script>
+        const citySkylines = {
+            nyc: {
+                headline: "NEW YORK CITY",
+                tag: "USA #01",
+                date: "OCTOBER 2026 ISSUE\nMANHATTAN & BROOKLYN",
+                chart: "EMPIRE STATE\nCHRYSLER\nTIMES SQUARE\nCENTRAL PARK\nBROOKLYN BRIDGE",
+                accent: "BOOM! NYC",
+                url: "https://maps.google.com/?q=New+York+City",
+                image: "newyork.png",
+                defaultHeight: 350
+            },
+            tokyo: {
+                headline: "TOKYO METRO",
+                tag: "JAPAN #03",
+                date: "SHINJUKU & SHIBUYA\nNIGHT CITY EDITION",
+                chart: "TOKYO TOWER\nSKYTREE\nSHIBUYA\nAKIHABARA\nSENSOJI",
+                accent: "ZAP! TOKYO",
+                url: "https://maps.google.com/?q=Tokyo",
+                image: "japan.png",
+                defaultHeight: 380
+            },
+            london: {
+                headline: "LONDON TOWN",
+                tag: "UK #02",
+                date: "WESTMINSTER DISTRICT\nTHAMES RIVER SIDE",
+                chart: "BIG BEN\nGHERKIN\nLONDON EYE\nTOWER BRIDGE\nPICCADILLY",
+                accent: "POW! LONDON",
+                url: "https://maps.google.com/?q=London",
+                image: "london.png",
+                defaultHeight: 380
+            },
+            sydney: {
+                headline: "SYDNEY HARBOUR",
+                tag: "AUS #06",
+                date: "AUSTRALIAN COASTLINE\nSUMMER FESTIVAL",
+                chart: "OPERA HOUSE\nHARBOUR BRIDGE\nBONDI BEACH\nDARLING HRB\nMANLY",
+                accent: "G'DAY!",
+                url: "https://maps.google.com/?q=Sydney",
+                image: "sydney.png",
+                defaultHeight: 380
+            },
+            paris: {
+                headline: "PARIS CITY",
+                tag: "FRANCE #04",
+                date: "SEINE RIVER DISTRICT\nART & FASHION CAPITAL",
+                chart: "EIFFEL TOWER\nLOUVRE\nARC TRIOMPHE\nNOTRE DAME\nMONTMARTRE",
+                accent: "WOW! PARIS",
+                url: "https://maps.google.com/?q=Paris",
+                image: "eiffeltower.png",
+                defaultHeight: 360
+            }
+        };
+
+        const randomPalettes = [
+            { bg: "#8ac926", header: "#ff2020", badge: "#ffffff", accent: "#ffe600", eyebox: "#ffffff", eyetext: "#111111" },
+            { bg: "#ff5964", header: "#ffe600", badge: "#fff3b0", accent: "#00f0ff", eyebox: "#ffffff", eyetext: "#111111" },
+            { bg: "#35a7ff", header: "#ff5964", badge: "#ffffff", accent: "#ffe600", eyebox: "#ffffff", eyetext: "#111111" },
+            { bg: "#ffe600", header: "#00f0ff", badge: "#ffffff", accent: "#ff2020", eyebox: "#ffffff", eyetext: "#111111" },
+            { bg: "#b5179e", header: "#4cc9f0", badge: "#e0aaff", accent: "#ffe600", eyebox: "#ffffff", eyetext: "#111111" }
+        ];
+
+        const fonts = ["Carter One", "Fredoka One", "Permanent Marker", "Archivo Black"];
+        const eyeFonts = ["Changa One", "Archivo Black", "Space Grotesk", "Cutive Mono"];
+        const accents = ["BOOM!", "ZAP!", "POW!", "WOW!", "BAM!", "EPIC!"];
+        const layoutNames = ['header', 'center', 'side', 'corner', 'footer'];
+
+        let qrCodeInstance = null;
+
+        function initQR() {
+            const qrContainer = document.getElementById("qrcode");
+            qrContainer.innerHTML = "";
+            qrCodeInstance = new QRCode(qrContainer, {
+                text: document.getElementById('inputQrUrl').value || "https://maps.google.com",
+                width: 70,
+                height: 70,
+                colorDark: "#111111",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+            });
+        }
+
+        function loadCityPreset() {
+            const val = document.getElementById('citySelector').value;
+            const p = citySkylines[val];
+            
+            document.getElementById('inputHeadline').value = p.headline;
+            document.getElementById('inputFmTag').value = p.tag;
+            document.getElementById('inputDateTag').value = p.date;
+            document.getElementById('inputEyeChart').value = p.chart;
+            document.getElementById('inputQrUrl').value = p.url;
+            document.getElementById('imageSizeRange').value = p.defaultHeight;
+            
+            updatePoster();
+        }
+
+        function setLayout(layout) {
+            const poster = document.getElementById('poster');
+            layoutNames.forEach(l => poster.classList.remove('layout-' + l));
+            poster.classList.add('layout-' + layout);
+
+            document.querySelectorAll('.layout-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.getElementById('btn-layout-' + layout);
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+
+        function updatePoster() {
+            document.getElementById('previewHeadline').innerHTML = document.getElementById('inputHeadline').value.replace(/\n/g, '<br>');
+            document.getElementById('previewFmTag').innerText = document.getElementById('inputFmTag').value;
+            
+            const dateVal = document.getElementById('inputDateTag').value.replace(/\n/g, '<br>');
+            document.getElementById('previewDateTag').innerHTML = dateVal;
+
+            document.getElementById('previewAccent').innerText = document.getElementById('inputAccent').value;
+
+            const eyeLines = document.getElementById('inputEyeChart').value.split('\n');
+            let eyeHtml = '';
+            eyeLines.forEach((line, index) => {
+                let rowClass = `eye-row eye-row-${Math.min(index + 1, 5)}`;
+                eyeHtml += `<div class="${rowClass}">${escapeHtml(line)}</div>`;
+            });
+            document.getElementById('previewEyeRows').innerHTML = eyeHtml;
+
+            document.getElementById('previewHeadline').style.fontFamily = `'${document.getElementById('selectFontHeadline').value}', cursive, sans-serif`;
+            
+            document.getElementById('poster').style.backgroundColor = document.getElementById('colorBg').value;
+            document.getElementById('previewHeadline').style.color = document.getElementById('colorHeader').value;
+            document.getElementById('previewQrBadge').style.backgroundColor = document.getElementById('colorBadge').value;
+            document.getElementById('previewAccent').style.backgroundColor = document.getElementById('colorAccent').value;
+            
+            const eyeChartContainer = document.getElementById('previewEyeChartContainer');
+            eyeChartContainer.style.backgroundColor = document.getElementById('colorEyeBox').value;
+            
+            const chosenEyeFont = document.getElementById('selectFontEye').value;
+            const eyeRowsNodes = document.querySelectorAll('.eye-row');
+            eyeRowsNodes.forEach(row => {
+                row.style.color = document.getElementById('colorEyeText').value;
+                row.style.fontFamily = `'${chosenEyeFont}', sans-serif`;
+            });
+            document.getElementById('previewEyeFooter').style.color = document.getElementById('colorEyeText').value;
+
+            const imgHeight = document.getElementById('imageSizeRange').value;
+            document.getElementById('sizeVal').innerText = imgHeight;
+
+            const val = document.getElementById('citySelector').value;
+            const skylineLayer = document.getElementById('skylineLayer');
+            skylineLayer.innerHTML = `<img src="${citySkylines[val].image}" alt="${citySkylines[val].headline} Skyline" style="height: ${imgHeight}px; width: auto; object-fit: contain;">`;
+
+            const urlVal = document.getElementById('inputQrUrl').value;
+            if (qrCodeInstance) {
+                qrCodeInstance.clear();
+                qrCodeInstance.makeCode(urlVal);
+            }
+        }
+
+        function randomizeAllVariations() {
+            const cityKeys = Object.keys(citySkylines);
+            const randomCity = cityKeys[Math.floor(Math.random() * cityKeys.length)];
+            document.getElementById('citySelector').value = randomCity;
+            
+            const p = citySkylines[randomCity];
+            document.getElementById('inputHeadline').value = p.headline;
+            document.getElementById('inputFmTag').value = p.tag;
+            document.getElementById('inputDateTag').value = p.date;
+            document.getElementById('inputEyeChart').value = p.chart;
+            document.getElementById('inputQrUrl').value = p.url;
+            
+            document.getElementById('imageSizeRange').value = Math.floor(Math.random() * 80) + 300;
+
+            const palette = randomPalettes[Math.floor(Math.random() * randomPalettes.length)];
+            document.getElementById('colorBg').value = palette.bg;
+            document.getElementById('colorHeader').value = palette.header;
+            document.getElementById('colorBadge').value = palette.badge;
+            document.getElementById('colorAccent').value = palette.accent;
+            document.getElementById('colorEyeBox').value = palette.eyebox;
+            document.getElementById('colorEyeText').value = palette.eyetext;
+
+            document.getElementById('selectFontHeadline').value = fonts[Math.floor(Math.random() * fonts.length)];
+            document.getElementById('selectFontEye').value = eyeFonts[Math.floor(Math.random() * eyeFonts.length)];
+            document.getElementById('inputAccent').value = accents[Math.floor(Math.random() * accents.length)] + " " + p.headline.split(" ")[0];
+
+            const randomLayout = layoutNames[Math.floor(Math.random() * layoutNames.length)];
+            setLayout(randomLayout);
+
+            updatePoster();
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // Modal Controls
+        function openModal(id) { document.getElementById(id).style.display = "block"; }
+        function closeModal(id) { document.getElementById(id).style.display = "none"; }
+        function openImageModal(src) {
+            document.getElementById('modalImgSrc').src = src;
+            document.getElementById('modalImageTitle').innerText = src;
+            openModal('imageModal');
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = "none";
+            }
+        }
+
+        // Export Function with Local Base64 Image Conversion
+        function exportPoster() {
+            const posterCanvas = document.getElementById('poster');
+            const val = document.getElementById('citySelector').value;
+            const images = posterCanvas.querySelectorAll('img');
+
+            let promises = Array.from(images).map(img => {
+                return new Promise((resolve) => {
+                    if (!img.src || img.src.startsWith('data:')) {
+                        resolve();
+                        return;
+                    }
+                    const tempImg = new Image();
+                    tempImg.crossOrigin = "anonymous";
+                    tempImg.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = tempImg.naturalWidth || 300;
+                        canvas.height = tempImg.naturalHeight || 300;
+                        const ctx = canvas.getContext('2d');
+                        try {
+                            ctx.drawImage(tempImg, 0, 0);
+                            img.src = canvas.toDataURL('image/png');
+                        } catch(e) {}
+                        resolve();
+                    };
+                    tempImg.onerror = function() { resolve(); };
+                    tempImg.src = img.src + (img.src.includes('?') ? '&' : '?') + 't=' + Date.now();
+                });
+            });
+
+            Promise.all(promises).then(() => {
+                html2canvas(posterCanvas, { scale: 2, useCORS: true, allowTaint: true }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = `${val}-comic-poster.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                }).catch(err => {
+                    alert("Could not export. Make sure your local image files are in the same folder.");
+                    console.error(err);
+                });
+            });
+        }
+
+        window.onload = function() {
+            initQR();
+            loadCityPreset();
+        };
+    </script>
+</body>
+</html>
