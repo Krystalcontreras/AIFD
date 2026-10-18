@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global City Live Radio Poster Studio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0f172a',
+                        cardbg: '#1e293b'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts including Variable Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&family=Oswald:wght@500;700&family=Playfair+Display:ital,wght@0,700;1,400&family=Righteous&family=Special+Elite&family=Syne:wght@400..800&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Shrikhand&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2canvas for poster export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- qrcode.js for live QR codes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        .poster-frame {
+            width: 500px;
+            height: 700px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .cutout-overlay {
+            position: absolute;
+            inset: 0;
+            mix-blend-mode: overlay;
+            opacity: 0.85;
+            pointer-events: none;
+            transition: background-image 0.5s ease;
+        }
+
+        .cutout-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.85) 80%);
+            pointer-events: none;
+        }
+
+        .halftone-bg {
+            background-image: radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px);
+            background-size: 16px 16px;
+            animation: halftoneDrift 20s linear infinite;
+        }
+
+        @keyframes halftoneDrift {
+            0% { background-position: 0 0; }
+            100% { background-position: 32px 32px; }
+        }
+
+        .floating-img-badge {
+            position: absolute;
+            z-index: 12;
+            pointer-events: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        .floating-img-badge img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(120%) saturate(110%);
+        }
+
+        .float-pos-1 { top: 28%; right: 5%; animation: floatAdvanced1 7s ease-in-out infinite; }
+        .float-pos-2 { bottom: 24%; left: 4%; animation: floatAdvanced2 8s ease-in-out infinite; }
+
+        @keyframes floatAdvanced1 {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+            50% { transform: translateY(-10px) rotate(8deg) scale(1.05); }
+        }
+
+        @keyframes floatAdvanced2 {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+            50% { transform: translateY(10px) rotate(-8deg) scale(1.05); }
+        }
+
+        .comic-bubble {
+            position: relative;
+            background: #fff;
+            color: #000;
+            border: 4px solid #000;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-family: 'Bungee', cursive;
+            box-shadow: 6px 6px 0px #000;
+            z-index: 15;
+            animation: bubbleWiggle 4s ease-in-out infinite;
+        }
+
+        @keyframes bubbleWiggle {
+            0%, 100% { transform: rotate(-3deg) translateY(0); }
+            50% { transform: rotate(-1deg) translateY(-3px); }
+        }
+
+        .comic-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -14px; left: 30px;
+            border-width: 14px 14px 0; border-style: solid;
+            border-color: #fff transparent; display: block; width: 0;
+        }
+        .comic-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -19px; left: 26px;
+            border-width: 16px 16px 0; border-style: solid;
+            border-color: #000 transparent; display: block; width: 0; z-index: -1;
+        }
+
+        /* Full-Bleed Beat Visualizer Header */
+        .masthead-container {
+            width: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .full-masthead-title {
+            width: 100%;
+            font-size: 3.8rem;
+            line-height: 0.88;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            word-break: break-word;
+            text-align: justify;
+            text-align-last: center;
+            transition: transform 0.15s ease-out, filter 0.15s ease-out, letter-spacing 0.15s ease-out;
+            transform-origin: center center;
+            will-change: transform, font-variation-settings;
+        }
+
+        .kenburns-img {
+            animation: kenBurnsZoom 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes kenBurnsZoom {
+            0% { transform: scale(1.02); }
+            100% { transform: scale(1.15); }
+        }
+
+        .eq-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 16px;
+            width: 28px;
+        }
+        .eq-bar {
+            flex: 1;
+            background-color: #10b981;
+            height: 4px;
+            transition: height 0.05s ease;
+            border-radius: 1px;
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="bg-darkbg text-slate-100 min-h-screen flex flex-col font-sans selection:bg-amber-500 selection:text-black">
+
+    <audio id="live-audio-stream" preload="none" crossorigin="anonymous"></audio>
+
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50 px-6 py-4 flex flex-wrap justify-between items-center gap-4 shadow-lg">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-black font-black text-xl shadow-lg shadow-amber-500/20">
+                <i class="fa-solid fa-tower-broadcast animate-pulse"></i>
+            </div>
+            <div>
+                <h1 class="font-black tracking-wider text-lg uppercase bg-gradient-to-r from-amber-400 via-rose-400 to-purple-400 bg-clip-text text-transparent">Global City Live Radio Poster Studio</h1>
+                <p class="text-xs text-slate-400">Seoul, Tokyo, London, Paris & New York Live Broadcasts</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button id="btn-audio-toggle" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-600/20 transition-all flex items-center gap-2 transform active:scale-95">
+                <i id="audio-toggle-icon" class="fa-solid fa-play"></i> <span id="audio-toggle-text">Tune In / Play Radio</span>
+            </button>
+            <button id="btn-remix" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-black font-bold text-sm rounded-xl shadow-lg shadow-amber-500/20 transition-all flex items-center gap-2 transform active:scale-95">
+                <i class="fa-solid fa-bolt"></i> Remix Stream & Colors
+            </button>
+            <button id="btn-export" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-sm rounded-xl transition-all flex items-center gap-2 transform active:scale-95">
+                <i class="fa-solid fa-download text-amber-400"></i> Export PNG
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Controls Sidebar -->
+        <aside class="lg:col-span-5 bg-cardbg border border-slate-800/80 rounded-2xl p-5 shadow-xl flex flex-col gap-5">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h2 class="font-bold text-base flex items-center gap-2 text-slate-200">
+                    <i class="fa-solid fa-sliders text-amber-400"></i> Studio Control Deck
+                </h2>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-amber-400 border border-amber-500/30 font-mono" id="active-station-badge">Seoul Live 91.9 FM</span>
+            </div>
+
+            <!-- Audio Player Widget -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 flex flex-col gap-2.5 shadow-inner">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span id="speaker-pulse" class="w-3 h-3 rounded-full bg-slate-600"></span>
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-300" id="player-status-label">Station Audio Standby</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="eq-bars" id="control-eq">
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                        </div>
+                        <span class="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20" id="player-freq-badge">91.9 FM</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="btn-play-pause" class="w-10 h-10 rounded-xl bg-amber-500 hover:bg-amber-400 text-black flex items-center justify-center font-bold shadow-lg transition-all transform active:scale-95">
+                        <i id="main-play-icon" class="fa-solid fa-play"></i>
+                    </button>
+                    <div class="flex-1 flex flex-col">
+                        <span class="text-xs font-bold text-white truncate" id="player-station-title">Radio Korea Live</span>
+                        <span class="text-[10px] text-slate-400 font-mono" id="player-genre-label">K-Pop & Korean Broadcast • Live</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-volume-low text-xs text-slate-400"></i>
+                        <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.8" class="w-20 accent-amber-500 cursor-pointer">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom City Text Override -->
+            <div class="flex flex-col gap-2">
+                <label class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
+                    <span><i class="fa-solid fa-heading text-amber-400 mr-1.5"></i> Custom City Masthead</span>
+                    <span class="text-[10px] text-emerald-400 font-mono">Subtle Beat Sync</span>
+                </label>
+                <input type="text" id="stamp-text-input" value="SEOUL LIVE RADIO" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500 uppercase tracking-widest font-bold">
+            </div>
+
+            <!-- City Selector Grid -->
+            <div class="flex flex-col gap-2">
+                <label class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
+                    <span><i class="fa-solid fa-city text-amber-400 mr-1.5"></i> Global City & Stream Source</span>
+                    <span class="text-[10px] text-amber-400/80" id="city-cutout-desc">Seoul Station Sync</span>
+                </label>
+                <div class="grid grid-cols-5 gap-2" id="city-selector-grid"></div>
+            </div>
+
+            <!-- Live Station Selector -->
+            <div class="flex flex-col gap-2">
+                <label class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
+                    <span><i class="fa-solid fa-radio text-amber-400 mr-1.5"></i> Live Broadcast Station</span>
+                    <span class="text-[10px] text-emerald-400 font-mono">HTTPS Live</span>
+                </label>
+                <div class="flex gap-2">
+                    <select id="station-select" class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-amber-500"></select>
+                    <button id="btn-next-station" class="px-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-amber-400 text-sm font-semibold transition-all" title="Next Station"><i class="fa-solid fa-rotate"></i></button>
+                </div>
+            </div>
+
+            <!-- Layout Composition Mode -->
+            <div class="flex flex-col gap-2">
+                <label class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                    <i class="fa-solid fa-layer-group text-amber-400 mr-1.5"></i> Poster Composition Mode
+                </label>
+                <div class="grid grid-cols-5 gap-2" id="layout-mode-grid"></div>
+            </div>
+
+            <!-- Typography & Color Settings -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                    <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Masthead Font</label>
+                    <select id="font-masthead" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200">
+                        <option value="CityDynamic" selected>Genre-Sync Variable (Default)</option>
+                        <option value="Syne">Syne (Variable)</option>
+                        <option value="Fraunces">Fraunces (Variable)</option>
+                        <option value="Shrikhand">Shrikhand</option>
+                        <option value="Bungee">Bungee</option>
+                    </select>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Color Theme</label>
+                    <button id="btn-random-color" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl py-2 text-xs text-amber-400 font-bold">Randomize Palette</button>
+                </div>
+            </div>
+            <div class="hidden">
+                <input type="color" id="color-bg" value="#090d16">
+                <input type="color" id="color-accent" value="#f59e0b">
+                <input type="color" id="color-text" value="#ffffff">
+            </div>
+        </aside>
+
+        <!-- Poster Workspace Preview -->
+        <div class="lg:col-span-7 flex flex-col items-center justify-center">
+            <div class="text-xs text-slate-400 mb-3 flex items-center gap-2 font-mono bg-slate-900/60 px-3 py-1.5 rounded-full border border-slate-800">
+                <span id="workspace-pulse-dot" class="w-2 h-2 rounded-full bg-slate-500"></span>
+                <span id="workspace-status-text">Audio Standby Preview</span> • 500 × 700 px
+            </div>
+
+            <!-- The Exportable Poster Frame -->
+            <div id="poster-canvas" class="poster-frame bg-slate-950 flex flex-col justify-between p-6 rounded-2xl relative shadow-2xl border-4 border-slate-800/80" style="background-color: #090d16; color: #ffffff;">
+                
+                <div id="poster-cutout-bg" class="cutout-overlay" style="background-image: url('https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=1000&q=80'); background-size: cover; background-position: center;"></div>
+                <div class="cutout-glow"></div>
+                <div class="absolute inset-0 halftone-bg opacity-30 pointer-events-none"></div>
+
+                <div class="floating-img-badge float-pos-1">
+                    <img id="floating-img-1" src="https://images.unsplash.com/photo-1517154421773-0529f29ea451?auto=format&fit=crop&w=200&q=80" alt="Vibe">
+                </div>
+                <div class="floating-img-badge float-pos-2">
+                    <img id="floating-img-2" src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=200&q=80" alt="Vibe">
+                </div>
+
+                <!-- Full Top Section: Beat-Reactive Full-Bleed City Masthead -->
+                <div id="layout-header-slot" class="relative z-10 w-full flex flex-col items-center">
+                    <div class="w-full flex items-center justify-between mb-1">
+                        <div id="poster-issue-badge" class="text-[9px] uppercase font-mono tracking-widest text-amber-400 font-bold px-2 py-0.5 bg-black/60 backdrop-blur rounded border border-amber-500/30">
+                            EDITION #099 • SEOUL LIVE FEED
+                        </div>
+                        <div id="poster-freq" class="text-[10px] font-mono font-bold text-amber-400 bg-black/60 px-2 py-0.5 rounded border border-amber-500/30 backdrop-blur">
+                            91.9 FM
+                        </div>
+                    </div>
+
+                    <div class="masthead-container">
+                        <h2 id="poster-masthead" class="full-masthead-title drop-shadow-lg text-white">
+                            SEOUL LIVE RADIO
+                        </h2>
+                    </div>
+
+                    <div class="text-[10px] text-slate-300 font-mono uppercase tracking-widest mt-1 bg-black/40 px-2.5 py-0.5 rounded-full border border-white/10 backdrop-blur" id="poster-city-name">
+                        Seoul, Korea
+                    </div>
+                </div>
+
+                <!-- Center Slot -->
+                <div id="layout-center-slot" class="relative z-10 my-auto py-2 flex flex-col items-center text-center">
+                    <div id="poster-bubble" class="comic-bubble mb-3 text-xs uppercase tracking-wider">
+                        DAEBAK! K-POP LIVE!
+                    </div>
+
+                    <!-- Live Music Waveform Display -->
+                    <div id="waveform-box" class="w-full max-w-[340px] bg-black/60 border border-amber-500/30 rounded-xl px-3 py-2 mb-3 backdrop-blur flex items-center justify-between shadow-lg">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            <span class="text-[9px] font-mono uppercase tracking-widest text-slate-300" id="waveform-genre-label">Genre Sync</span>
+                        </div>
+                        <div class="flex-1 mx-3 h-7 flex items-center">
+                            <svg id="audio-waveform-svg" class="w-full h-full" viewBox="0 0 200 30" preserveAspectRatio="none">
+                                <path id="waveform-path" d="M 0 15 Q 25 5, 50 15 T 100 15 T 150 15 T 200 15" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span id="waveform-hz" class="text-[9px] font-mono text-amber-400">LIVE-SYNC</span>
+                    </div>
+
+                    <div id="landmark-frame-box" class="relative w-full max-w-[340px] h-32 rounded-2xl overflow-hidden border-2 border-amber-500/50 shadow-2xl group bg-black/60 backdrop-blur flex items-center justify-center">
+                        <img id="poster-landmark-img" src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=800&q=80" alt="Landmark" class="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-luminosity filter contrast-150 kenburns-img">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                        <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-left">
+                            <div>
+                                <span class="text-[9px] font-mono tracking-widest uppercase text-amber-400 font-bold block" id="poster-station-tag">Live Stream Feed</span>
+                                <span id="poster-landmark-title" class="text-sm font-bold text-white tracking-wide uppercase font-['Oswald']">N Seoul Tower Lights</span>
+                            </div>
+                            <span id="poster-speaker-icon" class="w-8 h-8 rounded-full bg-amber-500 text-black flex items-center justify-center font-bold text-xs shadow-lg shadow-amber-500/40">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Slot -->
+                <div id="layout-footer-slot" class="flex flex-col gap-3 relative z-10">
+                    <div id="spec-grid-box" class="grid grid-cols-4 gap-2 text-center bg-black/50 backdrop-blur-md p-3 rounded-xl border border-white/10 text-[10px] font-mono items-center">
+                        <div>
+                            <span class="text-slate-400 block uppercase">Genre</span>
+                            <span id="spec-genre" class="font-bold text-amber-400 uppercase">K-Pop & Hits</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block uppercase">Equalizer</span>
+                            <div class="eq-bars mx-auto mt-1" id="poster-eq">
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block uppercase">Transmitter</span>
+                            <span id="spec-transmitter" class="font-bold text-white">N Seoul Tower</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block uppercase">Status</span>
+                            <span id="poster-on-air-status" class="font-bold text-slate-400">STANDBY</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-white/10 flex items-center justify-between">
+                        <div>
+                            <div class="text-xs font-bold uppercase tracking-wider text-white" id="poster-station-name">Radio Korea Live</div>
+                            <div class="text-[9px] text-slate-400 font-mono mt-0.5">Live365 CDN Relay Audio</div>
+                        </div>
+                        <div class="w-12 h-12 bg-white p-1 rounded-lg shadow-md flex items-center justify-center" id="qrcode-container" title="Scan to tune in"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const citiesData = {
+            seoul: {
+                id: 'seoul', name: 'Seoul', country: 'Korea', masthead: 'SEOUL LIVE RADIO', badge: 'EDITION #099 • RADIO KOREA', transmitter: 'N Seoul Tower',
+                fontFamily: "'Syne', sans-serif",
+                getVariableSettings: (time, audioVal, genre) => {
+                    const weight = 600 + Math.floor(Math.sin(time * 0.0012) * 150) + (audioVal * 0.3);
+                    return `'wght' ${Math.min(800, Math.max(400, weight))}`;
+                },
+                getWaveformShape: (time, audioVal, width) => {
+                    const h1 = 15 - ((audioVal * 0.3) + Math.sin(time * 0.006) * 5);
+                    const h2 = 15 + ((audioVal * 0.3) + Math.cos(time * 0.007) * 5);
+                    return `M 0 15 Q 50 ${h1}, 100 ${h2} T 200 15`;
+                },
+                stations: [
+                    { name: 'Radio Korea Live', freq: '91.9 FM', genre: 'K-Pop & Dance', bitrate: '128kbps MP3', bubble: 'DAEBAK! K-POP LIVE!', landmarkTitle: 'N Seoul Tower Lights', streamUrl: 'https://das-edge13-live365-dal02.cdnstream.com/a48202', stationUrl: 'https://live365.com/station/RADIO-KOREA-NY-a48202', img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=800&q=80', cutoutBg: 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?auto=format&fit=crop&w=1000&q=80', floatImg1: 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?auto=format&fit=crop&w=200&q=80', floatImg2: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=200&q=80' }
+                ]
+            },
+            tokyo: {
+                id: 'tokyo', name: 'Tokyo', country: 'Japan', masthead: 'TOKYO PULSE RADIO', badge: 'EDITION #088 • J1 RADIO TOKYO', transmitter: 'Tokyo Tower',
+                fontFamily: "'Fraunces', serif",
+                getVariableSettings: (time, audioVal, genre) => {
+                    const opsz = 20 + Math.floor(Math.abs(Math.sin(time * 0.003)) * 120) + (audioVal * 0.3);
+                    const wonk = Math.sin(time * 0.004) > 0 ? 1 : 0;
+                    const weight = 500 + Math.floor(Math.cos(time * 0.002) * 250);
+                    return `'wght' ${weight}, 'opsz' ${opsz}, 'WONK' ${wonk}`;
+                },
+                getWaveformShape: (time, audioVal, width) => {
+                    const h1 = 15 - Math.sin(time * 0.006) * (audioVal * 0.4 + 4);
+                    const h2 = 15 + Math.cos(time * 0.008) * (audioVal * 0.4 + 4);
+                    return `M 0 15 C 50 ${h1}, 100 ${h2}, 200 15`;
+                },
+                stations: [
+                    { name: 'J1 HITS Tokyo', freq: '80.0 FM', genre: 'J-Pop & Synth', bitrate: '128kbps MP3', bubble: 'ZAP! TOKYO HITS LIVE!', landmarkTitle: 'Tokyo Tower Nights', streamUrl: 'https://jenny.torontocast.com:8056/stream', stationUrl: 'https://www.j1fm.tokyo/', img: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=80', cutoutBg: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1000&q=80', floatImg1: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=200&q=80', floatImg2: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=200&q=80' }
+                ]
+            },
+            london: {
+                id: 'london', name: 'London', country: 'UK', masthead: 'LONDON SOUND FM', badge: 'ISSUE #104 • CAPITAL LONDON', transmitter: 'Crystal Palace',
+                fontFamily: "'Fraunces', serif",
+                getVariableSettings: (time, audioVal, genre) => {
+                    const rumble = 650 + Math.floor(Math.sin(time * 0.01) * 150) + (audioVal * 1.0);
+                    return `'wght' ${Math.min(900, Math.max(500, rumble))}, 'opsz' 72, 'WONK' 0`;
+                },
+                getWaveformShape: (time, audioVal, width) => {
+                    const h1 = 15 - (audioVal * 0.5);
+                    const h2 = 15 + (audioVal * 0.5);
+                    return `M 0 15 L 50 ${h1} L 100 ${h2} L 150 ${h1} L 200 15`;
+                },
+                stations: [
+                    { 
+                        name: 'Capital London 95.8 FM', freq: '95.8 FM', genre: 'Pop & Chart Hits', bitrate: '128kbps MP3', bubble: 'BLAM! UK NUMBER ONES!', landmarkTitle: 'Tower Bridge Night', 
+                        streamUrl: 'https://media-ice.musicradio.com/CapitalMP3', 
+                        stationUrl: 'https://www.capitalfm.com/london/', 
+                        img: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80', 
+                        cutoutBg: 'https://images.unsplash.com/photo-1506579309851-93e0c0344483?auto=format&fit=crop&w=1000&q=80', 
+                        floatImg1: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=200&q=80', 
+                        floatImg2: 'https://images.unsplash.com/photo-1526129318478-627900baf8eb?auto=format&fit=crop&w=200&q=80' 
+                    }
+                ]
+            },
+            paris: {
+                id: 'paris', name: 'Paris', country: 'France', masthead: 'PARIS HITS RADIO', badge: 'EDITION #100 • NRJ PARIS', transmitter: 'Eiffel Tower',
+                fontFamily: "'Fraunces', serif",
+                getVariableSettings: (time, audioVal, genre) => {
+                    const sway = 550 + Math.floor(Math.sin(time * 0.0015) * 180) + (audioVal * 0.4);
+                    return `'wght' ${Math.min(850, Math.max(400, sway))}, 'opsz' 84`;
+                },
+                getWaveformShape: (time, audioVal, width) => {
+                    const h1 = 15 - Math.sin(time * 0.005) * (audioVal * 0.35 + 4);
+                    const h2 = 15 + Math.cos(time * 0.006) * (audioVal * 0.35 + 4);
+                    return `M 0 15 Q 50 ${h1}, 100 ${h2} T 200 15`;
+                },
+                stations: [
+                    { 
+                        name: 'NRJ Paris 100.3 FM', freq: '100.3 FM', genre: 'French Pop & Dance Hits', bitrate: '128kbps MP3', bubble: 'OULALA! HIT MUSIC ONLY!', landmarkTitle: 'Eiffel Tower Lights', 
+                        streamUrl: 'https://streaming.nrjaudio.fm/oumvmk8fnozc', 
+                        stationUrl: 'https://www.nrj.fr/', 
+                        img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80', 
+                        cutoutBg: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1000&q=80', 
+                        floatImg1: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=200&q=80', 
+                        floatImg2: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=200&q=80' 
+                    }
+                ]
+            },
+            nyc: {
+                id: 'nyc', name: 'New York', country: 'USA', masthead: 'NEW YORK LIVE RADIO', badge: 'ISSUE #042 • BIG APPLE', transmitter: 'Empire St.',
+                fontFamily: "'Syne', sans-serif",
+                getVariableSettings: (time, audioVal, genre) => {
+                    const cycle = (time * 0.004) % (Math.PI * 2);
+                    const heartbeat = Math.max(0, Math.sin(cycle) * 0.4 + Math.sin(cycle * 2.2) * 0.2);
+                    const weight = 450 + Math.floor(heartbeat * 250) + (audioVal * 0.6);
+                    return `'wght' ${Math.min(800, Math.max(400, weight))}`;
+                },
+                getWaveformShape: (time, audioVal, width) => {
+                    const cycle = (time * 0.004) % (Math.PI * 2);
+                    const pulse = Math.max(0, Math.sin(cycle)) * (audioVal * 0.4 + 4);
+                    return `M 0 15 Q 50 ${15 - pulse}, 100 15 T 200 15`;
+                },
+                stations: [
+                    { name: 'Z100 New York', freq: '103.5 FM', genre: 'Top 40 Pop Anthems', bitrate: '320kbps AAC', bubble: 'POW! HITS ALL DAY!', landmarkTitle: 'Empire State Pulse', streamUrl: 'https://stream.revma.ihrhls.com/zc1465', stationUrl: 'https://z100.iheart.com/', img: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=800&q=80', cutoutBg: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=1000&q=80', floatImg1: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=200&q=80', floatImg2: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=200&q=80' }
+                ]
+            }
+        };
+
+        const layoutModes = [
+            { id: 'classic', name: 'Classic' },
+            { id: 'bold', name: 'Bold' },
+            { id: 'minimal', name: 'Minimal' },
+            { id: 'retro', name: 'Retro' },
+            { id: 'cyber', name: 'Cyber' }
+        ];
+
+        const colorPalettes = [
+            { bg: '#090d16', accent: '#f59e0b', text: '#ffffff', border: 'rgba(245, 158, 11, 0.4)' },
+            { bg: '#180f1a', accent: '#ec4899', text: '#fdf2f8', border: 'rgba(236, 72, 153, 0.4)' },
+            { bg: '#0a1a15', accent: '#10b981', text: '#ecfdf5', border: 'rgba(16, 185, 129, 0.4)' },
+            { bg: '#1a1309', accent: '#f97316', text: '#fff7ed', border: 'rgba(249, 115, 22, 0.4)' },
+            { bg: '#0e1526', accent: '#06b6d4', text: '#ecfeff', border: 'rgba(6, 182, 212, 0.4)' },
+            { bg: '#1f1326', accent: '#c084fc', text: '#faf5ff', border: 'rgba(192, 132, 252, 0.4)' }
+        ];
+
+        let state = {
+            currentCity: 'seoul',
+            currentStationIdx: 0,
+            layoutMode: 'classic',
+            mastheadFont: 'CityDynamic',
+            palette: colorPalettes[0],
+            isPlaying: false
+        };
+
+        let audioCtx = null;
+        let analyser = null;
+        let audioSrcNode = null;
+        let animationFrameId = null;
+
+        const cityGrid = document.getElementById('city-selector-grid');
+        const layoutGrid = document.getElementById('layout-mode-grid');
+        const stationSelect = document.getElementById('station-select');
+        const btnNextStation = document.getElementById('btn-next-station');
+        const btnRemix = document.getElementById('btn-remix');
+        const btnExport = document.getElementById('btn-export');
+        const btnRandomColor = document.getElementById('btn-random-color');
+        const fontMastheadSelect = document.getElementById('font-masthead');
+        
+        const audioStream = document.getElementById('live-audio-stream');
+        const btnAudioToggle = document.getElementById('btn-audio-toggle');
+        const audioToggleText = document.getElementById('audio-toggle-text');
+        const audioToggleIcon = document.getElementById('audio-toggle-icon');
+        const btnPlayPause = document.getElementById('btn-play-pause');
+        const mainPlayIcon = document.getElementById('main-play-icon');
+        const speakerPulse = document.getElementById('speaker-pulse');
+        const playerStatusLabel = document.getElementById('player-status-label');
+        const playerFreqBadge = document.getElementById('player-freq-badge');
+        const playerStationTitle = document.getElementById('player-station-title');
+        const playerGenreLabel = document.getElementById('player-genre-label');
+        const volumeSlider = document.getElementById('volume-slider');
+
+        const stampTextInput = document.getElementById('stamp-text-input');
+
+        const posterCanvas = document.getElementById('poster-canvas');
+        const posterCutoutBg = document.getElementById('poster-cutout-bg');
+        const posterIssueBadge = document.getElementById('poster-issue-badge');
+        const posterMasthead = document.getElementById('poster-masthead');
+        const posterFreq = document.getElementById('poster-freq');
+        const posterCityName = document.getElementById('poster-city-name');
+        const posterBubble = document.getElementById('poster-bubble');
+        const posterLandmarkImg = document.getElementById('poster-landmark-img');
+        const posterLandmarkTitle = document.getElementById('poster-landmark-title');
+        const posterStationName = document.getElementById('poster-station-name');
+        const activeStationBadge = document.getElementById('active-station-badge');
+        const posterOnAirStatus = document.getElementById('poster-on-air-status');
+        const posterSpeakerIcon = document.getElementById('poster-speaker-icon');
+        const workspacePulseDot = document.getElementById('workspace-pulse-dot');
+        const workspaceStatusText = document.getElementById('workspace-status-text');
+        const waveformPath = document.getElementById('waveform-path');
+        const waveformGenreLabel = document.getElementById('waveform-genre-label');
+        const waveformBox = document.getElementById('waveform-box');
+        
+        const specGenre = document.getElementById('spec-genre');
+        const specTransmitter = document.getElementById('spec-transmitter');
+        const qrcodeContainer = document.getElementById('qrcode-container');
+        const floatingImg1 = document.getElementById('floating-img-1');
+        const floatingImg2 = document.getElementById('floating-img-2');
+        const badgeElem = document.querySelector('.float-pos-1');
+        const badgeElem2 = document.querySelector('.float-pos-2');
+
+        const landmarkFrameBox = document.getElementById('landmark-frame-box');
+        const specGridBox = document.getElementById('spec-grid-box');
+        
+        let qrCodeObj = new QRCode(qrcodeContainer, {
+            text: "https://live365.com/station/RADIO-KOREA-NY-a48202", width: 42, height: 42, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.L
+        });
+
+        function initUI() {
+            cityGrid.innerHTML = '';
+            Object.values(citiesData).forEach(city => {
+                const btn = document.createElement('button');
+                btn.className = `p-2.5 rounded-xl border flex flex-col items-center gap-1 transition-all ${state.currentCity === city.id ? 'bg-amber-500/20 border-amber-500 text-amber-400 font-bold shadow-md' : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'}`;
+                btn.innerHTML = `<i class="fa-solid fa-city text-sm"></i><span class="text-[10px] uppercase">${city.name}</span>`;
+                btn.onclick = () => {
+                    state.currentCity = city.id;
+                    state.currentStationIdx = 0;
+                    stampTextInput.value = city.masthead;
+                    updateStationsDropdown();
+                    updateUI();
+                    if(state.isPlaying) playAudioStream();
+                };
+                cityGrid.appendChild(btn);
+            });
+
+            layoutGrid.innerHTML = '';
+            layoutModes.forEach(mode => {
+                const btn = document.createElement('button');
+                btn.className = `p-2 rounded-xl border flex flex-col items-center gap-1 transition-all ${state.layoutMode === mode.id ? 'bg-amber-500/20 border-amber-500 text-amber-400 font-bold' : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'}`;
+                btn.innerHTML = `<i class="fa-solid fa-square-full text-[10px]"></i><span class="text-[9px] uppercase">${mode.name}</span>`;
+                btn.onclick = () => {
+                    state.layoutMode = mode.id;
+                    updateUI();
+                };
+                layoutGrid.appendChild(btn);
+            });
+
+            stampTextInput.value = citiesData[state.currentCity].masthead;
+            updateStationsDropdown();
+            updateUI();
+        }
+
+        function updateStationsDropdown() {
+            const city = citiesData[state.currentCity];
+            stationSelect.innerHTML = '';
+            city.stations.forEach((st, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.textContent = `${st.name} (${st.freq})`;
+                if (idx === state.currentStationIdx) opt.selected = true;
+                stationSelect.appendChild(opt);
+            });
+        }
+
+        function applyLayoutMode() {
+            posterBubble.style.display = 'block';
+            specGridBox.style.display = 'grid';
+            badgeElem.style.display = 'block';
+            badgeElem2.style.display = 'block';
+            landmarkFrameBox.style.height = '8rem';
+
+            if (state.layoutMode === 'minimal') {
+                posterBubble.style.display = 'none';
+                landmarkFrameBox.style.height = '10rem';
+                badgeElem.style.display = 'none';
+            }
+        }
+
+        function updateUI() {
+            const city = citiesData[state.currentCity];
+            const station = city.stations[state.currentStationIdx];
+            const pal = state.palette;
+
+            Array.from(cityGrid.children).forEach((btn, idx) => {
+                const cityKey = Object.keys(citiesData)[idx];
+                btn.className = `p-2.5 rounded-xl border flex flex-col items-center gap-1 ${cityKey === state.currentCity ? 'bg-amber-500/20 border-amber-500 text-amber-400 font-bold shadow-md' : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'}`;
+            });
+
+            Array.from(layoutGrid.children).forEach((btn, idx) => {
+                const modeKey = layoutModes[idx].id;
+                btn.className = `p-2 rounded-xl border flex flex-col items-center gap-1 ${modeKey === state.layoutMode ? 'bg-amber-500/20 border-amber-500 text-amber-400 font-bold' : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'}`;
+            });
+
+            document.getElementById('city-cutout-desc').textContent = `${city.name} Station Sync`;
+            applyLayoutMode();
+
+            floatingImg1.src = station.floatImg1;
+            floatingImg2.src = station.floatImg2;
+            posterCutoutBg.style.backgroundImage = `url('${station.cutoutBg}')`;
+            posterIssueBadge.textContent = city.badge;
+            posterMasthead.textContent = stampTextInput.value;
+            
+            state.mastheadFont = fontMastheadSelect.value;
+            if (state.mastheadFont === 'CityDynamic') {
+                posterMasthead.style.fontFamily = city.fontFamily;
+            } else if (state.mastheadFont === 'Syne') {
+                posterMasthead.style.fontFamily = "'Syne', sans-serif";
+            } else if (state.mastheadFont === 'Fraunces') {
+                posterMasthead.style.fontFamily = "'Fraunces', serif";
+            } else {
+                posterMasthead.style.fontFamily = `'${state.mastheadFont}', sans-serif`;
+            }
+
+            posterFreq.textContent = station.freq;
+            posterCityName.textContent = `${city.name}, ${city.country}`;
+            posterBubble.textContent = station.bubble;
+            posterLandmarkImg.src = station.img;
+            posterLandmarkTitle.textContent = station.landmarkTitle;
+            
+            specGenre.textContent = station.genre;
+            specTransmitter.textContent = city.transmitter;
+            posterStationName.textContent = station.name;
+            activeStationBadge.textContent = `${station.name} ${station.freq}`;
+            waveformGenreLabel.textContent = `${station.genre} Sync`;
+
+            playerStationTitle.textContent = station.name;
+            playerFreqBadge.textContent = station.freq;
+            playerGenreLabel.textContent = `${station.genre} • ${station.bitrate}`;
+
+            // Apply Dynamic Color Palette across Poster Elements
+            posterCanvas.style.backgroundColor = pal.bg;
+            posterCanvas.style.color = pal.text;
+            posterMasthead.style.color = pal.accent;
+            posterFreq.style.color = pal.accent;
+            posterFreq.style.borderColor = pal.border;
+            posterIssueBadge.style.color = pal.accent;
+            posterIssueBadge.style.borderColor = pal.border;
+            specGenre.style.color = pal.accent;
+            landmarkFrameBox.style.borderColor = pal.border;
+            waveformBox.style.borderColor = pal.border;
+            posterSpeakerIcon.style.backgroundColor = pal.accent;
+            waveformPath.setAttribute('stroke', pal.accent);
+
+            qrCodeObj.clear();
+            qrCodeObj.makeCode(station.stationUrl);
+        }
+
+        function initAudioVisualizer() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 64;
+                
+                audioSrcNode = audioCtx.createMediaElementSource(audioStream);
+                audioSrcNode.connect(analyser);
+                analyser.connect(audioCtx.destination);
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            visualizeSpectrum();
+        }
+
+        function visualizeSpectrum() {
+            const timestamp = performance.now();
+            const dataArray = new Uint8Array(analyser ? analyser.frequencyBinCount : 32);
+            if (analyser && state.isPlaying) {
+                analyser.getByteFrequencyData(dataArray);
+            }
+
+            const controlBars = document.querySelectorAll('#control-eq .eq-bar');
+            const posterBars = document.querySelectorAll('#poster-eq .eq-bar');
+            let audioSum = 0;
+
+            for (let i = 0; i < 4; i++) {
+                const val = dataArray[i * 2] || 10;
+                audioSum += val;
+                const heightPct = Math.max(15, (val / 255) * 100);
+                
+                if (controlBars[i]) controlBars[i].style.height = `${heightPct}%`;
+                if (posterBars[i]) posterBars[i].style.height = `${heightPct}%`;
+            }
+
+            const avgAudio = audioSum / 4;
+            const city = citiesData[state.currentCity];
+            const station = city.stations[state.currentStationIdx];
+
+            // Softened Beat Expansion Animation
+            if (state.isPlaying) {
+                const maxExpansion = state.currentCity === 'nyc' ? 0.018 : 0.025;
+                const scalePulse = 1 + (avgAudio / 255) * maxExpansion;
+                const glowStrength = Math.floor((avgAudio / 255) * 8);
+                const letterSpacing = -0.05 + ((avgAudio / 255) * 0.008);
+                
+                posterMasthead.style.transform = `scale(${scalePulse})`;
+                posterMasthead.style.letterSpacing = `${letterSpacing}em`;
+                posterMasthead.style.filter = `drop-shadow(0 0 ${glowStrength}px ${state.palette.accent})`;
+            } else {
+                posterMasthead.style.transform = `scale(1)`;
+                posterMasthead.style.letterSpacing = `-0.05em`;
+                posterMasthead.style.filter = `drop-shadow(0 4px 6px rgba(0,0,0,0.4))`;
+            }
+
+            // Live Animate Variable Font Axes
+            if (state.mastheadFont === 'CityDynamic') {
+                posterMasthead.style.fontVariationSettings = city.getVariableSettings(timestamp, avgAudio, station.genre);
+            } else {
+                posterMasthead.style.fontVariationSettings = "'wght' 800";
+            }
+
+            // Animate SVG Waveform Path based on Station Genre
+            waveformPath.setAttribute('d', city.getWaveformShape(timestamp, avgAudio));
+
+            animationFrameId = requestAnimationFrame(visualizeSpectrum);
+        }
+
+        function playAudioStream() {
+            const city = citiesData[state.currentCity];
+            const station = city.stations[state.currentStationIdx];
+            
+            audioStream.src = station.streamUrl;
+            audioStream.volume = parseFloat(volumeSlider.value);
+            audioStream.play().then(() => {
+                state.isPlaying = true;
+                updateAudioPlayerUI(true);
+                initAudioVisualizer();
+            }).catch(err => {
+                state.isPlaying = false;
+                updateAudioPlayerUI(false);
+                playerStatusLabel.textContent = "Click Play to Buffer";
+            });
+        }
+
+        function stopAudioStream() {
+            audioStream.pause();
+            audioStream.src = "";
+            state.isPlaying = false;
+            
+            document.querySelectorAll('.eq-bar').forEach(bar => bar.style.height = '4px');
+            updateAudioPlayerUI(false);
+        }
+
+        function toggleAudioPlay() {
+            if (state.isPlaying) stopAudioStream();
+            else playAudioStream();
+        }
+
+        function updateAudioPlayerUI(isPlaying) {
+            if (isPlaying) {
+                mainPlayIcon.className = "fa-solid fa-pause";
+                audioToggleText.textContent = "Stop Live Radio";
+                audioToggleIcon.className = "fa-solid fa-stop";
+                btnAudioToggle.className = "px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-rose-600/20 transition-all flex items-center gap-2 transform active:scale-95";
+                
+                speakerPulse.className = "w-3 h-3 rounded-full bg-emerald-400 animate-ping";
+                playerStatusLabel.textContent = "LIVE BROADCAST ON AIR";
+                posterOnAirStatus.textContent = "ON AIR";
+                posterOnAirStatus.className = "font-bold text-emerald-400 animate-pulse";
+                posterFreq.style.boxShadow = `0 0 15px ${state.palette.accent}`;
+                posterSpeakerIcon.className = "w-8 h-8 rounded-full bg-emerald-400 text-black flex items-center justify-center font-bold text-xs shadow-lg shadow-emerald-400/50 animate-bounce";
+                workspacePulseDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-ping";
+                workspaceStatusText.textContent = "Live Radio Streaming Active";
+            } else {
+                mainPlayIcon.className = "fa-solid fa-play";
+                audioToggleText.textContent = "Tune In / Play Radio";
+                audioToggleIcon.className = "fa-solid fa-play";
+                btnAudioToggle.className = "px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-600/20 transition-all flex items-center gap-2 transform active:scale-95";
+                
+                speakerPulse.className = "w-3 h-3 rounded-full bg-slate-600";
+                playerStatusLabel.textContent = "Station Audio Standby";
+                posterOnAirStatus.textContent = "STANDBY";
+                posterOnAirStatus.className = "font-bold text-slate-400";
+                posterFreq.style.boxShadow = 'none';
+                posterSpeakerIcon.className = "w-8 h-8 rounded-full bg-amber-500 text-black flex items-center justify-center font-bold text-xs shadow-lg shadow-amber-500/40";
+                workspacePulseDot.className = "w-2 h-2 rounded-full bg-slate-500";
+                workspaceStatusText.textContent = "Audio Standby Preview";
+            }
+        }
+
+        btnAudioToggle.onclick = toggleAudioPlay;
+        btnPlayPause.onclick = toggleAudioPlay;
+        volumeSlider.oninput = (e) => { audioStream.volume = parseFloat(e.target.value); };
+
+        stationSelect.onchange = (e) => {
+            state.currentStationIdx = parseInt(e.target.value);
+            updateUI();
+            if (state.isPlaying) playAudioStream();
+        };
+
+        btnNextStation.onclick = () => {
+            const city = citiesData[state.currentCity];
+            state.currentStationIdx = (state.currentStationIdx + 1) % city.stations.length;
+            stationSelect.value = state.currentStationIdx;
+            updateUI();
+            if (state.isPlaying) playAudioStream();
+        };
+
+        fontMastheadSelect.onchange = (e) => { state.mastheadFont = e.target.value; updateUI(); };
+        stampTextInput.oninput = () => {
+            posterMasthead.textContent = stampTextInput.value;
+        };
+
+        btnRandomColor.onclick = () => {
+            state.palette = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
+            updateUI();
+            if(state.isPlaying) posterFreq.style.boxShadow = `0 0 15px ${state.palette.accent}`;
+        };
+
+        btnRemix.onclick = () => {
+            const cityKeys = Object.keys(citiesData);
+            state.currentCity = cityKeys[Math.floor(Math.random() * cityKeys.length)];
+            const city = citiesData[state.currentCity];
+            state.currentStationIdx = Math.floor(Math.random() * city.stations.length);
+            state.layoutMode = layoutModes[Math.floor(Math.random() * layoutModes.length)].id;
+            state.palette = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
+            stampTextInput.value = city.masthead;
+            updateStationsDropdown();
+            updateUI();
+            if(state.isPlaying) posterFreq.style.boxShadow = `0 0 15px ${state.palette.accent}`;
+            if (state.isPlaying) playAudioStream();
+        };
+
+        btnExport.onclick = () => {
+            html2canvas(posterCanvas, { scale: 2, useCORS: true }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `radio-poster-${state.currentCity}-${state.layoutMode}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        };
+
+        window.onload = () => {
+            initUI();
+            visualizeSpectrum();
+        };
+    </script>
+</body>
+</html>
