@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SSEP Mission Patch — Sketch Sequence</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       ROOT VARIABLES & THEME (Soft Pink Aesthetic matching index.html)
+       ========================================================================== */
+    :root {
+      --bg-color: #fcf8f9;
+      --card-bg: #ffffff;
+      --text-main: #2d2629;
+      --text-muted: #7d6e75;
+      --pink-primary: #d85c8a;
+      --pink-soft: #f4c0d1;
+      --pink-light: #fdf2f5;
+      --border-color: #f1d4de;
+      --shadow-sm: 0 4px 15px rgba(216, 92, 138, 0.05);
+      --shadow-hover: 0 12px 30px rgba(216, 92, 138, 0.12);
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      --max-width: 1040px;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: 40px 20px 80px;
+    }
+
+    /* ==========================================================================
+       MAIN CONTAINER & LAYOUT
+       ========================================================================== */
+    main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    /* Header Section */
+    .header-section {
+      margin-bottom: 48px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .header-section h1 {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 400;
+      color: var(--text-main);
+      line-height: 1.15;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .header-section h1 span {
+      color: var(--pink-primary);
+      display: inline-block;
+    }
+
+    .header-subtitle {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--pink-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+
+    /* Sequence Grid Layout */
+    .sequence-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+
+    /* Individual Card */
+    .sequence-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: grid;
+      grid-template-columns: 1fr;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    @media (min-width: 768px) {
+      .sequence-card {
+        grid-template-columns: 1.1fr 1fr;
+      }
+    }
+
+    .sequence-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Image / Visual Container */
+    .card-media {
+      background-color: var(--pink-light);
+      position: relative;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      border-right: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    .card-media img {
+      width: 100%;
+      height: 100%;
+      max-height: 480px;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      transition: transform 0.3s ease;
+    }
+
+    .card-media img:hover {
+      transform: scale(1.02);
+      cursor: pointer;
+    }
+
+    /* Content Area */
+    .card-content {
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-number {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      color: var(--pink-soft);
+      line-height: 1;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      line-height: 1.25;
+    }
+
+    .card-description {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+
+    /* Key Notes / Dynamic Tags */
+    .tag-section-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--pink-primary);
+      margin-bottom: 10px;
+    }
+
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      background-color: var(--pink-light);
+      color: var(--pink-primary);
+      border: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .selected-tag {
+      background-color: var(--pink-primary);
+      color: #ffffff;
+      border-color: var(--pink-primary);
+      font-weight: 600;
+    }
+
+    /* Footer / Navigation Back Link */
+    footer {
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--pink-primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+    <!-- Header -->
+    <header class="header-section">
+      <div class="header-subtitle">ART 3041 · Design Sequence</div>
+      <h1><span>SSEP Mission Patch</span> Sequence</h1>
+    </header>
+
+    <!-- Sequence Container with 5 Cards -->
+    <div class="sequence-grid">
+
+      <!-- SKETCH 01 -->
+      <article class="sequence-card">
+        <div class="card-media">
+          <img src="sketches1.jpg" alt="Sketches 1 - Visual Translation Game">
+        </div>
+        <div class="card-content">
+          <div>
+            <div class="card-number">01</div>
+            <h2 class="card-title">Visual Translation Game</h2>
+            <p class="card-description">
+              The initial visual translation game warm-up[cite: 6]. We began by asking what message Baruch would send into space, generating rapid icon associations around core motifs like curiosity, discovery, handshakes, teamwork, magnify glasses, and weightlessness[cite: 6].
+            </p>
+          </div>
+          <div>
+            <div class="tag-section-title">Extracted Prompts & Ideas</div>
+            <div class="tag-container">
+              <span class="tag">Curiosity</span>
+              <span class="tag">Discovery</span>
+              <span class="tag">Handshake</span>
+              <span class="tag">Teamwork</span>
+              <span class="tag">Weightlessness</span>
+              <span class="tag">Science Bottles</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- SKETCH 02 -->
+      <article class="sequence-card">
+        <div class="card-media">
+          <img src="sketches2.jpg" alt="Sketches 2 - Space Research Mind Map">
+        </div>
+        <div class="card-content">
+          <div>
+            <div class="card-number">02</div>
+            <h2 class="card-title">Space Research Mind Map</h2>
+            <p class="card-description">
+              Expanding on space exploration concepts through a structured mind map[cite: 7]. Focus centered on scientific observation, astronomy, lab equipment, orbit dynamics, high-tech machinery, and the crew of workers driving space station research[cite: 7].
+            </p>
+          </div>
+          <div>
+            <div class="tag-section-title">Key Elements</div>
+            <div class="tag-container">
+              <span class="tag">Astronomy</span>
+              <span class="tag">Space Station</span>
+              <span class="tag">Goggles & Lab Coats</span>
+              <span class="tag">Orbit & Satellites</span>
+              <span class="tag">Microscopes</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- SKETCH 03 -->
+      <article class="sequence-card">
+        <div class="card-media">
+          <img src="sketches3.jpg" alt="Sketches 3 - Baruch Community Mind Map">
+        </div>
+        <div class="card-content">
+          <div>
+            <div class="card-number">03</div>
+            <h2 class="card-title">Baruch Community Mind Map</h2>
+            <p class="card-description">
+              Grounding the space concept in the identity of our campus community[cite: 8]. Exploring student life around Lexington Campus, Flatiron district, multicultural diversity, urban bustle, and collaborative spirit alongside quirky campus realities like broken elevators[cite: 8].
+            </p>
+          </div>
+          <div>
+            <div class="tag-section-title">Campus Identifiers</div>
+            <div class="tag-container">
+              <span class="tag">Lexington Campus</span>
+              <span class="tag">Multicultural</span>
+              <span class="tag">Flatiron District</span>
+              <span class="tag">Collaborative</span>
+              <span class="tag">Urban & Packed</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- SKETCH 04 -->
+      <article class="sequence-card">
+        <div class="card-media">
+          <img src="sketches4.jpg" alt="Sketches 4 - Rapid Concept Generation">
+        </div>
+        <div class="card-content">
+          <div>
+            <div class="card-number">04</div>
+            <h2 class="card-title">Rapid Concept Frameworks</h2>
+            <p class="card-description">
+              Rapid concept generation exploring six distinct visual avenues: Geometric, Narrative, Abstract, Symbolic, Minimal, and Unexpected[cite: 9]. Developing quick graphical shapes and visual layouts corresponding to each strategic direction[cite: 9].
+            </p>
+          </div>
+          <div>
+            <div class="tag-section-title">Explored Frameworks</div>
+            <div class="tag-container">
+              <span class="tag">Geometric</span>
+              <span class="tag">Narrative</span>
+              <span class="tag">Abstract</span>
+              <span class="tag">Symbolic</span>
+              <span class="tag">Minimal</span>
+              <span class="tag selected-tag">★ Unexpected</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- SKETCH 05 -->
+      <article class="sequence-card">
+        <div class="card-media">
+          <img src="sketches5.jpg" alt="Sketches 5 - Final Mission Patch Sketch">
+        </div>
+        <div class="card-content">
+          <div>
+            <div class="card-number">05</div>
+            <h2 class="card-title">Final Patch Sketch & Chosen Direction</h2>
+            <p class="card-description">
+              The final mission patch composite sketch[cite: 10]. I chose the <strong>Unexpected</strong> approach as my core design direction, synthesising the prominent Baruch banner typography, celestial orbits, number badges, and geometric patch frame into a cohesive emblem[cite: 10].
+            </p>
+          </div>
+          <div>
+            <div class="tag-section-title">Chosen Patch Attributes</div>
+            <div class="tag-container">
+              <span class="tag selected-tag">Unexpected Concept</span>
+              <span class="tag">Baruch Typography</span>
+              <span class="tag">Geometric Emblem</span>
+              <span class="tag">SSEP Mission Ready</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div>ART 3041 — SSEP Mission Patch Project</div>
+      <div><a href="index.html">← Back to Index</a></div>
+    </footer>
+  </main>
+
+</body>
+</html>
