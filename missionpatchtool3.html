@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baruch SSEP Mission Patch Generator</title>
+    <!-- html2canvas Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Changa+One&family=Cutive+Mono&family=Fredoka+One&family=Inter:wght@400;700;900&family=Space+Grotesk:wght@700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #060b19;
+            color: #f0f0f2;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Control Panel */
+        .sidebar {
+            width: 440px;
+            background: #0f172a;
+            border-right: 1px solid #1e293b;
+            padding: 24px;
+            height: 100vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sidebar h2 {
+            font-size: 1.3rem;
+            color: #38bdf8;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .sidebar p.subtitle {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .control-section {
+            border-top: 1px solid #1e293b;
+            padding-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-section-title {
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .control-group label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #cbd5e1;
+        }
+
+        .control-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        input[type="text"], textarea, select {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #fff;
+            padding: 9px 11px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus, textarea:focus, select:focus {
+            border-color: #38bdf8;
+        }
+
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+            width: 100%;
+            height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #1e293b;
+            padding: 2px;
+        }
+
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        input[type="color"]::-webkit-color-swatch {
+            border: 1px solid #334155;
+            border-radius: 4px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: #38bdf8;
+            cursor: pointer;
+        }
+
+        .layout-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .layout-btn {
+            background: #1e293b;
+            color: #cbd5e1;
+            border: 1px solid #334155;
+            padding: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .layout-btn:hover { background: #334155; color: #fff; }
+        .layout-btn.active {
+            background: #0284c7;
+            color: white;
+            border-color: #38bdf8;
+        }
+
+        button {
+            flex: 1;
+            background: #0284c7;
+            color: white;
+            border: none;
+            padding: 11px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        button:hover { background: #0369a1; }
+        button:active { transform: scale(0.98); }
+        button.secondary { background: #334155; color: #fff; }
+        button.secondary:hover { background: #475569; }
+        button.download-btn { background: #38bdf8; color: #0f172a; width: 100%; font-weight: 900; }
+        button.download-btn:hover { background: #7dd3fc; }
+
+        .doc-link-btn {
+            background: #1e293b;
+            color: #38bdf8;
+            border: 1px solid #334155;
+            padding: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-align: center;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            flex: 1;
+        }
+        .doc-link-btn:hover { background: #334155; color: #fff; }
+
+        /* Modal Viewer */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            padding: 40px;
+            overflow-y: auto;
+        }
+        .modal-content {
+            background: #0f172a;
+            border: 1px solid #334155;
+            max-width: 700px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 8px;
+            color: #f0f0f2;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-modal:hover { color: #fff; }
+        .modal-content h3 { color: #38bdf8; margin-bottom: 12px; font-size: 1.2rem; }
+        .modal-content pre { background: #1e293b; padding: 12px; border-radius: 6px; white-space: pre-wrap; font-size: 0.8rem; color: #38bdf8; line-height: 1.4; overflow-x: auto; }
+
+        /* Main Preview Area */
+        .preview-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background: radial-gradient(circle at center, #1e293b 0%, #060b19 100%);
+            overflow: auto;
+            position: relative;
+        }
+
+        /* Scale Toolbar (Small-Scale Check Feature) */
+        .scale-toolbar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid #334155;
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+        .scale-btn {
+            background: #1e293b;
+            color: #cbd5e1;
+            border: 1px solid #475569;
+            padding: 5px 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .scale-btn:hover { background: #334155; color: #fff; }
+        .scale-btn.active { background: #0284c7; color: #fff; border-color: #38bdf8; }
+
+        /* Patch Container with Scaled Wrapper */
+        .patch-scale-wrapper {
+            transition: transform 0.3s ease;
+            transform-origin: center;
+        }
+
+        /* Patch Container - Flexible Shape (Circular or Square with Rounded Corners) */
+        .patch-container {
+            width: 620px;
+            height: 620px;
+            position: relative;
+            border-radius: 50%;
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.4), inset 0 0 15px rgba(0,0,0,0.8), 0 30px 60px rgba(0,0,0,0.9);
+            flex-shrink: 0;
+            background: #020617;
+            transition: box-shadow 0.3s, border-radius 0.3s ease;
+            overflow: hidden;
+        }
+
+        .patch-container.square-patch {
+            border-radius: 48px;
+        }
+
+        /* SVG Art Layer */
+        .patch-svg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+        }
+
+        /* TRACTOR BEAM ANIMATIONS */
+        @keyframes beamPulse {
+            0%, 100% { opacity: 0.55; }
+            50% { opacity: 0.95; filter: drop-shadow(0 0 15px rgba(250, 219, 49, 0.8)); }
+        }
+
+        @keyframes ringScanDown {
+            0% { transform: translateY(-40px) scaleX(0.7); opacity: 0; }
+            20% { opacity: 0.9; }
+            80% { opacity: 0.9; }
+            100% { transform: translateY(140px) scaleX(1.3); opacity: 0; }
+        }
+
+        @keyframes rayShift {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: -32; }
+        }
+
+        .anim-beam-cone {
+            animation: beamPulse 2.5s infinite ease-in-out;
+            transform-origin: top center;
+        }
+
+        .anim-ring-1 {
+            animation: ringScanDown 3s infinite linear;
+            transform-origin: center;
+        }
+
+        .anim-ring-2 {
+            animation: ringScanDown 3s infinite linear 1s;
+            transform-origin: center;
+        }
+
+        .anim-ring-3 {
+            animation: ringScanDown 3s infinite linear 2s;
+            transform-origin: center;
+        }
+
+        .anim-beam-rays {
+            stroke-dasharray: 8 8;
+            animation: rayShift 1.2s infinite linear;
+        }
+
+        /* Star Twinkle Keyframe Animations */
+        @keyframes starTwinkleFast {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+        @keyframes starTwinkleSlow {
+            0%, 100% { opacity: 0.9; transform: scale(1.1); }
+            50% { opacity: 0.3; transform: scale(0.7); }
+        }
+        .twinkle-fast { animation: starTwinkleFast 2.2s infinite ease-in-out; transform-origin: center; }
+        .twinkle-slow { animation: starTwinkleSlow 3.8s infinite ease-in-out; transform-origin: center; }
+
+        /* Animated Flying Asteroids / Meteors */
+        @keyframes asteroidFly1 {
+            0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { transform: translate(-380px, 280px) scale(1.1); opacity: 0; }
+        }
+
+        @keyframes asteroidFly2 {
+            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translate(-420px, 240px) scale(1.2); opacity: 0; }
+        }
+
+        .anim-asteroid-1 { animation: asteroidFly1 4.5s infinite linear; }
+        .anim-asteroid-2 { animation: asteroidFly2 6.2s infinite linear 2s; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Control Panel -->
+    <div class="sidebar">
+        <div>
+            <h2>Baruch SSEP Patch Studio</h2>
+            <p class="subtitle">Design official SSEP space research mission patches.</p>
+        </div>
+
+        <div class="control-section">
+            <div class="control-section-title">Documentation</div>
+            <div style="display: flex; gap: 8px;">
+                <a href="javascript:void(0)" class="doc-link-btn" onclick="openModal('skillsModal')">View skills.md</a>
+            </div>
+        </div>
+
+        <button class="secondary" style="background: #7c3aed; font-weight: bold; width: 100%;" onclick="randomize()">🎲 Randomize Mission Variations</button>
+
+        <div class="control-group" style="margin-top: 5px;">
+            <label>Patch Outer Geometry Shape</label>
+            <div class="layout-buttons">
+                <button class="layout-btn active" id="btn-shape-circle" onclick="setPatchShape('circle')">Circular Patch</button>
+                <button class="layout-btn" id="btn-shape-square" onclick="setPatchShape('square')">Square Patch</button>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label>Design Theme Preset</label>
+            <select id="themeSelector" onchange="loadThemePreset()">
+                <option value="baruch" selected>Baruch Classic (Navy & Athletic Gold)</option>
+                <option value="alien">Extraterrestrial Neon Green</option>
+                <option value="nebula">Deep Space Cosmic Magenta</option>
+                <option value="cyberpunk">Cyberpunk Neon Purple & Cyan</option>
+                <option value="solar">Solar Flare Orange & Gold</option>
+                <option value="midnight">Midnight Cobalt & Silver</option>
+            </select>
+        </div>
+
+        <!-- PHYSICAL PATCH TEXTURES -->
+        <div class="control-group">
+            <label>Physical Patch Surface Texture</label>
+            <select id="selectTexture" onchange="updatePatch()">
+                <option value="none">Smooth Vector Graphic (Clean)</option>
+                <option value="embroidered" selected>Authentic Embroidered Satin Thread</option>
+                <option value="leather">Distressed Vintage Space Canvas</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>Patch Layout Composition</label>
+            <div class="layout-buttons">
+                <button class="layout-btn active" id="btn-layout-centered" onclick="setLayout('centered')">Centered Abduction</button>
+                <button class="layout-btn" id="btn-layout-diagonal" onclick="setLayout('diagonal')">Diagonal Orbit</button>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <div class="control-section-title">Glow & Density Settings</div>
+            <div class="control-group">
+                <label>Outer Border Glow Radius: <span id="glowVal">12</span>px</label>
+                <input type="range" id="glowRadiusRange" min="0" max="25" step="1" value="12" oninput="updatePatch()">
+            </div>
+            <div class="control-group">
+                <label>Nebula Gas Glow Opacity: <span id="nebulaVal">0.75</span></label>
+                <input type="range" id="nebulaOpacityRange" min="0.2" max="1.0" step="0.05" value="0.75" oninput="updatePatch()">
+            </div>
+            <div class="control-group">
+                <label>Texture Bump Depth: <span id="bumpVal">1.5</span>x</label>
+                <input type="range" id="bumpDepthRange" min="0.5" max="3.0" step="0.1" value="1.5" oninput="updatePatch()">
+            </div>
+        </div>
+
+        <div class="control-section">
+            <div class="control-section-title">Color Customization Palette</div>
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Space Background</label>
+                    <input type="color" id="colorBg" value="#020617" oninput="updatePatch()">
+                </div>
+                <div class="control-group">
+                    <label>Tractor Beam</label>
+                    <input type="color" id="colorBeam" value="#fadb31" oninput="updatePatch()">
+                </div>
+            </div>
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Outer Stitched Border</label>
+                    <input type="color" id="colorGold" value="#39ff14" oninput="updatePatch()">
+                </div>
+                <div class="control-group">
+                    <label>Inner Ring Banner</label>
+                    <input type="color" id="colorRing" value="#dc2626" oninput="updatePatch()">
+                </div>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <div class="control-section-title">Inner Ring Typography Controls</div>
+            <div class="control-group">
+                <label>Top Arch Banner Text</label>
+                <input type="text" id="inputHeader" value="BARUCH COLLEGE • EXTRATERRESTRIAL INITIATIVE" oninput="updatePatch()">
+            </div>
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Banner Font</label>
+                    <select id="selectFontHeader" onchange="updatePatch()">
+                        <option value="Archivo Black" selected>Archivo Black</option>
+                        <option value="Space Grotesk">Space Grotesk</option>
+                        <option value="Fredoka One">Fredoka One</option>
+                        <option value="Changa One">Changa One</option>
+                        <option value="Cutive Mono">Cutive Mono</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Header Font Size</label>
+                    <select id="selectHeaderFontSize" onchange="updatePatch()">
+                        <option value="19" selected>Large (19px)</option>
+                        <option value="22">Extra Large (22px)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group" style="margin-top: 6px;">
+                <label>Bottom Arch Banner Text</label>
+                <input type="text" id="inputSub" value="SSEP MICROGRAVITY RESEARCH" oninput="updatePatch()">
+            </div>
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Subtitle Font Size</label>
+                    <select id="selectSubFontSize" onchange="updatePatch()">
+                        <option value="20" selected>Large (20px)</option>
+                        <option value="23">Extra Large (23px)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Banner Text Color</label>
+                    <input type="color" id="colorText" value="#ffffff" oninput="updatePatch()">
+                </div>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <div class="control-section-title">Element Scaling</div>
+            <div class="control-group">
+                <label>Bearcat Mascot Scale: <span id="scaleVal">1.0</span>x</label>
+                <input type="range" id="bearcatScaleRange" min="0.8" max="1.3" step="0.05" value="1.0" oninput="updatePatch()">
+            </div>
+            <div class="control-group">
+                <label>Tractor Beam Opacity: <span id="opacityVal">0.60</span></label>
+                <input type="range" id="beamOpacityRange" min="0.2" max="0.9" step="0.05" value="0.60" oninput="updatePatch()">
+            </div>
+        </div>
+
+        <div class="control-section">
+            <div class="control-section-title">Download Patch</div>
+            <button class="download-btn" onclick="exportPatch()">Download Patch (1200x1200 PNG)</button>
+        </div>
+    </div>
+
+    <!-- Live Preview Area -->
+    <div class="preview-area">
+        <!-- Scale Toolbar (Small-Scale Check Feature) -->
+        <div class="scale-toolbar">
+            <span style="font-size: 0.7rem; font-weight: 700; align-self: center; color: #94a3b8; text-transform: uppercase;">Scale Check:</span>
+            <button class="scale-btn active" id="scaleBtn100" onclick="setPreviewScale(1.0, this)">100%</button>
+            <button class="scale-btn" id="scaleBtn50" onclick="setPreviewScale(0.5, this)">50% (Uniform)</button>
+            <button class="scale-btn" id="scaleBtn25" onclick="setPreviewScale(0.25, this)">25% (Mini)</button>
+        </div>
+
+        <div class="patch-scale-wrapper" id="patchScaleWrapper">
+            <div class="patch-container" id="patchContainer">
+                <svg class="patch-svg-canvas" viewBox="0 0 600 600" id="patchSvg">
+                    <defs>
+                        <!-- Outer Border Glow Filter -->
+                        <filter id="outerNeonGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="12" result="blur" id="feGlowBlur"/>
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+
+                        <!-- Star Glow Filter -->
+                        <filter id="starGlow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="1.5" result="blur"/>
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+
+                        <!-- HIGH-FIDELITY REALISTIC TEXTURE BUMP & LIGHTING FILTERS -->
+                        <filter id="filterEmbroidered" x="-10%" y="-10%" width="120%" height="120%">
+                            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise"/>
+                            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.8 0" in="noise" result="alphaNoise"/>
+                            <feDisplacementMap in="SourceGraphic" in2="alphaNoise" scale="3" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+                            <feDiffuseLighting in="alphaNoise" lighting-color="#ffffff" surfaceScale="2" diffuseConstant="1.2" result="light">
+                                <feDistantLight azimuth="45" elevation="60"/>
+                            </feDiffuseLighting>
+                            <feBlend mode="multiply" in="light" in2="displaced" result="textured"/>
+                        </filter>
+
+                        <filter id="filterLeather" x="-10%" y="-10%" width="120%" height="120%">
+                            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="4" result="grain"/>
+                            <feDiffuseLighting in="grain" lighting-color="#e2e8f0" surfaceScale="2.5" result="light">
+                                <feDistantLight azimuth="210" elevation="40"/>
+                            </feDiffuseLighting>
+                            <feBlend mode="overlay" in="light" in2="SourceGraphic"/>
+                        </filter>
+
+                        <!-- HIGH-CONTRAST PATTERN OVERLAYS -->
+                        <pattern id="patEmbroidered" width="8" height="8" patternUnits="userSpaceOnUse">
+                            <line x1="0" y1="0" x2="8" y2="8" stroke="#ffffff" stroke-width="1.2" opacity="0.25"/>
+                            <line x1="8" y1="0" x2="0" y2="8" stroke="#000000" stroke-width="1.2" opacity="0.3"/>
+                        </pattern>
+
+                        <pattern id="patCanvas" width="12" height="12" patternUnits="userSpaceOnUse">
+                            <circle cx="3" cy="3" r="1.5" fill="#000" opacity="0.25"/>
+                            <circle cx="9" cy="9" r="1.5" fill="#fff" opacity="0.2"/>
+                            <circle cx="6" cy="11" r="1" fill="#000" opacity="0.2"/>
+                        </pattern>
+
+                        <!-- Cosmic Deep Space Nebulas -->
+                        <radialGradient id="nebulaMagenta" cx="40%" cy="40%" r="60%">
+                            <stop offset="0%" stop-color="#ec4899" stop-opacity="0.85"/>
+                            <stop offset="50%" stop-color="#8b5cf6" stop-opacity="0.45"/>
+                            <stop offset="100%" stop-color="#020617" stop-opacity="0"/>
+                        </radialGradient>
+
+                        <radialGradient id="nebulaCyan" cx="60%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.8"/>
+                            <stop offset="60%" stop-color="#3b82f6" stop-opacity="0.35"/>
+                            <stop offset="100%" stop-color="#020617" stop-opacity="0"/>
+                        </radialGradient>
+
+                        <!-- Starburst Glows -->
+                        <radialGradient id="starburstGlow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+                            <stop offset="30%" stop-color="#38bdf8" stop-opacity="0.8"/>
+                            <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+                        </radialGradient>
+
+                        <!-- Tractor Beam Glow Gradient -->
+                        <linearGradient id="beamGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#fadb31" stop-opacity="0.85"/>
+                            <stop offset="100%" stop-color="#fadb31" stop-opacity="0.1"/>
+                        </linearGradient>
+
+                        <!-- Asteroid Tail Gradient -->
+                        <linearGradient id="asteroidTailGrad" x1="100%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#f97316" stop-opacity="0.9"/>
+                            <stop offset="50%" stop-color="#f2a900" stop-opacity="0.5"/>
+                            <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+                        </linearGradient>
+
+                        <!-- Inner Banner Text Arc Paths (For Circular Shape) -->
+                        <path id="textPathTop" d="M 35, 300 A 265, 265 0 0, 1 565, 300" />
+                        <path id="textPathBottom" d="M 35, 300 A 265, 265 0 0, 0 565, 300" />
+                    </defs>
+
+                    <!-- TARGET TEXTURED CONTENT GROUP -->
+                    <g id="svgTexturedContentGroup" filter="url(#filterEmbroidered)">
+                        <!-- Dynamic Outer Shape Background (Circle or Square) -->
+                        <rect x="5" y="5" width="590" height="590" rx="295" ry="295" fill="#020617" id="svgBgShape" />
+
+                        <!-- Cosmic Volumetric Space Background -->
+                        <g id="svgSpaceBg">
+                            <ellipse cx="430" cy="190" rx="150" ry="120" fill="url(#nebulaMagenta)" class="nebula-cloud" opacity="0.75" id="nebulaCloud1"/>
+                            <ellipse cx="170" cy="370" rx="140" ry="110" fill="url(#nebulaCyan)" class="nebula-cloud" opacity="0.75" id="nebulaCloud2"/>
+                            
+                            <!-- Dust Filament Lines -->
+                            <path d="M 370,110 Q 450,150 520,120" fill="none" stroke="#f472b6" stroke-width="3" opacity="0.4"/>
+                            <path d="M 80,340 Q 150,410 230,360" fill="none" stroke="#38bdf8" stroke-width="3" opacity="0.4"/>
+
+                            <!-- Realistic Stellar Star Field -->
+                            <g id="realisticStars">
+                                <circle cx="110" cy="120" r="0.8" fill="#ffffff" opacity="0.7"/>
+                                <circle cx="160" cy="80" r="1.1" fill="#93c5fd" opacity="0.9"/>
+                                <circle cx="210" cy="140" r="0.6" fill="#ffffff" opacity="0.6"/>
+                                <circle cx="280" cy="90" r="1.2" fill="#fef08a" opacity="0.8"/>
+                                <circle cx="340" cy="110" r="0.7" fill="#ffffff" opacity="0.5"/>
+                                <circle cx="390" cy="75" r="1.4" fill="#60a5fa" opacity="0.9" class="twinkle-fast"/>
+                                <circle cx="440" cy="130" r="0.9" fill="#fca5a5" opacity="0.8"/>
+                                <circle cx="490" cy="95" r="1.1" fill="#ffffff" opacity="0.8" class="twinkle-slow"/>
+
+                                <circle cx="85" cy="220" r="1.3" fill="#60a5fa" opacity="0.85" class="twinkle-slow"/>
+                                <circle cx="140" cy="250" r="0.7" fill="#ffffff" opacity="0.6"/>
+                                <circle cx="460" cy="210" r="1.5" fill="#fef08a" opacity="0.9" class="twinkle-fast"/>
+                                <circle cx="510" cy="260" r="0.8" fill="#ffffff" opacity="0.7"/>
+
+                                <circle cx="90" cy="360" r="1.0" fill="#93c5fd" opacity="0.8" class="twinkle-fast"/>
+                                <circle cx="150" cy="420" r="0.8" fill="#ffffff" opacity="0.5"/>
+                                <circle cx="200" cy="460" r="1.2" fill="#fca5a5" opacity="0.85"/>
+                                <circle cx="260" cy="480" r="0.6" fill="#ffffff" opacity="0.6"/>
+                                <circle cx="360" cy="470" r="1.3" fill="#fef08a" opacity="0.9" class="twinkle-slow"/>
+                                <circle cx="420" cy="440" r="0.9" fill="#60a5fa" opacity="0.8"/>
+                                <circle cx="480" cy="430" r="1.1" fill="#ffffff" opacity="0.7" class="twinkle-fast"/>
+                            </g>
+
+                            <!-- Diffraction Spike Major Stars -->
+                            <g filter="url(#starGlow)" class="twinkle-slow">
+                                <g transform="translate(180, 110)">
+                                    <ellipse cx="0" cy="0" rx="12" ry="1.2" fill="#ffffff"/>
+                                    <ellipse cx="0" cy="0" rx="1.2" ry="12" fill="#ffffff"/>
+                                    <circle cx="0" cy="0" r="2.5" fill="#ffffff"/>
+                                    <circle cx="0" cy="0" r="4.5" fill="#93c5fd" opacity="0.5"/>
+                                </g>
+
+                                <g transform="translate(470, 140)">
+                                    <ellipse cx="0" cy="0" rx="16" ry="1.5" fill="#ffffff"/>
+                                    <ellipse cx="0" cy="0" rx="1.5" ry="16" fill="#ffffff"/>
+                                    <circle cx="0" cy="0" r="3" fill="#ffffff"/>
+                                    <circle cx="0" cy="0" r="6" fill="#38bdf8" opacity="0.6"/>
+                                </g>
+
+                                <g transform="translate(440, 390)">
+                                    <ellipse cx="0" cy="0" rx="10" ry="1" fill="#ffffff"/>
+                                    <ellipse cx="0" cy="0" rx="1" ry="10" fill="#ffffff"/>
+                                    <circle cx="0" cy="0" r="2" fill="#ffffff"/>
+                                    <circle cx="0" cy="0" r="4" fill="#fef08a" opacity="0.6"/>
+                                </g>
+                            </g>
+
+                            <!-- POP SPACE ELEMENTS (Ringed Planet & Satellite) -->
+                            <g id="popSwirlGalaxy" transform="translate(130, 120) scale(0.75)">
+                                <path d="M 0,0 C 30,-30 70,0 40,40 C 10,70 -40,30 -30,-20 C -20,-60 50,-70 80,-20 C 100,20 60,80 0,80" fill="none" stroke="#a855f7" stroke-width="8" stroke-linecap="round"/>
+                                <path d="M 0,0 C 20,-20 50,0 30,30 C 10,50 -20,20 -15,-10" fill="none" stroke="#e9d5ff" stroke-width="4" stroke-linecap="round"/>
+                                <polygon points="60,-40 64,-30 74,-26 64,-22 60,-12 56,-22 46,-26 56,-30" fill="#fbbf24"/>
+                            </g>
+
+                            <g id="popGreenPlanet" transform="translate(430, 180) scale(0.85)">
+                                <circle cx="0" cy="0" r="42" fill="#4ade80" stroke="#166534" stroke-width="3"/>
+                                <path d="M -15,-20 C -5,-30 20,-10 15,10" fill="none" stroke="#86efac" stroke-width="5" stroke-linecap="round"/>
+                                <ellipse cx="0" cy="0" rx="75" ry="16" fill="none" stroke="#c084fc" stroke-width="8" transform="rotate(-18)"/>
+                            </g>
+
+                            <g id="popRocket" transform="translate(480, 290) rotate(-25) scale(0.75)" style="display: none;">
+                                <path d="M 0,-45 C 20,-20 20,20 18,35 L -18,35 C -20,20 -20,-20 0,-45 Z" fill="#a855f7" stroke="#581c87" stroke-width="3"/>
+                                <circle cx="0" cy="-5" r="10" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+                                <path d="M -18,15 L -35,38 L -18,35 Z" fill="#ec4899"/>
+                                <path d="M 18,15 L 35,38 L 18,35 Z" fill="#ec4899"/>
+                                <path d="M -12,35 C -15,55 0,75 0,75 C 0,75 15,55 12,35 Z" fill="#fb923c"/>
+                                <path d="M -6,35 C -8,48 0,60 0,60 C 0,60 8,48 6,35 Z" fill="#fef08a"/>
+                            </g>
+
+                            <g id="popSatellite" transform="translate(160, 240) rotate(20) scale(0.7)">
+                                <rect x="-12" y="-12" width="24" height="24" fill="#cbd5e1" stroke="#475569" stroke-width="2" rx="3"/>
+                                <rect x="-55" y="-8" width="35" height="16" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+                                <rect x="20" y="-8" width="35" height="16" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+                                <path d="M 0,12 L 0,25 M -12,25 A 12,12 0 0,0 12,25" fill="none" stroke="#cbd5e1" stroke-width="2"/>
+                            </g>
+
+                            <!-- ANIMATED FLYING ASTEROIDS / METEORS -->
+                            <g id="animatedAsteroids">
+                                <g transform="translate(490, 80)" class="anim-asteroid-1" id="asteroidVar1">
+                                    <polygon points="0,0 80,-40 60,-10" fill="url(#asteroidTailGrad)"/>
+                                    <line x1="0" y1="0" x2="110" y2="-55" stroke="#f97316" stroke-width="2" stroke-linecap="round"/>
+                                    <polygon points="-6,-4 2,-8 8,-2 6,6 -2,8 -8,2" fill="#78716c" stroke="#f97316" stroke-width="1.5"/>
+                                    <circle cx="-1" cy="-1" r="1.5" fill="#44403c"/>
+                                </g>
+
+                                <g transform="translate(420, 50)" class="anim-asteroid-2" id="asteroidVar2">
+                                    <polygon points="0,0 90,-30 70,-5" fill="url(#asteroidTailGrad)"/>
+                                    <line x1="0" y1="0" x2="130" y2="-42" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                                    <polygon points="-8,-2 0,-7 7,-4 5,5 -3,7 -7,3" fill="#a8a29e" stroke="#38bdf8" stroke-width="1.5"/>
+                                </g>
+                            </g>
+                        </g>
+
+                        <!-- FLOATING MOON (Hidden by default in this variation preset) -->
+                        <g id="moonGroup" transform="translate(130, 150)" style="display: none;">
+                            <circle cx="0" cy="0" r="48" fill="#e2e8f0" stroke="#94a3b8" stroke-width="3"/>
+                            <circle cx="-14" cy="-10" r="11" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+                            <circle cx="-11" cy="-8" r="7" fill="#94a3b8"/>
+                            <circle cx="16" cy="14" r="12" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+                            <circle cx="18" cy="16" r="8" fill="#94a3b8"/>
+                            <circle cx="-7" cy="20" r="8" fill="#cbd5e1" stroke="#64748b" stroke-width="1.5"/>
+                            <circle cx="16" cy="-16" r="6" fill="#cbd5e1" stroke="#64748b" stroke-width="1.5"/>
+                        </g>
+
+                        <!-- BOTTOM CRATERED MOON TERRAIN - SMOOTH ROUNDED SPHERICAL DOME -->
+                        <g id="bottomMoonTerrain">
+                            <!-- Large Circular Lunar Dome Surface -->
+                            <path d="M 15,580 Q 300,320 585,580 L 585,610 L 15,610 Z" fill="#a3a3a3" stroke="#525252" stroke-width="4"/>
+                            <!-- Smooth Lunar Rim Highlight Arc -->
+                            <path d="M 35,565 Q 300,335 565,565" fill="none" stroke="#d4d4d4" stroke-width="7" stroke-linecap="round"/>
+
+                            <!-- Spherical Depth Shadow Arc -->
+                            <path d="M 25,580 Q 300,360 575,580" fill="none" stroke="#737373" stroke-width="18" opacity="0.3"/>
+
+                            <!-- Craters Positioned naturally on Curvature -->
+                            <ellipse cx="140" cy="495" rx="26" ry="18" fill="#737373" stroke="#404040" stroke-width="2" transform="rotate(-12 140 495)"/>
+                            <ellipse cx="132" cy="490" rx="16" ry="11" fill="#525252" transform="rotate(-12 132 490)"/>
+
+                            <ellipse cx="440" cy="505" rx="32" ry="22" fill="#737373" stroke="#404040" stroke-width="2" transform="rotate(14 440 505)"/>
+                            <ellipse cx="450" cy="500" rx="18" ry="12" fill="#525252" transform="rotate(14 450 500)"/>
+
+                            <ellipse cx="290" cy="455" rx="22" ry="13" fill="#737373" stroke="#404040" stroke-width="2"/>
+                            <ellipse cx="290" cy="452" rx="14" ry="8" fill="#525252"/>
+
+                            <ellipse cx="210" cy="520" rx="16" ry="10" fill="#737373" opacity="0.8"/>
+                            <ellipse cx="370" cy="530" rx="19" ry="12" fill="#737373" opacity="0.8"/>
+                        </g>
+
+                        <!-- Curved Planet Horizon Variant -->
+                        <g id="planetHorizonTerrain" style="display: none;">
+                            <path d="M 15,580 Q 300,300 585,580 L 585,610 L 15,610 Z" fill="#3b82f6" stroke="#93c5fd" stroke-width="3"/>
+                            <path d="M 25,565 Q 300,312 575,565" fill="none" stroke="#60a5fa" stroke-width="6" opacity="0.85"/>
+                        </g>
+
+                        <!-- ANIMATED TRACTOR BEAM CONE & PULSING SCAN RINGS -->
+                        <g id="tractorBeamContainer">
+                            <!-- Animated Pulsing Cone Body -->
+                            <polygon points="210,220 390,220 500,480 100,480" fill="url(#beamGradient)" id="svgBeamPolygon" opacity="0.60" class="anim-beam-cone"/>
+                            
+                            <!-- Downward Scanning Energy Rings -->
+                            <g id="beamRingsGroup" stroke="#ffffff" stroke-width="2.5" fill="none">
+                                <ellipse cx="300" cy="270" rx="55" ry="14" class="anim-ring-1"/>
+                                <ellipse cx="300" cy="270" rx="55" ry="14" class="anim-ring-2"/>
+                                <ellipse cx="300" cy="270" rx="55" ry="14" class="anim-ring-3"/>
+                            </g>
+
+                            <!-- Animated Pulsing Rays -->
+                            <g stroke="#fef08a" stroke-width="2" opacity="0.75" id="beamLines" class="anim-beam-rays">
+                                <line x1="240" y1="220" x2="140" y2="480"/>
+                                <line x1="270" y1="220" x2="220" y2="480"/>
+                                <line x1="300" y1="220" x2="300" y2="480"/>
+                                <line x1="330" y1="220" x2="380" y2="480"/>
+                                <line x1="360" y1="220" x2="460" y2="480"/>
+                            </g>
+                        </g>
+
+                        <!-- UFO WITH BEARCAT & ALIEN CO-PILOTS INSIDE DOME -->
+                        <g id="ufoGroup" transform="translate(300, 205)">
+                            <path d="M -65,-5 C -65,-80 65,-80 65,-5 Z" fill="#a5f3fc" opacity="0.7" stroke="#0891b2" stroke-width="3"/>
+
+                            <!-- Single Pilot Dome -->
+                            <g id="singlePilotDome" style="display: none;">
+                                <g transform="translate(0, -24)">
+                                    <path d="M -22,-20 C -22,-38 22,-38 22,-20 C 22,-2 10,12 0,12 C -10,12 -22,-2 -22,-20 Z" fill="#cbd5e1" stroke="#475569" stroke-width="2"/>
+                                    <ellipse cx="-11" cy="-14" rx="6.5" ry="9" fill="#0f172a"/>
+                                    <ellipse cx="11" cy="-14" rx="6.5" ry="9" fill="#0f172a"/>
+                                    <circle cx="-13" cy="-17" r="2.2" fill="#fff"/>
+                                    <circle cx="9" cy="-17" r="2.2" fill="#fff"/>
+                                    <path d="M -22,10 L 22,10 L 26,30 L -26,30 Z" fill="#2563eb" stroke="#1d4ed8" stroke-width="2"/>
+                                </g>
+                            </g>
+
+                            <!-- Dual Co-Pilots: Waving Alien & Baruch Bearcat -->
+                            <g id="dualPilotDome">
+                                <!-- Waving Alien Pilot (Left) -->
+                                <g transform="translate(-18, -22) scale(0.65)">
+                                    <path d="M 0,5 C -8,18 -12,30 -12,42 L 12,42 C 12,30 8,18 0,5 Z" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+                                    <path d="M -8,18 Q -20,10 -22,-5" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round"/>
+                                    <circle cx="-22" cy="-7" r="2.5" fill="#22c55e"/>
+                                    <path d="M -16,-18 C -16,-34 16,-34 16,-18 C 16,-6 8,5 0,5 C -8,5 -16,-6 -16,-18 Z" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+                                    <ellipse cx="-7" cy="-16" rx="5" ry="7" fill="#0f172a"/>
+                                    <ellipse cx="7" cy="-16" rx="5" ry="7" fill="#0f172a"/>
+                                </g>
+                                <!-- Baruch Bearcat Co-Pilot (Right) -->
+                                <g transform="translate(15, -18) scale(0.55)">
+                                    <path d="M -18,-10 L 18,-10 L 14,28 L -14,28 Z" fill="#2563eb" stroke="#1d4ed8" stroke-width="2.5"/>
+                                    <circle cx="0" cy="0" r="18" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+                                    <polygon points="-12,-10 -20,-22 -6,-16" fill="#e2e8f0" stroke="#334155" stroke-width="1.5"/>
+                                    <polygon points="12,-10 20,-22 6,-16" fill="#e2e8f0" stroke="#334155" stroke-width="1.5"/>
+                                    <ellipse cx="0" cy="3" rx="7" ry="5" fill="#ffffff"/>
+                                    <polygon points="-2,0 2,0 0,3" fill="#ef4444"/>
+                                </g>
+                            </g>
+
+                            <ellipse cx="0" cy="0" rx="125" ry="28" fill="#f59e0b" stroke="#b45309" stroke-width="4" id="ufoOuterRim"/>
+                            <ellipse cx="0" cy="6" rx="100" ry="15" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                            <path d="M -125,0 C -125,24 125,24 125,0 Z" fill="#d97706" stroke="#92400e" stroke-width="3"/>
+
+                            <circle cx="-80" cy="8" r="4" fill="#ffffff"/>
+                            <circle cx="-50" cy="11" r="4" fill="#ffffff"/>
+                            <circle cx="-20" cy="12" r="4" fill="#ffffff"/>
+                            <circle cx="0" cy="13" r="4" fill="#ffffff"/>
+                            <circle cx="20" cy="12" r="4" fill="#ffffff"/>
+                            <circle cx="50" cy="11" r="4" fill="#ffffff"/>
+                            <circle cx="80" cy="8" r="4" fill="#ffffff"/>
+                        </g>
+
+                        <!-- Baruch Bearcat Mascot -->
+                        <g id="bearcatGroup" transform="translate(300, 365)">
+                            <g id="bearcatTransform" transform="scale(1.0)">
+                                <g transform="rotate(-25)">
+                                    <path d="M -30,20 C -50,30 -60,10 -70,15" fill="none" stroke="#e2e8f0" stroke-width="9" stroke-linecap="round"/>
+                                    <path d="M 10,25 C 25,45 35,55 50,52 C 55,50 58,42 50,38 C 40,35 25,20 15,15" fill="#cbd5e1" stroke="#334155" stroke-width="2.5"/>
+                                    <path d="M -15,25 C -25,48 -35,58 -18,65 C -8,68 0,55 -5,35" fill="#e2e8f0" stroke="#334155" stroke-width="2.5"/>
+
+                                    <path d="M -22,-15 L 22,-15 L 18,28 L -18,28 Z" fill="#2563eb" stroke="#1d4ed8" stroke-width="3"/>
+                                    <text x="0" y="-2" font-family="'Archivo Black', sans-serif" font-size="10" fill="#ffffff" text-anchor="middle">BARUCH</text>
+                                    <text x="0" y="18" font-family="'Archivo Black', sans-serif" font-size="18" fill="#ffffff" text-anchor="middle">43</text>
+
+                                    <path d="M -20,-10 C -35,-25 -30,-45 -20,-50 C -12,-52 -8,-40 -12,-25" fill="#e2e8f0" stroke="#334155" stroke-width="2.5"/>
+                                    <path d="M 20,-10 C 35,-30 25,-55 10,-25 C 2,-60 -2,-45 10,-25" fill="#e2e8f0" stroke="#334155" stroke-width="2.5"/>
+
+                                    <g transform="translate(-2, -28)">
+                                        <circle cx="0" cy="0" r="22" fill="#e2e8f0" stroke="#334155" stroke-width="2.5"/>
+                                        <polygon points="-16,-14 -26,-28 -8,-20" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+                                        <polygon points="-14,-16 -22,-25 -10,-20" fill="#f87171"/>
+                                        <polygon points="16,-14 26,-28 8,-20" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+                                        <polygon points="14,-16 22,-25 10,-20" fill="#f87171"/>
+
+                                        <ellipse cx="0" cy="4" rx="10" ry="8" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/>
+                                        <polygon points="-3,0 3,0 0,4" fill="#ef4444"/>
+                                        <path d="M -6,5 Q 0,14 6,5 Z" fill="#7f1d1d" stroke="#ef4444" stroke-width="1"/>
+
+                                        <ellipse cx="-7" cy="-5" rx="4" ry="5" fill="#ffffff" stroke="#000" stroke-width="1"/>
+                                        <circle cx="-6" cy="-5" r="2.5" fill="#000"/>
+                                        <ellipse cx="7" cy="-5" rx="4" ry="5" fill="#ffffff" stroke="#000" stroke-width="1"/>
+                                        <circle cx="6" cy="-5" r="2.5" fill="#000"/>
+
+                                        <line x1="-8" y1="4" x2="-20" y2="2" stroke="#475569" stroke-width="1.5"/>
+                                        <line x1="-8" y1="6" x2="-18" y2="8" stroke="#475569" stroke-width="1.5"/>
+                                        <line x1="8" y1="4" x2="20" y2="2" stroke="#475569" stroke-width="1.5"/>
+                                        <line x1="8" y1="6" x2="18" y2="8" stroke="#475569" stroke-width="1.5"/>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+
+                        <!-- INNER RING BANNER / CIRCULAR & SQUARE COMPOSITIONS -->
+                        <!-- Circular Banner Group -->
+                        <g id="svgInnerRingBanner">
+                            <circle cx="300" cy="300" r="260" fill="none" stroke="#dc2626" stroke-width="50" id="svgRedRing"/>
+                            <circle cx="300" cy="300" r="235" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.8"/>
+                            <circle cx="300" cy="300" r="285" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.8"/>
+
+                            <text font-family="'Archivo Black', sans-serif" font-size="19" fill="#ffffff" letter-spacing="1.5" dy="6">
+                                <textPath href="#textPathTop" startOffset="50%" text-anchor="middle" id="svgHeaderPreview">BARUCH COLLEGE • EXTRATERRESTRIAL INITIATIVE</textPath>
+                            </text>
+                            
+                            <text font-family="'Archivo Black', sans-serif" font-size="20" fill="#ffffff" letter-spacing="2" dy="-3">
+                                <textPath href="#textPathBottom" startOffset="50%" text-anchor="middle" id="svgSubPreview">SSEP MICROGRAVITY RESEARCH</textPath>
+                            </text>
+                        </g>
+
+                        <!-- Square Patch Border Banners (Hidden initially) -->
+                        <g id="svgSquareBanner" style="display: none;">
+                            <rect x="20" y="20" width="560" height="560" rx="32" fill="none" stroke="#dc2626" stroke-width="46" id="svgSquareRedRing"/>
+                            <rect x="7" y="7" width="586" height="586" rx="42" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.8"/>
+                            <rect x="43" y="43" width="514" height="514" rx="22" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.8"/>
+                            
+                            <text x="300" y="45" font-family="'Archivo Black', sans-serif" font-size="16.5" fill="#ffffff" letter-spacing="1.2" text-anchor="middle" id="svgSquareHeaderPreview">BARUCH COLLEGE • EXTRATERRESTRIAL INITIATIVE</text>
+                            <text x="300" y="568" font-family="'Archivo Black', sans-serif" font-size="17.5" fill="#ffffff" letter-spacing="1.6" text-anchor="middle" id="svgSquareSubPreview">SSEP MICROGRAVITY RESEARCH</text>
+                        </g>
+                    </g>
+
+                    <!-- HIGH-CONTRAST PATTERN OVERLAY -->
+                    <rect x="5" y="5" width="590" height="590" rx="295" ry="295" fill="url(#patEmbroidered)" id="svgTexturePatternOverlay" style="mix-blend-mode: overlay; pointer-events: none;"/>
+
+                    <!-- OUTER GLOWING STITCHED BORDER SHAPE -->
+                    <rect x="10" y="10" width="580" height="580" rx="290" ry="290" fill="none" stroke="#39ff14" stroke-width="10" stroke-dasharray="16 8" id="svgGoldBorder" filter="url(#outerNeonGlowFilter)"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Documentation -->
+    <div id="skillsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('skillsModal')">&times;</span>
+            <h3>skills.md Configuration</h3>
+            <pre>---
+name: user:baruch-ssep-mission-patch-generator
+description: Features large and prominent typography across all randomization variations and layout shapes (circular and square) for maximum readability without edge clipping.
+---
+
+# Baruch College SSEP Mission Patch Generator
+
+## Core Design Rules
+1. **Consistently Large Legible Typography:** Randomization routines exclusively pick large/extra-large font sizes (19px/22px for headers, 20px/23px for subtitles) with perfectly proportioned safe scaling for square bounds.
+2. **Spherical Bottom Lunar Surface:** Moon terrain at the bottom features rounded spherical curvature and realistic crater perspective.
+3. **Dynamic Patch Geometry:** Toggle between Circular and Square rounded patch options with full texture overlays.</pre>
+        </div>
+    </div>
+
+    <script>
+        const themes = {
+            baruch: { bg: "#020617", beam: "#fadb31", gold: "#39ff14", ring: "#dc2626" },
+            alien: { bg: "#031b0a", beam: "#39ff14", gold: "#00ffff", ring: "#064e3b" },
+            nebula: { bg: "#1f0933", beam: "#ff007f", gold: "#ffe600", ring: "#881337" },
+            cyberpunk: { bg: "#0f051d", beam: "#00ffff", gold: "#ff00ff", ring: "#7c3aed" },
+            solar: { bg: "#180802", beam: "#ffcc00", gold: "#ff4500", ring: "#b45309" },
+            midnight: { bg: "#020817", beam: "#38bdf8", gold: "#e2e8f0", ring: "#1e3a8a" }
+        };
+
+        const textures = ["none", "embroidered", "leather"];
+        const fonts = ["Archivo Black", "Space Grotesk", "Fredoka One", "Changa One", "Cutive Mono"];
+        let currentShape = 'circle';
+
+        function setPatchShape(shape) {
+            currentShape = shape;
+            document.querySelectorAll('#btn-shape-circle, #btn-shape-square').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-shape-${shape}`).classList.add('active');
+
+            const container = document.getElementById('patchContainer');
+            const bgShape = document.getElementById('svgBgShape');
+            const patternOverlay = document.getElementById('svgTexturePatternOverlay');
+            const goldBorder = document.getElementById('svgGoldBorder');
+
+            const circleBanner = document.getElementById('svgInnerRingBanner');
+            const squareBanner = document.getElementById('svgSquareBanner');
+
+            if (shape === 'square') {
+                container.classList.add('square-patch');
+                bgShape.setAttribute('rx', '40');
+                bgShape.setAttribute('ry', '40');
+                patternOverlay.setAttribute('rx', '40');
+                patternOverlay.setAttribute('ry', '40');
+                goldBorder.setAttribute('rx', '35');
+                goldBorder.setAttribute('ry', '35');
+
+                circleBanner.style.display = 'none';
+                squareBanner.style.display = 'block';
+            } else {
+                container.classList.remove('square-patch');
+                bgShape.setAttribute('rx', '295');
+                bgShape.setAttribute('ry', '295');
+                patternOverlay.setAttribute('rx', '295');
+                patternOverlay.setAttribute('ry', '295');
+                goldBorder.setAttribute('rx', '290');
+                goldBorder.setAttribute('ry', '290');
+
+                circleBanner.style.display = 'block';
+                squareBanner.style.display = 'none';
+            }
+            updatePatch();
+        }
+
+        function loadThemePreset() {
+            const val = document.getElementById('themeSelector').value;
+            const t = themes[val];
+            document.getElementById('colorBg').value = t.bg;
+            document.getElementById('colorBeam').value = t.beam;
+            document.getElementById('colorGold').value = t.gold;
+            document.getElementById('colorRing').value = t.ring;
+            updatePatch();
+        }
+
+        function randomize() {
+            // 1. Randomize Theme Preset / Color Palette
+            const themeKeys = Object.keys(themes);
+            const randomKey = themeKeys[Math.floor(Math.random() * themeKeys.length)];
+            document.getElementById('themeSelector').value = randomKey;
+            loadThemePreset();
+
+            // 2. Randomize Texture Style
+            const randomTexture = textures[Math.floor(Math.random() * textures.length)];
+            document.getElementById('selectTexture').value = randomTexture;
+
+            // 3. Randomize Banner Font
+            const randomFont = fonts[Math.floor(Math.random() * fonts.length)];
+            document.getElementById('selectFontHeader').value = randomFont;
+
+            // 4. Randomize Font Sizes strictly to LARGE or EXTRA LARGE sizes for high legibility
+            const largeHeaderSizes = ["19", "22"];
+            const largeSubSizes = ["20", "23"];
+            document.getElementById('selectHeaderFontSize').value = largeHeaderSizes[Math.floor(Math.random() * largeHeaderSizes.length)];
+            document.getElementById('selectSubFontSize').value = largeSubSizes[Math.floor(Math.random() * largeSubSizes.length)];
+
+            // 5. Randomize Terrain Variations
+            const terrainChoice = Math.floor(Math.random() * 3);
+            const moonGroup = document.getElementById('moonGroup');
+            const bottomTerrain = document.getElementById('bottomMoonTerrain');
+            const horizonTerrain = document.getElementById('planetHorizonTerrain');
+
+            moonGroup.style.display = "none";
+            bottomTerrain.style.display = "none";
+            horizonTerrain.style.display = "none";
+
+            if (terrainChoice === 0) {
+                moonGroup.style.display = "block";
+                moonGroup.setAttribute('transform', 'translate(130, 150)');
+            } else if (terrainChoice === 1) {
+                bottomTerrain.style.display = "block";
+            } else {
+                horizonTerrain.style.display = "block";
+            }
+
+            // 6. Randomize Shape Option
+            if (Math.random() > 0.5) {
+                setPatchShape('square');
+            } else {
+                setPatchShape('circle');
+            }
+
+            // 7. Randomize Pop Space Elements
+            document.getElementById('popSwirlGalaxy').style.display = Math.random() > 0.4 ? "block" : "none";
+            document.getElementById('popGreenPlanet').style.display = Math.random() > 0.4 ? "block" : "none";
+            document.getElementById('popRocket').style.display = Math.random() > 0.4 ? "block" : "none";
+            document.getElementById('popSatellite').style.display = Math.random() > 0.4 ? "block" : "none";
+
+            // 8. Randomize Pilot Domes (Single Alien vs Bearcat & Alien Co-Pilots)
+            const singleDome = document.getElementById('singlePilotDome');
+            const dualDome = document.getElementById('dualPilotDome');
+            const ufoOuterRim = document.getElementById('ufoOuterRim');
+            if (Math.random() > 0.4) {
+                singleDome.style.display = "none";
+                dualDome.style.display = "block";
+                ufoOuterRim.setAttribute('rx', '125');
+            } else {
+                singleDome.style.display = "block";
+                dualDome.style.display = "none";
+                ufoOuterRim.setAttribute('rx', '110');
+            }
+
+            // 9. Randomize Asteroid Angles & Nebula Opacity
+            const randomNebulaOp = (Math.random() * 0.5 + 0.35).toFixed(2);
+            document.getElementById('nebulaOpacityRange').value = randomNebulaOp;
+
+            const randomGlow = Math.floor(Math.random() * 15) + 6;
+            document.getElementById('glowRadiusRange').value = randomGlow;
+
+            const randomBump = (Math.random() * 2.0 + 1.0).toFixed(1);
+            document.getElementById('bumpDepthRange').value = randomBump;
+
+            const asteroid1 = document.getElementById('asteroidVar1');
+            const randomAst1Rot = Math.floor(Math.random() * 40) - 20;
+            asteroid1.setAttribute('transform', `translate(490, 80) rotate(${randomAst1Rot})`);
+
+            const asteroid2 = document.getElementById('asteroidVar2');
+            const randomAst2Rot = Math.floor(Math.random() * 50) - 25;
+            asteroid2.setAttribute('transform', `translate(420, 50) rotate(${randomAst2Rot})`);
+
+            updatePatch();
+        }
+
+        function setPreviewScale(scale, btn) {
+            document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('patchScaleWrapper').style.transform = `scale(${scale})`;
+        }
+
+        function setLayout(mode) {
+            document.querySelectorAll('.layout-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-layout-' + mode).classList.add('active');
+
+            const ufo = document.getElementById('ufoGroup');
+            const beamContainer = document.getElementById('tractorBeamContainer');
+            const bearcat = document.getElementById('bearcatGroup');
+            const moon = document.getElementById('moonGroup');
+
+            if (mode === 'diagonal') {
+                moon.setAttribute('transform', 'translate(130, 130)');
+                ufo.setAttribute('transform', 'translate(410, 190) rotate(18)');
+                beamContainer.setAttribute('transform', 'translate(80, 50) rotate(18)');
+                bearcat.setAttribute('transform', 'translate(310, 350)');
+            } else {
+                moon.setAttribute('transform', 'translate(130, 150)');
+                ufo.setAttribute('transform', 'translate(300, 205)');
+                beamContainer.removeAttribute('transform');
+                bearcat.setAttribute('transform', 'translate(300, 365)');
+            }
+        }
+
+        function updatePatch() {
+            // Colors
+            const bg = document.getElementById('colorBg').value;
+            const beamColor = document.getElementById('colorBeam').value;
+            const gold = document.getElementById('colorGold').value;
+            const ring = document.getElementById('colorRing').value;
+            const textColor = document.getElementById('colorText').value;
+
+            document.getElementById('svgBgShape').setAttribute('fill', bg);
+            document.getElementById('svgGoldBorder').setAttribute('stroke', gold);
+            document.getElementById('svgRedRing').setAttribute('stroke', ring);
+            document.getElementById('svgSquareRedRing').setAttribute('stroke', ring);
+            
+            document.getElementById('svgHeaderPreview').setAttribute('fill', textColor);
+            document.getElementById('svgSubPreview').setAttribute('fill', textColor);
+            document.getElementById('svgSquareHeaderPreview').setAttribute('fill', textColor);
+            document.getElementById('svgSquareSubPreview').setAttribute('fill', textColor);
+
+            // Container Shadow Glow matched to neon outer border
+            document.getElementById('patchContainer').style.boxShadow = `0 0 25px ${gold}88, inset 0 0 15px rgba(0,0,0,0.8), 0 30px 60px rgba(0,0,0,0.9)`;
+
+            // Update beam gradient
+            const stop1 = document.querySelectorAll('#beamGradient stop')[0];
+            const stop2 = document.querySelectorAll('#beamGradient stop')[1];
+            stop1.setAttribute('stop-color', beamColor);
+            stop2.setAttribute('stop-color', beamColor);
+
+            // Text Inputs
+            const headText = document.getElementById('inputHeader').value;
+            const subText = document.getElementById('inputSub').value;
+
+            document.getElementById('svgHeaderPreview').textContent = headText;
+            document.getElementById('svgSubPreview').textContent = subText;
+            document.getElementById('svgSquareHeaderPreview').textContent = headText;
+            document.getElementById('svgSquareSubPreview').textContent = subText;
+
+            const fontHeader = document.getElementById('selectFontHeader').value;
+            const headerSize = parseInt(document.getElementById('selectHeaderFontSize').value);
+            const subSize = parseInt(document.getElementById('selectSubFontSize').value);
+
+            // Circular Format Styling
+            const headerElem = document.getElementById('svgHeaderPreview');
+            headerElem.setAttribute('font-family', `'${fontHeader}', sans-serif`);
+            headerElem.setAttribute('font-size', headerSize);
+
+            document.getElementById('svgSubPreview').setAttribute('font-size', subSize);
+
+            // Square Format Styling (Proportioned nicely to fit safely inside borders without clipping)
+            const squareHeaderElem = document.getElementById('svgSquareHeaderPreview');
+            squareHeaderElem.setAttribute('font-family', `'${fontHeader}', sans-serif`);
+            const squareHeaderSize = Math.min(headerSize - 2.5, 16.5);
+            squareHeaderElem.setAttribute('font-size', squareHeaderSize);
+
+            const squareSubElem = document.getElementById('svgSquareSubPreview');
+            const squareSubSize = Math.min(subSize - 2.5, 17.5);
+            squareSubElem.setAttribute('font-size', squareSubSize);
+
+            // Real SVG Filter Displacement & Texture Overlay Processing
+            const texVal = document.getElementById('selectTexture').value;
+            const contentGroup = document.getElementById('svgTexturedContentGroup');
+            const patternOverlay = document.getElementById('svgTexturePatternOverlay');
+            const bumpDepth = document.getElementById('bumpDepthRange').value;
+
+            document.getElementById('bumpVal').textContent = bumpDepth;
+
+            if (texVal === 'embroidered') {
+                contentGroup.setAttribute('filter', 'url(#filterEmbroidered)');
+                patternOverlay.style.display = 'block';
+                patternOverlay.setAttribute('fill', 'url(#patEmbroidered)');
+                patternOverlay.style.mixBlendMode = 'overlay';
+            } else if (texVal === 'leather') {
+                contentGroup.setAttribute('filter', 'url(#filterLeather)');
+                patternOverlay.style.display = 'block';
+                patternOverlay.setAttribute('fill', 'url(#patCanvas)');
+                patternOverlay.style.mixBlendMode = 'multiply';
+            } else {
+                contentGroup.removeAttribute('filter');
+                patternOverlay.style.display = 'none';
+            }
+
+            // Sliders
+            const scale = document.getElementById('bearcatScaleRange').value;
+            document.getElementById('scaleVal').textContent = scale;
+            document.getElementById('bearcatTransform').setAttribute('transform', `scale(${scale})`);
+
+            const opacity = document.getElementById('beamOpacityRange').value;
+            document.getElementById('opacityVal').textContent = opacity;
+            document.getElementById('svgBeamPolygon').setAttribute('opacity', opacity);
+
+            // Glow Radius & Nebula Opacity Sliders
+            const radius = document.getElementById('glowRadiusRange').value;
+            document.getElementById('glowVal').textContent = radius;
+            document.getElementById('feGlowBlur').setAttribute('stdDeviation', radius);
+
+            const nebulaOp = document.getElementById('nebulaOpacityRange').value;
+            document.getElementById('nebulaVal').textContent = nebulaOp;
+            document.querySelectorAll('.nebula-cloud').forEach(el => el.setAttribute('opacity', nebulaOp));
+        }
+
+        function openModal(id) { document.getElementById(id).style.display = "block"; }
+        function closeModal(id) { document.getElementById(id).style.display = "none"; }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = "none";
+            }
+        }
+
+        function exportPatch() {
+            const container = document.getElementById('patchContainer');
+            html2canvas(container, { scale: 2, useCORS: true, backgroundColor: null }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `baruch-ssep-mission-patch-${currentShape}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(err => {
+                alert("Export failed.");
+                console.error(err);
+            });
+        }
+
+        window.onload = function() {
+            updatePatch();
+        };
+    </script>
+</body>
+</html>
