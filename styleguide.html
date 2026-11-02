@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Director Pt. 1: Style Guide — The Golden Cider Hour</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-spiced-amber: #D97706;
+            --color-brown-sugar: #78350F;
+            --color-frosted-vanilla: #FFFDF9;
+            --color-card-bg: #FFF8EE;
+            --color-cinnamon-bark: #4A150E;
+            --color-crisp-apple: #8B1E1E;
+            --color-soft-bg: #F4EBE1;
+            --color-text-dark: #331A12;
+            --font-display: 'DM Serif Display', Georgia, serif;
+            --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--color-soft-bg);
+            background-image: radial-gradient(rgba(120, 53, 15, 0.04) 1px, transparent 1px);
+            background-size: 24px 24px;
+            color: var(--color-text-dark);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            padding: 2.5rem 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Falling Autumn Leaves Animation Layer */
+        .leaves-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .leaf {
+            position: absolute;
+            top: -10%;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.75;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) translateX(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(50vh) translateX(60px) rotate(180deg);
+            }
+            100% {
+                transform: translateY(110vh) translateX(-40px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--color-frosted-vanilla);
+            border-radius: 20px;
+            box-shadow: 0 16px 40px rgba(74, 21, 14, 0.12);
+            padding: 3.5rem;
+            border: 1px solid rgba(217, 119, 6, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            border-bottom: 2px solid rgba(217, 119, 6, 0.15);
+            padding-bottom: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        header::after {
+            content: '☕ 🍎 ✨';
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-size: 1.25rem;
+            opacity: 0.8;
+        }
+
+        .brand-tag {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            font-weight: 600;
+            color: var(--color-spiced-amber);
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: 3.2rem;
+            color: var(--color-cinnamon-bark);
+            line-height: 1.15;
+            margin-bottom: 1rem;
+        }
+
+        .sub-header {
+            font-size: 1.25rem;
+            color: var(--color-brown-sugar);
+            font-weight: 400;
+        }
+
+        section {
+            margin-bottom: 3.5rem;
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--color-cinnamon-bark);
+            margin-bottom: 1.25rem;
+            border-left: 4px solid var(--color-spiced-amber);
+            padding-left: 0.85rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #4a3b32;
+        }
+
+        .brief-card {
+            background: var(--color-card-bg);
+            border-radius: 14px;
+            padding: 2rem;
+            border: 1px solid rgba(120, 53, 15, 0.12);
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.6);
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .swatch {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(120, 53, 15, 0.08);
+            border: 1px solid rgba(120, 53, 15, 0.1);
+            background: #fff;
+            transition: transform 0.2s ease;
+        }
+
+        .swatch:hover {
+            transform: translateY(-3px);
+        }
+
+        .swatch-color {
+            height: 100px;
+            width: 100%;
+        }
+
+        .swatch-info {
+            padding: 0.85rem;
+            text-align: center;
+            background: var(--color-card-bg);
+        }
+
+        .swatch-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--color-cinnamon-bark);
+        }
+
+        .swatch-hex {
+            font-size: 0.85rem;
+            color: var(--color-brown-sugar);
+            font-family: monospace;
+        }
+
+        .typography-spec {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .type-card {
+            border: 1px solid rgba(120, 53, 15, 0.12);
+            border-radius: 12px;
+            padding: 1.75rem;
+            background: var(--color-card-bg);
+        }
+
+        .type-sample-display {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            color: var(--color-cinnamon-bark);
+            margin: 0.5rem 0;
+            line-height: 1.2;
+        }
+
+        .type-sample-body {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--color-text-dark);
+            margin: 0.5rem 0;
+        }
+
+        .logo-preview-box {
+            background: var(--color-card-bg);
+            border: 2px dashed var(--color-spiced-amber);
+            border-radius: 14px;
+            padding: 2.5rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .logotype-demo {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--color-cinnamon-bark);
+            letter-spacing: -0.5px;
+        }
+
+        .logotype-sub {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--color-spiced-amber);
+            margin-top: 0.25rem;
+        }
+
+        .pdf-viewer-container {
+            width: 100%;
+            height: 650px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(120, 53, 15, 0.2);
+            box-shadow: 0 8px 24px rgba(120, 53, 15, 0.08);
+            margin-top: 1.5rem;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .typography-spec {
+                grid-template-columns: 1fr;
+            }
+
+            .pdf-viewer-container {
+                height: 450px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Falling Leaves Animation Container -->
+<div class="leaves-container" id="leavesContainer"></div>
+
+<script>
+    // Generate falling autumn leaves dynamically
+    const leavesContainer = document.getElementById('leavesContainer');
+    const leafSymbols = ['🍁', '🍂', '🌰', '✨'];
+    const leafCount = 18;
+
+    for (let i = 0; i < leafCount; i++) {
+        const leaf = document.createElement('div');
+        leaf.classList.add('leaf');
+        leaf.innerText = leafSymbols[Math.floor(Math.random() * leafSymbols.length)];
+        
+        // Random positioning, sizing, and timing
+        const startLeft = Math.random() * 100;
+        const animationDuration = 6 + Math.random() * 9; // between 6s and 15s
+        const animationDelay = Math.random() * 10; // up to 10s delay
+        const fontSize = 1 + Math.random() * 1.5; // between 1rem and 2.5rem
+
+        leaf.style.left = `${startLeft}%`;
+        leaf.style.fontSize = `${fontSize}rem`;
+        leaf.style.animationDuration = `${animationDuration}s`;
+        leaf.style.animationDelay = `${animationDelay}s`;
+
+        leavesContainer.appendChild(leaf);
+    }
+</script>
+
+<div class="container">
+    <header>
+        <div class="brand-tag">Olehenriksen — Project Brief</div>
+        <h1>Creative Director Pt. 1: Style Guide</h1>
+        <div class="sub-header">Campaign Launch: <strong>The Golden Cider Hour</strong></div>
+    </header>
+
+    <!-- SECTION 1: CAMPAIGN BRIEF -->
+    <section id="campaign-brief">
+        <h2>Campaign Overview & Brief</h2>
+        <div class="brief-card">
+            <p><strong>Product Focus:</strong> Pout Preserve Peptide Lip Treatment in <em>Spiced Apple Cider</em></p>
+            <p><strong>NYC Launch Strategy:</strong> <em>The Golden Cider Hour</em> positions Olehenriksen’s cult-favorite Pout Preserve Peptide Lip Treatment as an indispensable winter hydration luxury across New York City. The campaign bridges Scandinavian clinical skincare performance with the sensory warmth of fresh Hudson Valley pressed apples, brown sugar drip, and grated clove.</p>
+            <p><strong>Creative Core:</strong> Designed to contrast the crisp, chilly air of NYC winter with an ultra-dewy, high-shine amber glow. Key NYC activation touchpoints include a Scandinavian pop-up cider press kiosk in Bryant Park, high-impact wildposting runs in Soho and Bushwick, and weather-triggered digital LinkNYC displays that intensify warmth and luminescence as ambient city temperatures plunge below freezing.</p>
+        </div>
+    </section>
+
+    <!-- SECTION 2: STYLE GUIDE -->
+    <section id="style-guide">
+        <h2>Brand Campaign Style Guide</h2>
+        
+        <!-- Color Palette -->
+        <h3 style="font-size: 1.2rem; margin-top: 1.5rem; color: var(--color-cinnamon-bark);">Primary Palette</h3>
+        <div class="palette-grid">
+            <div class="swatch">
+                <div class="swatch-color" style="background-color: #D97706;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Spiced Amber</div>
+                    <div class="swatch-hex">#D97706</div>
+                </div>
+            </div>
+            <div class="swatch">
+                <div class="swatch-color" style="background-color: #78350F;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Brown Sugar</div>
+                    <div class="swatch-hex">#78350F</div>
+                </div>
+            </div>
+            <div class="swatch">
+                <div class="swatch-color" style="background-color: #FFFDF9;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Frosted Vanilla</div>
+                    <div class="swatch-hex">#FFFDF9</div>
+                </div>
+            </div>
+            <div class="swatch">
+                <div class="swatch-color" style="background-color: #4A150E;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Cinnamon Bark</div>
+                    <div class="swatch-hex">#4A150E</div>
+                </div>
+            </div>
+            <div class="swatch">
+                <div class="swatch-color" style="background-color: #8B1E1E;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Crisp Apple</div>
+                    <div class="swatch-hex">#8B1E1E</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Typography -->
+        <h3 style="font-size: 1.2rem; margin-top: 2rem; color: var(--color-cinnamon-bark);">Typography System</h3>
+        <div class="typography-spec">
+            <div class="type-card">
+                <div class="brand-tag">Primary Display Header</div>
+                <div class="type-sample-display">DM Serif Display</div>
+                <p>Used for campaign headlines, hero titles, billboard statements, and high-impact packaging titles.</p>
+            </div>
+            <div class="type-card">
+                <div class="brand-tag">Body & UI Typography</div>
+                <div class="type-sample-body">Poppins (Regular / Medium / Bold)</div>
+                <p>Used for body text, ingredient highlights, digital captions, and small print packaging details.</p>
+            </div>
+        </div>
+
+        <!-- Logomark / Logotype Section -->
+        <h3 style="font-size: 1.2rem; margin-top: 2rem; color: var(--color-cinnamon-bark);">Logotype & Brand Mark Concept</h3>
+        <div class="logo-preview-box">
+            <div class="logotype-demo">OLEHENRIKSEN</div>
+            <div class="logotype-sub">Pout Preserve • Spiced Apple Cider</div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: MOODBOARD -->
+    <section id="moodboard">
+        <h2>Campaign Moodboard</h2>
+        
+        <div class="pdf-viewer-container">
+            <iframe src="creativestyleguide.pdf" title="Campaign Moodboard PDF">
+                <p>Your browser does not support embedded PDFs. <a href="creativestyleguide.pdf">Download the Moodboard PDF here</a>.</p>
+            </iframe>
+        </div>
+    </section>
+</div>
+
+</body>
+</html>
