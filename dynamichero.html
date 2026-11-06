@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olehenriksen — Dynamic Hero Image Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-spiced-amber: #D97706;
+            --color-brown-sugar: #78350F;
+            --color-frosted-vanilla: #FFFDF9;
+            --color-card-bg: #FFF8EE;
+            --color-cinnamon-bark: #4A150E;
+            --color-crisp-apple: #8B1E1E;
+            --color-soft-bg: #F4EBE1;
+            --color-text-dark: #331A12;
+            --font-display: 'DM Serif Display', Georgia, serif;
+            --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--color-soft-bg);
+            background-image: radial-gradient(rgba(120, 53, 15, 0.04) 1px, transparent 1px);
+            background-size: 24px 24px;
+            color: var(--color-text-dark);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding: 2rem 1rem;
+        }
+
+        /* Falling Autumn Leaves Overlay */
+        .leaves-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .leaf {
+            position: absolute;
+            top: -10%;
+            opacity: 0.75;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0.8; }
+            50% { transform: translateY(50vh) translateX(50px) rotate(180deg); }
+            100% { transform: translateY(110vh) translateX(-30px) rotate(360deg); opacity: 0; }
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--color-frosted-vanilla);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(74, 21, 14, 0.12);
+            padding: 3rem;
+            border: 1px solid rgba(217, 119, 6, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            border-bottom: 2px solid rgba(217, 119, 6, 0.15);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .brand-tag {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            font-weight: 700;
+            color: var(--color-spiced-amber);
+            margin-bottom: 0.25rem;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: 2.8rem;
+            color: var(--color-cinnamon-bark);
+            line-height: 1.15;
+        }
+
+        .sub-header {
+            font-size: 1.1rem;
+            color: var(--color-brown-sugar);
+            font-weight: 400;
+        }
+
+        /* Hero Image Generator Canvas Frame */
+        .hero-generator-stage {
+            position: relative;
+            width: 100%;
+            height: 540px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(120, 53, 15, 0.2);
+            box-shadow: 0 16px 40px rgba(74, 21, 14, 0.15);
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            transition: filter 0.4s ease;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(51, 26, 18, 0.75) 0%, rgba(74, 21, 14, 0.35) 50%, rgba(0, 0, 0, 0.1) 100%);
+            z-index: 2;
+            transition: background 0.3s ease;
+        }
+
+        /* Interactive Dewy Glow Cursor Layer */
+        .dewy-cursor-glow {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(217, 119, 6, 0.35) 0%, rgba(251, 191, 36, 0.15) 40%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            mix-blend-mode: screen;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .hero-generator-stage:hover .dewy-cursor-glow {
+            opacity: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 4;
+            max-width: 580px;
+            padding: 3.5rem;
+            color: var(--color-frosted-vanilla);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 248, 238, 0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 253, 249, 0.3);
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: 3.2rem;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            color: #FFFDF9;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #F4EBE1;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-cta {
+            display: inline-block;
+            background: var(--color-spiced-amber);
+            color: #FFFDF9;
+            padding: 0.9rem 2.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.35);
+            transition: all 0.3s ease;
+        }
+
+        .hero-cta:hover {
+            background: #B45309;
+            transform: translateY(-2px);
+        }
+
+        /* Side-Scrolling Product Reel inside Generator */
+        .hero-reel-container {
+            position: absolute;
+            right: 2rem;
+            bottom: 2rem;
+            width: 380px;
+            height: 190px;
+            z-index: 5;
+            background: rgba(255, 248, 238, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 1rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--color-cinnamon-bark);
+            margin-bottom: 0.75rem;
+        }
+
+        .reel-track-wrapper {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+        }
+
+        .reel-track {
+            display: flex;
+            gap: 0.85rem;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .reel-item {
+            min-width: 110px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 0.75rem;
+            border: 1px solid rgba(120, 53, 15, 0.12);
+            text-align: center;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .reel-item:hover, .reel-item.active {
+            transform: translateY(-3px);
+            border-color: var(--color-spiced-amber);
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.18);
+        }
+
+        .reel-item-emoji {
+            font-size: 1.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .reel-item-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-cinnamon-bark);
+            line-height: 1.2;
+        }
+
+        .reel-item-desc {
+            font-size: 0.65rem;
+            color: var(--color-brown-sugar);
+        }
+
+        /* Controls Dashboard */
+        .controls-dashboard {
+            background: var(--color-card-bg);
+            border-radius: 18px;
+            padding: 2rem;
+            border: 1px solid rgba(120, 53, 15, 0.12);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-cinnamon-bark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-input, .control-select {
+            padding: 0.65rem 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(120, 53, 15, 0.2);
+            background: #fff;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            color: var(--color-text-dark);
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .control-input:focus, .control-select:focus {
+            border-color: var(--color-spiced-amber);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: var(--color-cinnamon-bark);
+            color: #fff;
+            border: none;
+            padding: 0.65rem 1.25rem;
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            flex: 1;
+        }
+
+        .action-btn:hover {
+            background: var(--color-spiced-amber);
+        }
+
+        @media (max-width: 900px) {
+            .hero-generator-stage {
+                height: auto;
+                min-height: 580px;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+            .hero-content {
+                padding: 2rem;
+            }
+            .hero-reel-container {
+                position: relative;
+                right: auto;
+                bottom: auto;
+                width: calc(100% - 2rem);
+                margin: 0 1rem 1rem 1rem;
+            }
+            .hero-title {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Falling Leaves Animation -->
+<div class="leaves-container" id="leavesContainer"></div>
+
+<script>
+    const leavesContainer = document.getElementById('leavesContainer');
+    const leafSymbols = ['🍁', '🍂', '🌰', '✨'];
+    for (let i = 0; i < 16; i++) {
+        const leaf = document.createElement('div');
+        leaf.classList.add('leaf');
+        leaf.innerText = leafSymbols[Math.floor(Math.random() * leafSymbols.length)];
+        leaf.style.left = `${Math.random() * 100}%`;
+        leaf.style.fontSize = `${1 + Math.random() * 1.4}rem`;
+        leaf.style.animationDuration = `${6 + Math.random() * 9}s`;
+        leaf.style.animationDelay = `${Math.random() * 8}s`;
+        leavesContainer.appendChild(leaf);
+    }
+</script>
+
+<div class="main-container">
+    <header>
+        <div>
+            <div class="brand-tag">Olehenriksen • Studio Generator</div>
+            <h1>Hero Image Generator</h1>
+        </div>
+        <div class="sub-header">Campaign Launch: <strong>The Golden Cider Hour</strong></div>
+    </header>
+
+    <!-- Interactive Hero Canvas Stage -->
+    <div class="hero-generator-stage" id="heroStage" onmousemove="moveDewyGlow(event)">
+        <!-- Main Background Image -->
+        <img src="heroimage.jpg" alt="The Golden Cider Hour Hero" class="hero-bg-image" id="heroBgImg">
+        <div class="hero-overlay" id="heroOverlay"></div>
+        
+        <!-- Dewy Glow Cursor Layer -->
+        <div class="dewy-cursor-glow" id="dewyGlow"></div>
+
+        <!-- Hero Content Layer -->
+        <div class="hero-content">
+            <div class="hero-badge" id="displayBadge">🍁 Spiced Apple Cider • Limited Edition</div>
+            <h2 class="hero-title" id="displayTitle">The Golden Cider Hour</h2>
+            <p class="hero-subtitle" id="displaySubtitle">Contrast the crisp NYC winter frost with the warm, dewy glow of Olehenriksen Pout Preserve Peptide Lip Treatment in Spiced Apple Cider.</p>
+            <a href="#shop" class="hero-cta" id="displayCta">Shop Spiced Apple Cider</a>
+        </div>
+
+        <!-- Integrated Side-Scroll Product Reel -->
+        <div class="hero-reel-container">
+            <div class="reel-header">
+                <span>Product Lineup</span>
+                <span id="reelStatus">Auto-Scroll ON</span>
+            </div>
+            <div class="reel-track-wrapper">
+                <div class="reel-track" id="reelTrack">
+                    <div class="reel-item active" onclick="selectReelItem('Spiced Apple Cider', '🍁')">
+                        <div class="reel-item-emoji">🍎</div>
+                        <div class="reel-item-name">Spiced Apple</div>
+                        <div class="reel-item-desc">Limited Edition</div>
+                    </div>
+                    <div class="reel-item" onclick="selectReelItem('Citrus Sunshine', '🍊')">
+                        <div class="reel-item-emoji">🍊</div>
+                        <div class="reel-item-name">Citrus Sunshine</div>
+                        <div class="reel-item-desc">Vitamin C</div>
+                    </div>
+                    <div class="reel-item" onclick="selectReelItem('Strawberry Sorbet', '🍓')">
+                        <div class="reel-item-emoji">🍓</div>
+                        <div class="reel-item-name">Strawberry</div>
+                        <div class="reel-item-desc">Hydrating</div>
+                    </div>
+                    <div class="reel-item" onclick="selectReelItem('Cocoa Craze', '🍫')">
+                        <div class="reel-item-emoji">🍫</div>
+                        <div class="reel-item-name">Cocoa Craze</div>
+                        <div class="reel-item-desc">Nourishing</div>
+                    </div>
+                    <div class="reel-item" onclick="selectReelItem('Bryant Park Kiosk', '🗽')">
+                        <div class="reel-item-emoji">🗽</div>
+                        <div class="reel-item-name">NYC Pop-Up</div>
+                        <div class="reel-item-desc">Activation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generator Controls Dashboard -->
+    <div class="controls-dashboard">
+        <div class="control-group">
+            <label class="control-label">Headline Text</label>
+            <input type="text" class="control-input" id="inputTitle" value="The Golden Cider Hour" oninput="updateHeroText()">
+        </div>
+        <div class="control-group">
+            <label class="control-label">Subtitle / Copy</label>
+            <input type="text" class="control-input" id="inputSubtitle" value="Contrast the crisp NYC winter frost with the warm, dewy glow of Olehenriksen Pout Preserve Peptide Lip Treatment in Spiced Apple Cider." oninput="updateHeroText()">
+        </div>
+        <div class="control-group">
+            <label class="control-label">Overlay Tint</label>
+            <select class="control-select" id="selectOverlay" onchange="updateOverlay()">
+                <option value="warm-cinnamon">Warm Cinnamon Bark</option>
+                <option value="spiced-amber">Spiced Amber Glow</option>
+                <option value="dark-brown-sugar">Deep Brown Sugar</option>
+                <option value="none">No Overlay (Pure Image)</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Side-Scroll Controls</label>
+            <div class="btn-group">
+                <button class="action-btn" onclick="toggleReelScroll()" id="toggleScrollBtn">Pause Reel</button>
+                <button class="action-btn" onclick="scrollReelNext()">Next Product</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Update Headline and Subtitle Copy Dynamically
+    function updateHeroText() {
+        document.getElementById('displayTitle').innerText = document.getElementById('inputTitle').value || 'The Golden Cider Hour';
+        document.getElementById('displaySubtitle').innerText = document.getElementById('inputSubtitle').value || '';
+    }
+
+    // Dewy Glow Cursor Tracking
+    function moveDewyGlow(e) {
+        const stage = document.getElementById('heroStage');
+        const glow = document.getElementById('dewyGlow');
+        const rect = stage.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        glow.style.left = `${x}px`;
+        glow.style.top = `${y}px`;
+    }
+
+    // Overlay Gradient Selection
+    function updateOverlay() {
+        const val = document.getElementById('selectOverlay').value;
+        const overlay = document.getElementById('heroOverlay');
+        if (val === 'warm-cinnamon') {
+            overlay.style.background = 'linear-gradient(90deg, rgba(51, 26, 18, 0.8) 0%, rgba(74, 21, 14, 0.4) 50%, rgba(0, 0, 0, 0.1) 100%)';
+        } else if (val === 'spiced-amber') {
+            overlay.style.background = 'linear-gradient(90deg, rgba(217, 119, 6, 0.75) 0%, rgba(120, 53, 15, 0.35) 60%, rgba(0, 0, 0, 0.1) 100%)';
+        } else if (val === 'dark-brown-sugar') {
+            overlay.style.background = 'linear-gradient(90deg, rgba(120, 53, 15, 0.85) 0%, rgba(51, 26, 18, 0.5) 60%, rgba(0, 0, 0, 0.2) 100%)';
+        } else {
+            overlay.style.background = 'transparent';
+        }
+    }
+
+    // Side-Scroll Product Reel Controls
+    const track = document.getElementById('reelTrack');
+    let scrollPos = 0;
+    let isAutoScrolling = true;
+    const maxScroll = 240;
+
+    function autoScrollStep() {
+        if (!isAutoScrolling) return;
+        scrollPos += 118;
+        if (scrollPos > maxScroll) scrollPos = 0;
+        track.style.transform = `translateX(-${scrollPos}px)`;
+    }
+
+    let scrollInterval = setInterval(autoScrollStep, 2600);
+
+    function toggleReelScroll() {
+        isAutoScrolling = !isAutoScrolling;
+        const btn = document.getElementById('toggleScrollBtn');
+        const status = document.getElementById('reelStatus');
+        if (isAutoScrolling) {
+            btn.innerText = 'Pause Reel';
+            status.innerText = 'Auto-Scroll ON';
+        } else {
+            btn.innerText = 'Resume Reel';
+            status.innerText = 'Paused';
+        }
+    }
+
+    function scrollReelNext() {
+        scrollPos += 118;
+        if (scrollPos > maxScroll) scrollPos = 0;
+        track.style.transform = `translateX(-${scrollPos}px)`;
+    }
+
+    function selectReelItem(name, emoji) {
+        document.getElementById('displayBadge').innerText = `${emoji} ${name} • Selected`;
+    }
+</script>
+
+</body>
+</html>
