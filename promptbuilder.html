@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olehenriksen — Campaign AI Prompt Builder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-spiced-amber: #D97706;
+            --color-brown-sugar: #78350F;
+            --color-frosted-vanilla: #FFFDF9;
+            --color-card-bg: #FFF8EE;
+            --color-cinnamon-bark: #4A150E;
+            --color-crisp-apple: #8B1E1E;
+            --color-soft-bg: #F4EBE1;
+            --color-text-dark: #331A12;
+            --font-display: 'DM Serif Display', Georgia, serif;
+            --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--color-soft-bg);
+            background-image: radial-gradient(rgba(120, 53, 15, 0.04) 1px, transparent 1px);
+            background-size: 24px 24px;
+            color: var(--color-text-dark);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            padding: 2.5rem 1rem;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+            background: var(--color-frosted-vanilla);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(74, 21, 14, 0.12);
+            padding: 3rem;
+            border: 1px solid rgba(217, 119, 6, 0.2);
+        }
+
+        header {
+            border-bottom: 2px solid rgba(217, 119, 6, 0.15);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .brand-tag {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            font-weight: 700;
+            color: var(--color-spiced-amber);
+            margin-bottom: 0.25rem;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: 2.6rem;
+            color: var(--color-cinnamon-bark);
+            line-height: 1.15;
+        }
+
+        .sub-header {
+            font-size: 1rem;
+            color: var(--color-brown-sugar);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-card {
+            background: var(--color-card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(120, 53, 15, 0.12);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-cinnamon-bark);
+        }
+
+        select, input[type="text"] {
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(120, 53, 15, 0.2);
+            background: #ffffff;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--color-text-dark);
+            outline: none;
+            transition: border-color 0.2s ease;
+            width: 100%;
+        }
+
+        select:focus, input[type="text"]:focus {
+            border-color: var(--color-spiced-amber);
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.25rem;
+        }
+
+        .checkbox-label {
+            font-size: 0.82rem;
+            font-weight: 500;
+            text-transform: none;
+            letter-spacing: normal;
+            color: var(--color-text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+        }
+
+        .checkbox-label input {
+            accent-color: var(--color-spiced-amber);
+        }
+
+        .output-section {
+            background: var(--color-card-bg);
+            border-radius: 18px;
+            border: 1px solid rgba(120, 53, 15, 0.18);
+            padding: 2rem;
+            position: relative;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .output-header label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-cinnamon-bark);
+        }
+
+        .generator-badge {
+            font-size: 0.75rem;
+            background: rgba(217, 119, 6, 0.15);
+            color: var(--color-spiced-amber);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        textarea {
+            width: 100%;
+            height: 220px;
+            border: 1px solid rgba(120, 53, 15, 0.15);
+            border-radius: 12px;
+            background: #ffffff;
+            font-family: monospace;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            color: var(--color-cinnamon-bark);
+            padding: 1.25rem;
+            resize: none;
+            outline: none;
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.25rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            background: var(--color-cinnamon-bark);
+            color: #ffffff;
+            border: none;
+            padding: 0.85rem 1.75rem;
+            border-radius: 12px;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: var(--color-spiced-amber);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-cinnamon-bark);
+            border: 1px solid rgba(120, 53, 15, 0.25);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(120, 53, 15, 0.05);
+            color: var(--color-cinnamon-bark);
+            transform: none;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--color-cinnamon-bark);
+            color: #ffffff;
+            padding: 0.85rem 1.5rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 99;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div>
+            <div class="brand-tag">Olehenriksen • Brand Skill Engine</div>
+            <h1>Prompt Generator Tool</h1>
+        </div>
+        <div class="sub-header">Launch Campaign: <strong>The Golden Cider Hour</strong></div>
+    </header>
+
+    <div class="form-grid">
+        <!-- Expanded Shot Type / Category Dropdown -->
+        <div class="control-card">
+            <label for="shotType">1. Expanded Shot Concept & Angle</label>
+            <select id="shotType" onchange="generatePrompt()">
+                <optgroup label="Product Shots">
+                    <option value="prod-single-macro">Product: Single Tube Frontal Studio Macro</option>
+                    <option value="prod-array-multi">Product: Multi-Angle Squeeze Tube Trio Array</option>
+                    <option value="prod-crate">Product: Tube Resting in Rustic Apple Box Crate</option>
+                    <option value="prod-knit">Product: Tube Laid on Chunky Cream Knit Sweater</option>
+                    <option value="prod-tip-drip">Product: Formula Drip from Precision Slanted Applicator Tip</option>
+                    <option value="prod-squeeze-action">Product: Hand Squeezing Tube Formula Swatch</option>
+                </optgroup>
+                <optgroup label="Macro Beauty & Swatches">
+                    <option value="beauty-lip-swatch">Beauty: Macro Glossy Lip Swatch Closeup</option>
+                    <option value="beauty-finger-swatch">Beauty: Finger Swatch Gloss Texture Closeup</option>
+                    <option value="beauty-dual-skintone">Beauty: Dual Skin Tone Lip Swatch Side-by-Side</option>
+                    <option value="beauty-heavy-drizzle">Beauty: Heavy Golden Amber Formula Drizzle on Lips</option>
+                    <option value="beauty-gloss-reflection">Beauty: High-Shine Gloss Lip Reflection Bokeh</option>
+                </optgroup>
+                <optgroup label="Lifestyle & Urban NYC">
+                    <option value="life-bryant-hand">Lifestyle: Hand Holding Tube in Bryant Park with Cider Mug</option>
+                    <option value="life-soho-wildposting">Lifestyle: Soho Brick Wall Wildposting Campaign Poster</option>
+                    <option value="life-kiosk-model">Lifestyle: Model Applying Lip Treatment outside Cider Kiosk</option>
+                    <option value="life-subway-platform">Lifestyle: Cozy Model on NYC Subway Platform Bench</option>
+                    <option value="life-coffee-window">Lifestyle: Lip Treatment on Cozy Coffee Shop Window Sill</option>
+                </optgroup>
+                <optgroup label="Environmental & Settings">
+                    <option value="env-bryant-kiosk">Setting: Bryant Park Scandinavian Cider Press Pop-Up Kiosk</option>
+                    <option value="env-hudson-orchard">Setting: Rustic Hudson Valley Apple Orchard Table Spread</option>
+                    <option value="env-cinnamon-stack">Setting: Cinnamon Bark & Brown Sugar Spice Market Stack</option>
+                    <option value="env-donut-stand">Setting: Warm Apple Cider Donut Stand Counter Display</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <!-- Size & Ratio Selection -->
+        <div class="control-card">
+            <label for="placement">2. Media Placement & Aspect Ratio</label>
+            <select id="placement" onchange="generatePrompt()">
+                <option value="billboard">NYC Highway Billboard (16:9 Widescreen, --ar 16:9)</option>
+                <option value="subway">NYC Subway Poster / Wildposting (4:5 Vertical, --ar 4:5)</option>
+                <option value="ig-ad">Instagram Feed Ad (1:1 Square, --ar 1:1)</option>
+                <option value="ig-reel">Instagram Reel / Story / TikTok (9:16 Vertical, --ar 9:16)</option>
+                <option value="magazine">High-Fashion Magazine Ad (3:4 Portrait, --ar 3:4)</option>
+                <option value="linknyc">LinkNYC Digital Kiosk Display (9:21 Vertical, --ar 9:21)</option>
+            </select>
+        </div>
+
+        <!-- Lighting & Atmosphere Preset Options -->
+        <div class="control-card">
+            <label for="lighting">3. Lighting & Atmosphere</label>
+            <select id="lighting" onchange="generatePrompt()">
+                <option value="golden-hour">Golden Hour Sunset Glow & Warm Sunlight</option>
+                <option value="cozy-ambient">Cozy Bryant Park Cider Press Warmth</option>
+                <option value="crisp-frost">Crisp NYC Winter Morning Frost with Warm Rim Highlight</option>
+                <option value="moody-cinnamon">Moody Cinnamon Bark Shadow Editorial Lighting</option>
+            </select>
+        </div>
+
+        <!-- Target AI Engine Target -->
+        <div class="control-card">
+            <label for="targetEngine">4. Target AI Generator</label>
+            <select id="targetEngine" onchange="generatePrompt()">
+                <option value="midjourney">Midjourney v6 (--ar format)</option>
+                <option value="dalle3">DALL-E 3 (Descriptive format)</option>
+                <option value="flux">Flux.1 / SDXL (Natural language)</option>
+            </select>
+        </div>
+
+        <!-- Packaging Lock Toggle & Details -->
+        <div class="control-card" style="grid-column: span 1;">
+            <label for="packagingLock">5. Exact Reference Packaging Lock</label>
+            <select id="packagingLock" onchange="generatePrompt()">
+                <option value="strict-ref">Strict Match: Reference Tube Specifications Locked</option>
+                <option value="artistic-ref">Editorial Match: Squeeze Tube with Stylized Angle</option>
+            </select>
+        </div>
+
+        <!-- Campaign Props & Textures -->
+        <div class="control-card" style="grid-column: span 1;">
+            <label>6. Campaign Props & Textures</label>
+            <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox" value="sliced Hudson Valley apples" checked onchange="generatePrompt()"> Apple Slices</label>
+                <label class="checkbox-label"><input type="checkbox" value="cinnamon sticks" checked onchange="generatePrompt()"> Cinnamon Sticks</label>
+                <label class="checkbox-label"><input type="checkbox" value="brown sugar granules" checked onchange="generatePrompt()"> Brown Sugar</label>
+                <label class="checkbox-label"><input type="checkbox" value="steaming cider mug" onchange="generatePrompt()"> Cider Mug</label>
+                <label class="checkbox-label"><input type="checkbox" value="chunky cream knit sweater" onchange="generatePrompt()"> Knit Sweater</label>
+                <label class="checkbox-label"><input type="checkbox" value="fresh autumn leaves" checked onchange="generatePrompt()"> Fall Leaves</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Output Section -->
+    <div class="output-section">
+        <div class="output-header">
+            <label>Generated On-Brand AI Prompt</label>
+            <span class="generator-badge" id="engineBadge">Midjourney Format</span>
+        </div>
+        <textarea id="promptOutput" readonly></textarea>
+        <div class="action-bar">
+            <button class="btn btn-secondary" onclick="generatePrompt()">Re-Generate</button>
+            <button class="btn" onclick="copyPrompt()">Copy Prompt</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast">Prompt copied to clipboard!</div>
+
+<script>
+    const exactPackagingLock = "Packaging reference spec: Cream/beige matte plastic squeeze tube body with a flat heat-sealed top crimp border. Vertical dark reddish-brown text 'I ♥ OLEHENRIKSEN' printed on the upper left side, followed by 'Pout Preserve Peptide Lip Treatment' in clean typography in warm cinnamon red, and secondary ingredient text in English and French ('Kokum butter, açai sterols & peptides / Beurre de kokum, stérols d'açaï et peptides'). Screw-on bottom cap in dark cinnamon brown terracotta color. Accompanied by a glowing translucent glossy warm spiced amber liquid swatch.";
+
+    const shotTemplates = {
+        'prod-single-macro': 'Extreme studio product macro shot of the exact Olehenriksen Pout Preserve Peptide Lip Treatment squeeze tube standing upright against a thick, glowing warm-amber formula swatch smear.',
+        'prod-array-multi': 'Multi-angle product lineup array showing three Olehenriksen lip treatment squeeze tubes resting on warm wood textures surrounded by cinnamon bark and sliced apples.',
+        'prod-crate': 'Cosmetic product shot of the Olehenriksen lip treatment squeeze tube lying inside a vintage rustic wooden Hudson Valley apple crate alongside ripe red apples.',
+        'prod-knit': 'Top-down flatlay product photograph of the cream Olehenriksen lip treatment squeeze tube nestled on a cozy chunky cream knit wool sweater next to brown sugar crystals.',
+        'prod-tip-drip': 'Macro shot of the slanted precision tip of the Olehenriksen squeeze tube, with a thick drop of translucent spiced amber peptide liquid oozing from the applicator.',
+        'prod-squeeze-action': 'Close-up macro of manicured fingers gently squeezing the beige Olehenriksen lip treatment tube, dispensing a glossy amber formula ribbon onto glass.',
+        
+        'beauty-lip-swatch': 'Macro beauty photography of full, plump lips swathed in high-shine translucent spiced amber lip gloss, showing ultra-hydrated wet finish texture.',
+        'beauty-finger-swatch': 'Extreme macro of a fingertip with a thick dollop of translucent warm brown-amber lip treatment formula showing shiny viscous texture.',
+        'beauty-dual-skintone': 'Side-by-side macro beauty shot of two diverse models with different skin tones wearing the glowing translucent Spiced Apple Cider lip treatment.',
+        'beauty-heavy-drizzle': 'High-fashion lip beauty closeup with a rich, glossy drizzle of golden amber liquid formula flowing over the lower lip line.',
+        'beauty-gloss-reflection': 'Ultra close-up of glossy lips catching golden hour sunlight reflections, highlighting smooth peptide hydration and dewy texture.',
+
+        'life-bryant-hand': 'Urban lifestyle shot of a hand holding the Olehenriksen lip treatment squeeze tube in Bryant Park NYC, soft-focused background of yellow fall trees and a steaming cider cup.',
+        'life-soho-wildposting': 'Street photography mockup of a wildposting campaign poster on a Soho brick wall featuring the Olehenriksen Spiced Apple Cider launch in NYC.',
+        'life-kiosk-model': 'Fashion lifestyle photo of a model in a cozy shearling coat applying the Olehenriksen lip treatment outside a Scandinavian wooden cider kiosk in NYC.',
+        'life-subway-platform': 'Atmospheric NYC street style photo of a chic model sitting on a subway platform bench, holding the Olehenriksen lip treatment tube.',
+        'life-coffee-window': 'Lifestyle image of the Olehenriksen lip treatment tube sitting on a wooden coffee shop window sill overlooking a chilly NYC street with autumn leaves.',
+
+        'env-bryant-kiosk': 'Wide architectural hero photo of a Scandinavian-style wooden cider press pop-up kiosk in Bryant Park NYC, decorated with apple garlands and festive warm lights.',
+        'env-hudson-orchard': 'Environmental autumn still life on a rustic wooden farm table in a Hudson Valley apple orchard, displaying fresh apples, cider mugs, and lip treatments.',
+        'env-cinnamon-stack': 'Textural still life shot featuring stacked cinnamon bark sticks, piled brown sugar granules, and golden cider syrup under warm directional spotlighting.',
+        'env-donut-stand': 'Cozy bakery display shot featuring fresh cinnamon cider donuts dusted in sugar alongside the Olehenriksen lip treatment campaign visuals.'
+    };
+
+    const ratioConfig = {
+        'billboard': { tag: '--ar 16:9', desc: '16:9 widescreen billboard format' },
+        'subway': { tag: '--ar 4:5', desc: '4:5 vertical NYC subway poster format' },
+        'ig-ad': { tag: '--ar 1:1', desc: '1:1 square Instagram ad post' },
+        'ig-reel': { tag: '--ar 9:16', desc: '9:16 vertical Instagram Reel format' },
+        'magazine': { tag: '--ar 3:4', desc: '3:4 vertical full-page magazine ad format' },
+        'linknyc': { tag: '--ar 9:21', desc: '9:21 vertical LinkNYC digital kiosk display format' }
+    };
+
+    const lightingTemplates = {
+        'golden-hour': 'Illuminated by warm golden hour sunset glow with rich golden light and soft bokeh reflections.',
+        'cozy-ambient': 'Lit with cozy Bryant Park cider press warmth, directional soft spotlighting, and amber glow.',
+        'crisp-frost': 'Set in crisp NYC winter morning frost with glowing warm rim highlights breaking through chilly air.',
+        'moody-cinnamon': 'Styled with moody cinnamon bark shadow contrast and high-end dramatic beauty editorial lighting.'
+    };
+
+    function getSelectedProps() {
+        const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]:checked');
+        const selected = Array.from(checkboxes).map(cb => cb.value);
+        return selected.length > 0 ? selected.join(', ') : 'minimal autumn props';
+    }
+
+    function generatePrompt() {
+        const shotTypeKey = document.getElementById('shotType').value;
+        const placementKey = document.getElementById('placement').value;
+        const lightingKey = document.getElementById('lighting').value;
+        const targetEngine = document.getElementById('targetEngine').value;
+
+        const shot = shotTemplates[shotTypeKey];
+        const placement = ratioConfig[placementKey];
+        const lighting = lightingTemplates[lightingKey];
+        const props = getSelectedProps();
+
+        document.getElementById('engineBadge').innerText = targetEngine.toUpperCase() + ' FORMAT';
+
+        const colorTokens = 'Spiced Amber (#D97706), Brown Sugar (#78350F), Frosted Vanilla (#FFFDF9), Cinnamon Bark (#4A150E), Crisp Apple (#8B1E1E)';
+        const negativeConstraints = 'NO cold blue daylight, NO harsh white studio flash, NO matte lip finishes, NO neon colors, NO plastic synthetic backgrounds, NO summer foliage.';
+
+        let fullPrompt = '';
+
+        if (targetEngine === 'midjourney') {
+            fullPrompt = `${shot} ${exactPackagingLock} Ambient lighting: ${lighting} Styled with ${props}. Palette: ${colorTokens}. Ultra-detailed commercial cosmetics editorial, high gloss texture. ${negativeConstraints} ${placement.tag}`;
+        } else if (targetEngine === 'dalle3') {
+            fullPrompt = `${shot} Set in New York City for 'The Golden Cider Hour' campaign launch. ${exactPackagingLock} Lighting atmosphere: ${lighting} Accompanying visual props: ${props}. Brand color scheme uses ${colorTokens}. High-end commercial cosmetics layout formatted for ${placement.desc}. Ensure ultra-dewy glossy textures, avoiding cold blue lighting or matte finishes.`;
+        } else {
+            // Flux / SDXL
+            fullPrompt = `Olehenriksen Pout Preserve Spiced Apple Cider campaign photoshoot. ${shot} ${exactPackagingLock} Lighting style: ${lighting} Props & textures: ${props}. Color palette: warm spiced amber, brown sugar, cinnamon bark, and crisp apple red. High gloss finish, dewy texture, commercial beauty photography, ${placement.desc}, photorealistic 8k. Negative prompt: cold blue light, matte lips, neon colors, synthetic plastic props.`;
+        }
+
+        document.getElementById('promptOutput').value = fullPrompt;
+    }
+
+    function copyPrompt() {
+        const copyText = document.getElementById('promptOutput');
+        copyText.select();
+        navigator.clipboard.writeText(copyText.value);
+
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // Initial load
+    generatePrompt();
+</script>
+
+</body>
+</html>
