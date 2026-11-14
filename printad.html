@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLEHENRIKSEN × The Golden Cider Hour — Campaign Mockups</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        amberSpiced: '#D97706',
+                        brownSugar: '#78350F',
+                        frostedVanilla: '#FFFDF9',
+                        cinnamonBark: '#4A150E',
+                        richGold: '#F59E0B',
+                        darkCharcoal: '#1C1917'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                        sans: ['"Inter"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            background-color: #1C1917;
+            color: #FFFDF9;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(28, 25, 23, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(217, 119, 6, 0.2);
+        }
+        .luxury-gradient {
+            background: linear-gradient(135deg, #4A150E 0%, #78350F 50%, #1C1917 100%);
+        }
+        .gold-glow {
+            box-shadow: 0 0 35px -5px rgba(217, 119, 6, 0.35);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1C1917;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #78350F;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #D97706;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col custom-scrollbar selection:bg-amberSpiced selection:text-white">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-gradient-to-r from-cinnamonBark via-brownSugar to-cinnamonBark text-frostedVanilla text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wider uppercase border-b border-amberSpiced/20">
+        ✨ New York City Out-of-Home Campaign • Fall/Winter 2026 Showcase ✨
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-amberSpiced/20 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amberSpiced to-richGold flex items-center justify-center text-cinnamonBark font-bold text-xl shadow-lg shadow-amberSpiced/30">
+                    O
+                </div>
+                <div>
+                    <span class="font-serif tracking-widest text-lg sm:text-xl font-bold bg-gradient-to-r from-frostedVanilla via-amber-200 to-amberSpiced bg-clip-text text-transparent">OLEHENRIKSEN</span>
+                    <span class="block text-[10px] sm:text-xs text-amber-400/80 tracking-widest uppercase font-mono">The Golden Cider Hour</span>
+                </div>
+            </div>
+
+            <!-- View Mode Toggle & Actions -->
+            <div class="flex items-center space-x-3 sm:space-x-4">
+                <div class="bg-darkCharcoal/90 p-1 rounded-xl border border-amberSpiced/30 flex items-center space-x-1">
+                    <button id="grid-view-btn" onclick="setViewMode('grid')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex items-center space-x-1.5 bg-amberSpiced text-white shadow">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">Grid View</span>
+                    </button>
+                    <button id="carousel-view-btn" onclick="setViewMode('carousel')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex items-center space-x-1.5 text-amber-200/70 hover:text-white">
+                        <i data-lucide="gallery-horizontal" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">Immersive</span>
+                    </button>
+                </div>
+                <a href="#campaign-overview" class="hidden md:inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-amberSpiced/10 hover:bg-amberSpiced/20 border border-amberSpiced/40 text-amber-300 text-sm transition-all">
+                    <i data-lucide="info" class="w-4 h-4"></i>
+                    <span>About Campaign</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full">
+
+        <!-- Hero Intro Section -->
+        <section class="text-center max-w-4xl mx-auto mb-12 sm:mb-16">
+            <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs sm:text-sm mb-6 tracking-wide">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                <span>NYC OOH Advertising Portfolio</span>
+            </div>
+            <h1 class="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-tight">
+                Pout Preserve: <br/><span class="bg-gradient-to-r from-amber-300 via-amber-500 to-yellow-600 bg-clip-text text-transparent">Spiced Apple Cider</span>
+            </h1>
+            <p class="text-stone-300 text-base sm:text-lg max-w-2xl mx-auto font-light leading-relaxed">
+                Explore the complete suite of 5 high-impact Out-of-Home (OOH) advertising mockups deployed across iconic New York City locations, blending warm autumn luxury with miniature whimsical art direction.
+            </p>
+
+            <!-- Filter Categories -->
+            <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-8">
+                <button onclick="filterMockups('all')" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-amberSpiced text-white shadow-md shadow-amberSpiced/30" data-filter="all">All Locations (5)</button>
+                <button onclick="filterMockups('Transit')" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-stone-800/80 hover:bg-stone-800 text-stone-300 border border-stone-700" data-filter="Transit">Subway Transit</button>
+                <button onclick="filterMockups('Billboard')" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-stone-800/80 hover:bg-stone-800 text-stone-300 border border-stone-700" data-filter="Billboard">Rooftop Billboard</button>
+                <button onclick="filterMockups('Retail')" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-stone-800/80 hover:bg-stone-800 text-stone-300 border border-stone-700" data-filter="Retail">Sephora Retail</button>
+                <button onclick="filterMockups('Times Square')" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-stone-800/80 hover:bg-stone-800 text-stone-300 border border-stone-700" data-filter="Times Square">Times Square</button>
+                <button onclick="filterMockups('Streetscape')" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-stone-800/80 hover:bg-stone-800 text-stone-300 border border-stone-700" data-filter="Streetscape">Street Construction</button>
+            </div>
+        </section>
+
+        <!-- Grid View Container -->
+        <div id="grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 transition-all duration-300">
+            <!-- Mockup 1 -->
+            <div class="mockup-card group rounded-2xl glass-panel overflow-hidden border border-amberSpiced/20 hover:border-amberSpiced/60 transition-all duration-300 flex flex-col shadow-xl" data-category="Transit">
+                <div class="relative aspect-[4/5] overflow-hidden bg-stone-900 cursor-pointer" onclick="openLightbox(0)">
+                    <img src="mockup1.jpg" alt="NYC Subway Station" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/800x1000/4A150E/FFFDF9?text=mockup1.jpg';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                        <span class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-amberSpiced text-white text-xs font-semibold shadow">
+                            <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+                            <span>View High-Res Mockup</span>
+                        </span>
+                    </div>
+                    <div class="absolute top-4 left-4 bg-stone-900/80 backdrop-blur-md px-3 py-1 rounded-full border border-amberSpiced/30 text-amber-400 text-xs font-medium">
+                        Mockup 01 • Transit
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-serif text-xl font-bold text-frostedVanilla group-hover:text-amber-400 transition-colors">NYC Subway Station</h3>
+                            <span class="text-xs font-mono text-amberSpiced">Platform Ad</span>
+                        </div>
+                        <p class="text-stone-300 text-sm leading-relaxed mb-4">
+                            Immersive underground platform placement capturing daily commuters with whimsical miniature art direction, rich spiced apple cider tones, and the Pout Preserve Lip Treatment showcase.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-stone-800 flex items-center justify-between">
+                        <span class="text-xs text-stone-400 flex items-center space-x-1">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amberSpiced"></i>
+                            <span>Spring St Station, NYC</span>
+                        </span>
+                        <button onclick="openLightbox(0)" class="text-xs font-semibold text-amberSpiced hover:text-amber-300 flex items-center space-x-1">
+                            <span>Inspect</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mockup 2 -->
+            <div class="mockup-card group rounded-2xl glass-panel overflow-hidden border border-amberSpiced/20 hover:border-amberSpiced/60 transition-all duration-300 flex flex-col shadow-xl" data-category="Billboard">
+                <div class="relative aspect-[4/5] overflow-hidden bg-stone-900 cursor-pointer" onclick="openLightbox(1)">
+                    <img src="mockup2.jpg" alt="Rooftop Billboard" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/800x1000/4A150E/FFFDF9?text=mockup2.jpg';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                        <span class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-amberSpiced text-white text-xs font-semibold shadow">
+                            <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+                            <span>View High-Res Mockup</span>
+                        </span>
+                    </div>
+                    <div class="absolute top-4 left-4 bg-stone-900/80 backdrop-blur-md px-3 py-1 rounded-full border border-amberSpiced/30 text-amber-400 text-xs font-medium">
+                        Mockup 02 • Billboard
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-serif text-xl font-bold text-frostedVanilla group-hover:text-amber-400 transition-colors">Rooftop Billboard</h3>
+                            <span class="text-xs font-mono text-amberSpiced">Skyline View</span>
+                        </div>
+                        <p class="text-stone-300 text-sm leading-relaxed mb-4">
+                            High-impact urban rooftop billboard displaying the expansive product lineup and "The Golden Cider Hour" campaign across city skylines with pristine clarity.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-stone-800 flex items-center justify-between">
+                        <span class="text-xs text-stone-400 flex items-center space-x-1">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amberSpiced"></i>
+                            <span>Outfront Media Network, NYC</span>
+                        </span>
+                        <button onclick="openLightbox(1)" class="text-xs font-semibold text-amberSpiced hover:text-amber-300 flex items-center space-x-1">
+                            <span>Inspect</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mockup 3 -->
+            <div class="mockup-card group rounded-2xl glass-panel overflow-hidden border border-amberSpiced/20 hover:border-amberSpiced/60 transition-all duration-300 flex flex-col shadow-xl" data-category="Retail">
+                <div class="relative aspect-[4/5] overflow-hidden bg-stone-900 cursor-pointer" onclick="openLightbox(2)">
+                    <img src="mockup3.jpg" alt="Sephora In-Store Lightbox" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/800x1000/4A150E/FFFDF9?text=mockup3.jpg';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                        <span class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-amberSpiced text-white text-xs font-semibold shadow">
+                            <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+                            <span>View High-Res Mockup</span>
+                        </span>
+                    </div>
+                    <div class="absolute top-4 left-4 bg-stone-900/80 backdrop-blur-md px-3 py-1 rounded-full border border-amberSpiced/30 text-amber-400 text-xs font-medium">
+                        Mockup 03 • Retail
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-serif text-xl font-bold text-frostedVanilla group-hover:text-amber-400 transition-colors">Sephora In-Store Lightbox</h3>
+                            <span class="text-xs font-mono text-amberSpiced">Retail Display</span>
+                        </div>
+                        <p class="text-stone-300 text-sm leading-relaxed mb-4">
+                            Point-of-sale interior lightbox poster at Sephora featuring lush close-ups and immediate product discoverability for beauty enthusiasts.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-stone-800 flex items-center justify-between">
+                        <span class="text-xs text-stone-400 flex items-center space-x-1">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amberSpiced"></i>
+                            <span>Sephora Flagship Interior</span>
+                        </span>
+                        <button onclick="openLightbox(2)" class="text-xs font-semibold text-amberSpiced hover:text-amber-300 flex items-center space-x-1">
+                            <span>Inspect</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mockup 4 -->
+            <div class="mockup-card group rounded-2xl glass-panel overflow-hidden border border-amberSpiced/20 hover:border-amberSpiced/60 transition-all duration-300 flex flex-col shadow-xl" data-category="Times Square">
+                <div class="relative aspect-[4/5] overflow-hidden bg-stone-900 cursor-pointer" onclick="openLightbox(3)">
+                    <img src="mockup4.jpg" alt="Times Square Takeover" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/800x1000/4A150E/FFFDF9?text=mockup4.jpg';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                        <span class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-amberSpiced text-white text-xs font-semibold shadow">
+                            <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+                            <span>View High-Res Mockup</span>
+                        </span>
+                    </div>
+                    <div class="absolute top-4 left-4 bg-stone-900/80 backdrop-blur-md px-3 py-1 rounded-full border border-amberSpiced/30 text-amber-400 text-xs font-medium">
+                        Mockup 04 • Times Square
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-serif text-xl font-bold text-frostedVanilla group-hover:text-amber-400 transition-colors">Times Square Takeover</h3>
+                            <span class="text-xs font-mono text-amberSpiced">LED Spectacular</span>
+                        </div>
+                        <p class="text-stone-300 text-sm leading-relaxed mb-4">
+                            Breathtaking curved multi-panel digital takeover in the heart of Times Square surrounded by flagship Sephora retail activation and bustling NYC traffic.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-stone-800 flex items-center justify-between">
+                        <span class="text-xs text-stone-400 flex items-center space-x-1">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amberSpiced"></i>
+                            <span>Times Square, NYC</span>
+                        </span>
+                        <button onclick="openLightbox(3)" class="text-xs font-semibold text-amberSpiced hover:text-amber-300 flex items-center space-x-1">
+                            <span>Inspect</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mockup 5 -->
+            <div class="mockup-card group rounded-2xl glass-panel overflow-hidden border border-amberSpiced/20 hover:border-amberSpiced/60 transition-all duration-300 flex flex-col shadow-xl md:col-span-2 lg:col-span-1" data-category="Streetscape">
+                <div class="relative aspect-[4/5] overflow-hidden bg-stone-900 cursor-pointer" onclick="openLightbox(4)">
+                    <img src="mockup5.jpg" alt="Street Construction Fence Gallery" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/800x1000/4A150E/FFFDF9?text=mockup5.jpg';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                        <span class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-amberSpiced text-white text-xs font-semibold shadow">
+                            <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+                            <span>View High-Res Mockup</span>
+                        </span>
+                    </div>
+                    <div class="absolute top-4 left-4 bg-stone-900/80 backdrop-blur-md px-3 py-1 rounded-full border border-amberSpiced/30 text-amber-400 text-xs font-medium">
+                        Mockup 05 • Streetscape
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-serif text-xl font-bold text-frostedVanilla group-hover:text-amber-400 transition-colors">Street Construction Fence Gallery</h3>
+                            <span class="text-xs font-mono text-amberSpiced">SoHo Sidewalk</span>
+                        </div>
+                        <p class="text-stone-300 text-sm leading-relaxed mb-4">
+                            Organic urban wheatpaste and panel gallery along downtown construction barriers glowing in the warm golden hour sunset light of SoHo.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-stone-800 flex items-center justify-between">
+                        <span class="text-xs text-stone-400 flex items-center space-x-1">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amberSpiced"></i>
+                            <span>SoHo / Downtown NYC</span>
+                        </span>
+                        <button onclick="openLightbox(4)" class="text-xs font-semibold text-amberSpiced hover:text-amber-300 flex items-center space-x-1">
+                            <span>Inspect</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Immersive Carousel View Container (Hidden by default) -->
+        <div id="carousel-container" class="hidden relative max-w-4xl mx-auto py-4">
+            <div class="glass-panel rounded-3xl overflow-hidden border border-amberSpiced/30 shadow-2xl relative">
+                <div class="relative aspect-[4/5] sm:aspect-[16/10] bg-stone-950 flex items-center justify-center overflow-hidden">
+                    <img id="carousel-img" src="" alt="Campaign Mockup" class="w-full h-full object-cover object-center transition-all duration-500 cursor-pointer" onclick="openLightbox(currentCarouselIndex)">
+                    <div class="absolute top-6 left-6 bg-stone-900/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-amberSpiced/40 text-amber-300 text-xs font-semibold">
+                        <span id="carousel-badge">Mockup 1 of 5</span>
+                    </div>
+                </div>
+                <div class="p-6 sm:p-8 bg-gradient-to-t from-stone-950 via-stone-900/90 to-transparent">
+                    <h3 id="carousel-title" class="font-serif text-2xl font-bold text-frostedVanilla mb-2">Title</h3>
+                    <p id="carousel-desc" class="text-stone-300 text-sm sm:text-base mb-6">Description</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-stone-800">
+                        <span id="carousel-location" class="text-xs sm:text-sm text-amber-400 flex items-center space-x-2">
+                            <i data-lucide="map-pin" class="w-4 h-4"></i>
+                            <span>Location</span>
+                        </span>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="prevCarousel()" class="p-3 rounded-xl bg-stone-800 hover:bg-amberSpiced text-white transition-all border border-stone-700">
+                                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                            </button>
+                            <button onclick="nextCarousel()" class="p-3 rounded-xl bg-stone-800 hover:bg-amberSpiced text-white transition-all border border-stone-700">
+                                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaign Overview Section -->
+        <section id="campaign-overview" class="mt-24 py-16 px-6 sm:px-12 rounded-3xl luxury-gradient border border-amberSpiced/30 relative overflow-hidden gold-glow">
+            <div class="absolute -right-20 -top-20 w-96 h-96 bg-amberSpiced/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="max-w-3xl mx-auto relative z-10 text-center">
+                <span class="text-amber-400 text-xs sm:text-sm font-mono uppercase tracking-widest block mb-3">Creative Direction & Story</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold mb-6 text-frostedVanilla">The Golden Cider Hour</h2>
+                <p class="text-stone-200 text-base sm:text-lg leading-relaxed mb-8">
+                    OLEHENRIKSEN introduces the limited-edition <strong class="text-amber-300 font-semibold">Spiced Apple Cider Pout Preserve Peptide Lip Treatment</strong>. This OOH campaign captures the magic of autumn in New York City through macro golden hour gloss, crisp apple notes, and whimsical miniature artisans crafting luxury hydration across subway stations, soaring billboards, and glowing Sephora retail displays.
+                </p>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                    <div class="p-4 rounded-2xl bg-stone-900/60 border border-amberSpiced/20">
+                        <span class="block font-serif text-2xl sm:text-3xl font-bold text-amber-400 mb-1">5</span>
+                        <span class="text-xs text-stone-300 uppercase tracking-wider">OOH Touchpoints</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-stone-900/60 border border-amberSpiced/20">
+                        <span class="block font-serif text-2xl sm:text-3xl font-bold text-amber-400 mb-1">NYC</span>
+                        <span class="text-xs text-stone-300 uppercase tracking-wider">Metropolitan Area</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-stone-900/60 border border-amberSpiced/20">
+                        <span class="block font-serif text-2xl sm:text-3xl font-bold text-amber-400 mb-1">Peptide</span>
+                        <span class="text-xs text-stone-300 uppercase tracking-wider">Lip Treatment</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-stone-900/60 border border-amberSpiced/20">
+                        <span class="block font-serif text-2xl sm:text-3xl font-bold text-amber-400 mb-1">Sephora</span>
+                        <span class="text-xs text-stone-300 uppercase tracking-wider">Exclusive Retail</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 bg-stone-950/95 backdrop-blur-xl hidden flex items-center justify-center p-4 sm:p-8 transition-opacity duration-300">
+        <div class="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center justify-center">
+            <button onclick="closeLightbox()" class="absolute -top-12 right-0 sm:-right-4 text-stone-400 hover:text-white p-2 bg-stone-900/80 rounded-full border border-stone-700 transition-all z-20">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="relative w-full h-[70vh] sm:h-[75vh] flex items-center justify-center overflow-hidden rounded-2xl bg-stone-900 border border-amberSpiced/30 shadow-2xl">
+                <img id="lightbox-img" src="" alt="High-Res Mockup" class="max-w-full max-h-full object-contain transition-transform duration-300">
+            </div>
+            <div class="mt-4 text-center">
+                <h3 id="lightbox-title" class="font-serif text-xl sm:text-2xl font-bold text-frostedVanilla mb-1">Title</h3>
+                <p id="lightbox-desc" class="text-stone-300 text-xs sm:text-sm max-w-xl mx-auto">Description</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-20 border-t border-amberSpiced/20 bg-stone-950/80 py-12 px-4 sm:px-6 lg:px-8 text-center text-stone-400 text-sm">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-amberSpiced to-richGold flex items-center justify-center text-cinnamonBark font-bold text-sm shadow">
+                    O
+                </div>
+                <span class="font-serif text-frostedVanilla font-semibold tracking-wider">OLEHENRIKSEN × The Golden Cider Hour</span>
+            </div>
+            <p class="text-xs text-stone-500">
+                © 2026 OLEHENRIKSEN Cosmetics. All Out-of-Home campaign mockups generated for exhibition purposes.
+            </p>
+            <div class="flex items-center space-x-4 text-xs">
+                <a href="#" class="hover:text-amber-400 transition-colors">Privacy Policy</a>
+                <span>•</span>
+                <a href="#" class="hover:text-amber-400 transition-colors">Press Kit</a>
+                <span>•</span>
+                <a href="#" class="hover:text-amber-400 transition-colors">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Mockup Data Store
+        const mockups = [
+            {
+                title: "NYC Subway Station",
+                category: "Transit",
+                location: "Spring St Station, NYC Subway Platform",
+                description: "Immersive underground platform placement capturing daily commuters with whimsical miniature art direction, rich spiced apple cider tones, and the Pout Preserve Lip Treatment showcase.",
+                src: "mockup1.jpg"
+            },
+            {
+                title: "Rooftop Billboard",
+                category: "Billboard",
+                location: "Outfront Media Network, NYC Skyline",
+                description: "High-impact urban rooftop billboard displaying the expansive product lineup and 'The Golden Cider Hour' campaign across city skylines with pristine clarity.",
+                src: "mockup2.jpg"
+            },
+            {
+                title: "Sephora In-Store Lightbox",
+                category: "Retail",
+                location: "Sephora Flagship Interior Display",
+                description: "Point-of-sale interior lightbox poster at Sephora featuring lush close-ups and immediate product discoverability for beauty enthusiasts.",
+                src: "mockup3.jpg"
+            },
+            {
+                title: "Times Square Takeover",
+                category: "Times Square",
+                location: "Times Square LED Spectacular, NYC",
+                description: "Breathtaking curved multi-panel digital takeover in the heart of Times Square surrounded by flagship Sephora retail activation and bustling NYC traffic.",
+                src: "mockup4.jpg"
+            },
+            {
+                title: "Street Construction Fence Gallery",
+                category: "Streetscape",
+                location: "SoHo / Downtown Sidewalk Gallery, NYC",
+                description: "Organic urban wheatpaste and panel gallery along downtown construction barriers glowing in the warm golden hour sunset light of SoHo.",
+                src: "mockup5.jpg"
+            }
+        ];
+
+        let currentCarouselIndex = 0;
+        let currentView = 'grid';
+
+        // Initialize Lucide Icons
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            updateCarousel();
+        });
+
+        // View Mode Toggle
+        function setViewMode(mode) {
+            currentView = mode;
+            const gridContainer = document.getElementById('grid-container');
+            const carouselContainer = document.getElementById('carousel-container');
+            const gridBtn = document.getElementById('grid-view-btn');
+            const carouselBtn = document.getElementById('carousel-view-btn');
+
+            if (mode === 'grid') {
+                gridContainer.classList.remove('hidden');
+                carouselContainer.classList.add('hidden');
+                gridBtn.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex items-center space-x-1.5 bg-amberSpiced text-white shadow";
+                carouselBtn.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex items-center space-x-1.5 text-amber-200/70 hover:text-white";
+            } else {
+                gridContainer.classList.add('hidden');
+                carouselContainer.classList.remove('hidden');
+                carouselBtn.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex items-center space-x-1.5 bg-amberSpiced text-white shadow";
+                gridBtn.className = "px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex items-center space-x-1.5 text-amber-200/70 hover:text-white";
+                updateCarousel();
+            }
+        }
+
+        // Filter Mockups
+        function filterMockups(category) {
+            const cards = document.querySelectorAll('.mockup-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => {
+                if (btn.getAttribute('data-filter') === category) {
+                    btn.className = "filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-amberSpiced text-white shadow-md shadow-amberSpiced/30";
+                } else {
+                    btn.className = "filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-stone-800/80 hover:bg-stone-800 text-stone-300 border border-stone-700";
+                }
+            });
+
+            cards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                if (category === 'all' || cardCategory === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Carousel Navigation
+        function updateCarousel() {
+            const item = mockups[currentCarouselIndex];
+            document.getElementById('carousel-img').src = item.src;
+            document.getElementById('carousel-title').textContent = item.title;
+            document.getElementById('carousel-desc').textContent = item.description;
+            document.getElementById('carousel-location').innerHTML = `<i data-lucide="map-pin" class="w-4 h-4"></i><span>${item.location}</span>`;
+            document.getElementById('carousel-badge').textContent = `Mockup ${currentCarouselIndex + 1} of ${mockups.length} • ${item.category}`;
+            lucide.createIcons();
+        }
+
+        function nextCarousel() {
+            currentCarouselIndex = (currentCarouselIndex + 1) % mockups.length;
+            updateCarousel();
+        }
+
+        function prevCarousel() {
+            currentCarouselIndex = (currentCarouselIndex - 1 + mockups.length) % mockups.length;
+            updateCarousel();
+        }
+
+        // Lightbox Modal Controls
+        function openLightbox(index) {
+            const item = mockups[index];
+            const modal = document.getElementById('lightbox-modal');
+            const img = document.getElementById('lightbox-img');
+            const title = document.getElementById('lightbox-title');
+            const desc = document.getElementById('lightbox-desc');
+
+            img.src = item.src;
+            title.textContent = item.title;
+            desc.textContent = `${item.location} — ${item.description}`;
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on outside click
+        document.getElementById('lightbox-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('lightbox-modal')) {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+</html>
