@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Golden Cider Hour — Olehenriksen Digital Campaign</title>
+
+  <!-- Google Fonts: Editorial Serif & Clean Modern Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Custom Design Tokens -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FDF9F4',
+            ivory: '#FFFDFB',
+            sand: '#F5EDE3',
+            borderWarm: '#E8DDD2',
+            espresso: '#24160E',
+            cocoa: '#654D3E',
+            amberAccent: '#9E4B23',
+            ciderGlow: '#C66D36',
+            golden: '#EBD9C8',
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          boxShadow: {
+            editorial: '0 18px 45px -16px rgba(36, 22, 14, 0.07)',
+            cardHover: '0 26px 55px -14px rgba(158, 75, 35, 0.14)',
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-cream text-espresso font-sans antialiased selection:bg-golden selection:text-espresso">
+
+  <!-- Top Minimal Navigation Bar -->
+  <header class="sticky top-0 z-30 bg-cream/90 backdrop-blur-md border-b border-borderWarm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <span class="w-2 h-2 rounded-full bg-amberAccent inline-block"></span>
+        <span class="text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase text-espresso">
+          OLEHENRIKSEN &times; DIGITAL CAMPAIGN
+        </span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sand border border-borderWarm text-cocoa text-xs font-medium">
+          Frameless Campaign Creatives
+        </span>
+        <button
+          id="openFirstLightbox"
+          type="button"
+          class="px-4 py-2 rounded-full bg-espresso text-ivory text-xs sm:text-sm font-medium hover:bg-amberAccent transition-colors duration-200 shadow-sm cursor-pointer"
+        >
+          Inspect Deck
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden pt-12 pb-10 sm:pt-20 sm:pb-14 border-b border-borderWarm">
+    <!-- Subtle Warm Ambient Gradient -->
+    <div
+      class="pointer-events-none absolute -top-32 right-0 w-[30rem] h-[30rem] rounded-full opacity-40 blur-3xl"
+      style="background: radial-gradient(circle, #EBD9C8 0%, rgba(253,249,244,0) 70%);"
+    ></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 relative">
+      <div class="max-w-3xl">
+        <p class="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-[0.22em] uppercase text-amberAccent mb-4">
+          <span>OLEHENRIKSEN &times; DIGITAL CAMPAIGN</span>
+          <span class="text-ciderGlow">&bull;</span>
+          <span>5 CREATIVES</span>
+        </p>
+
+        <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl font-semibold text-espresso leading-[1.02] tracking-tight mb-5">
+          The Golden Cider Hour
+        </h1>
+
+        <p class="text-base sm:text-xl text-cocoa leading-relaxed font-normal max-w-2xl">
+          Paid social media creative series showcasing the limited-edition <span class="text-espresso font-semibold">Pout Preserve Peptide Lip Treatment</span> in <span class="italic font-serif text-amberAccent text-xl sm:text-2xl font-semibold">Spiced Apple Cider</span> across Instagram Feed &amp; Stories.
+        </p>
+      </div>
+
+      <!-- Campaign KPIs & Metadata Tags -->
+      <div class="mt-10 sm:mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+        <div class="bg-ivory border border-borderWarm rounded-2xl p-5 shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.16em] text-amberAccent mb-1">
+            Format
+          </div>
+          <div class="text-base sm:text-lg font-semibold text-espresso">
+            4:5 &amp; 9:16 Paid Social
+          </div>
+          <p class="text-xs sm:text-sm text-cocoa mt-1">
+            Full-bleed frameless creatives (<code class="text-amberAccent font-mono text-xs">digital1.jpg</code> &ndash; <code class="text-amberAccent font-mono text-xs">digital5.jpg</code>).
+          </p>
+        </div>
+
+        <div class="bg-ivory border border-borderWarm rounded-2xl p-5 shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.16em] text-amberAccent mb-1">
+            Channel
+          </div>
+          <div class="text-base sm:text-lg font-semibold text-espresso">
+            Instagram Feed &amp; Stories
+          </div>
+          <p class="text-xs sm:text-sm text-cocoa mt-1">
+            High-impact visual storytelling paired with direct-response <span class="text-espresso font-medium">Shop Now</span> placement copy.
+          </p>
+        </div>
+
+        <div class="bg-ivory border border-borderWarm rounded-2xl p-5 shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.16em] text-amberAccent mb-1">
+            Collection
+          </div>
+          <div class="text-base sm:text-lg font-semibold text-espresso">
+            Limited-Edition Spiced Apple Cider
+          </div>
+          <p class="text-xs sm:text-sm text-cocoa mt-1">
+            Warm spiced amber peptide lip glaze styled with autumn botanicals and honeyed textures.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Gallery & Controls Section -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 sm:py-16">
+    <!-- Filter & Layout Toolbar -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-8 border-b border-borderWarm">
+      <!-- Category Filter Pills -->
+      <div class="flex flex-wrap items-center gap-2" role="tablist" aria-label="Filter campaign creatives">
+        <button
+          type="button"
+          data-filter="all"
+          class="filter-btn active px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 bg-espresso text-ivory shadow-sm cursor-pointer"
+        >
+          All Creatives (5)
+        </button>
+        <button
+          type="button"
+          data-filter="still-life"
+          class="filter-btn px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 bg-ivory text-cocoa border border-borderWarm hover:border-amberAccent/50 hover:text-espresso cursor-pointer"
+        >
+          Product Still Life
+        </button>
+        <button
+          type="button"
+          data-filter="editorial"
+          class="filter-btn px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 bg-ivory text-cocoa border border-borderWarm hover:border-amberAccent/50 hover:text-espresso cursor-pointer"
+        >
+          Editorial &amp; Beauty
+        </button>
+      </div>
+
+      <!-- Layout Toggle (Editorial Grid vs. Gallery Strip / Spotlight) -->
+      <div class="flex items-center gap-2 self-start md:self-auto">
+        <span class="text-xs text-cocoa font-medium mr-1">View:</span>
+        <div class="inline-flex rounded-full bg-sand p-1 border border-borderWarm">
+          <button
+            type="button"
+            id="viewGridBtn"
+            class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-ivory text-espresso shadow-sm transition-all cursor-pointer"
+          >
+            Editorial Grid
+          </button>
+          <button
+            type="button"
+            id="viewSpotlightBtn"
+            class="px-3.5 py-1.5 rounded-full text-xs font-semibold text-cocoa hover:text-espresso transition-all cursor-pointer"
+          >
+            Gallery Strip
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gallery Container (Frameless digital1.jpg - digital5.jpg) -->
+    <div id="galleryGrid" class="mt-10 grid grid-cols-1 md:grid-cols-6 gap-8 lg:gap-10">
+      <!-- Cards injected by script -->
+    </div>
+  </main>
+
+  <!-- Full-Screen Lightbox Inspector Modal -->
+  <div
+    id="lightboxModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-espresso/85 backdrop-blur-md p-3 sm:p-6"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="lightboxTitle"
+  >
+    <div class="relative w-full max-w-5xl bg-ivory rounded-2xl overflow-hidden shadow-2xl border border-borderWarm grid grid-cols-1 lg:grid-cols-12 max-h-[92vh]">
+      <!-- Close Button -->
+      <button
+        id="closeLightboxBtn"
+        type="button"
+        aria-label="Close modal"
+        class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-cream/95 text-espresso hover:bg-amberAccent hover:text-ivory border border-borderWarm flex items-center justify-center transition-colors shadow-md cursor-pointer"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Left: Full-Bleed Frameless Creative Preview -->
+      <div class="lg:col-span-7 bg-sand relative flex items-center justify-center p-4 sm:p-8 min-h-[340px] sm:min-h-[480px] overflow-hidden">
+        <!-- Prev / Next Navigation Buttons -->
+        <button
+          id="prevSlideBtn"
+          type="button"
+          aria-label="Previous creative"
+          class="absolute left-3 sm:left-4 z-10 w-10 h-10 rounded-full bg-ivory/95 text-espresso hover:bg-espresso hover:text-ivory border border-borderWarm flex items-center justify-center shadow-md transition-colors cursor-pointer"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <div id="lightboxMediaContainer" class="w-full h-full flex items-center justify-center">
+          <!-- Frameless active image rendered here -->
+        </div>
+
+        <button
+          id="nextSlideBtn"
+          type="button"
+          aria-label="Next creative"
+          class="absolute right-3 sm:right-4 z-10 w-10 h-10 rounded-full bg-ivory/95 text-espresso hover:bg-espresso hover:text-ivory border border-borderWarm flex items-center justify-center shadow-md transition-colors cursor-pointer"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Right: Creative Brief & Suggested Instagram Ad Caption -->
+      <div class="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between overflow-y-auto bg-ivory">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-amberAccent mb-2">
+            <span id="lightboxIndex">01 / 05</span>
+            <span>&bull;</span>
+            <span id="lightboxFilename" class="font-mono lowercase bg-sand border border-borderWarm px-2.5 py-0.5 rounded text-espresso">digital1.jpg</span>
+          </div>
+
+          <h2 id="lightboxTitle" class="font-serif text-3xl sm:text-4xl font-semibold text-espresso leading-tight mb-3">
+            The Spiced Apple Stack
+          </h2>
+
+          <p id="lightboxDescription" class="text-sm text-cocoa leading-relaxed mb-6">
+            Honeyed drip macro with stacked sliced apples, cinnamon sticks, and demerara sugar.
+          </p>
+
+          <!-- Campaign Specs Grid -->
+          <div class="grid grid-cols-2 gap-3 mb-6">
+            <div class="p-3 rounded-xl bg-cream border border-borderWarm">
+              <div class="text-[10px] uppercase tracking-wider text-cocoa font-semibold">Category</div>
+              <div id="lightboxCategory" class="text-xs sm:text-sm font-semibold text-espresso mt-0.5">Product Still Life</div>
+            </div>
+            <div class="p-3 rounded-xl bg-cream border border-borderWarm">
+              <div class="text-[10px] uppercase tracking-wider text-cocoa font-semibold">Placement CTA</div>
+              <div class="mt-0.5">
+                <span id="lightboxCta" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amberAccent text-ivory">
+                  Shop Now
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Suggested Instagram Ad Caption Box -->
+          <div class="rounded-xl bg-cream border border-borderWarm p-4">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[11px] font-semibold uppercase tracking-wider text-cocoa">
+                Suggested Instagram Caption
+              </span>
+              <button
+                id="copyCaptionBtn"
+                type="button"
+                class="px-3 py-1 rounded-full bg-sand hover:bg-amberAccent hover:text-ivory border border-borderWarm text-xs font-semibold text-espresso transition-colors cursor-pointer"
+              >
+                Copy Ad Copy
+              </button>
+            </div>
+            <p id="lightboxCaption" class="text-xs sm:text-sm text-espresso/90 leading-relaxed">
+              Your perfect fall pout is here!
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Modal Controls -->
+        <div class="mt-6 pt-4 border-t border-borderWarm flex items-center justify-between text-xs text-cocoa">
+          <span>Navigate with &larr; &rarr; or Esc</span>
+          <span class="font-semibold text-espresso">@olehenriksen</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification for Copy Feedback -->
+  <div
+    id="toastNotification"
+    role="status"
+    aria-live="polite"
+    class="fixed bottom-6 right-6 z-50 pointer-events-none opacity-0 translate-y-3 transition-all duration-300"
+  >
+    <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-espresso text-ivory text-xs sm:text-sm font-medium shadow-xl border border-amberAccent/40">
+      <span class="w-2 h-2 rounded-full bg-ciderGlow"></span>
+      <span id="toastMessage">Copied ad copy to clipboard</span>
+    </div>
+  </div>
+
+  <!-- Editorial Footer -->
+  <footer class="border-t border-borderWarm bg-ivory mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 sm:py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <div>
+        <div class="font-serif text-2xl font-semibold text-espresso">
+          Olehenriksen &mdash; The Golden Cider Hour
+        </div>
+        <p class="text-xs sm:text-sm text-cocoa mt-1">
+          Paid Social Media Campaign Showcase &bull; Spiced Apple Cider Pout Preserve Peptide Lip Treatment.
+        </p>
+      </div>
+      <div class="text-xs text-cocoa sm:text-right">
+        <p class="font-semibold text-espresso">Assets: digital1.jpg &bull; digital2.jpg &bull; digital3.jpg &bull; digital4.jpg &bull; digital5.jpg</p>
+        <p class="mt-0.5">All creatives displayed frameless at full bleed.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Self-Contained JavaScript for Frameless Gallery, Fallbacks, Filtering & Lightbox -->
+  <script>
+    /**
+     * Campaign Creative Data Array
+     * Maps digital1.jpg through digital5.jpg as frameless campaign creatives
+     */
+    const CAMPAIGN_CREATIVES = [
+      {
+        id: 1,
+        filename: 'digital1.jpg',
+        title: 'The Spiced Apple Stack',
+        category: 'still-life',
+        categoryLabel: 'Product Still Life',
+        format: '4:5 Paid Social',
+        cta: 'Shop Now',
+        description:
+          'Honeyed drip macro with stacked sliced apples, cinnamon sticks, and demerara sugar.',
+        caption:
+          'Your perfect fall pout is here! Meet the new Pout Preserve Peptide Lip Treatment in Spiced Apple Cider. 🧡 Coziness in a tube with deep hydration and a warm spiced amber glaze. #PoutPreserve #SpicedAppleCider #Olehenriksen',
+      },
+      {
+        id: 2,
+        filename: 'digital2.jpg',
+        title: 'Cider Cocktail Splash',
+        category: 'still-life',
+        categoryLabel: 'Product Still Life',
+        format: '4:5 & 9:16 Paid Social',
+        cta: 'Shop Now',
+        description:
+          'Dynamic golden cider pour into a coupe glass with clove and apple slice garnish.',
+        caption:
+          'Cozy up with The Golden Cider Hour. 🍎✨ Deep peptide hydration with a warm spiced apple cider shine. Tap Shop Now to get yours before it’s gone. #PoutPreserve #Olehenriksen #TheGoldenCiderHour',
+      },
+      {
+        id: 3,
+        filename: 'digital3.jpg',
+        title: 'Golden Cider Claw',
+        category: 'editorial',
+        categoryLabel: 'Editorial & Beauty',
+        format: '4:5 Paid Social',
+        cta: 'Shop Now',
+        description:
+          'Retro arcade claw machine lifting the Spiced Apple Cider tube over spiced apples and honeycomb.',
+        caption:
+          'Win the ultimate autumn lip glaze. 🧡 Our limited-edition Spiced Apple Cider Pout Preserve delivers cushiony hydration and high-shine warmth in every swipe. #Olehenriksen #PoutPreserve #LipTreatment',
+      },
+      {
+        id: 4,
+        filename: 'digital4.jpg',
+        title: 'Glazed Cider Pout',
+        category: 'editorial',
+        categoryLabel: 'Editorial & Beauty',
+        format: '4:5 Paid Social',
+        cta: 'Shop Now',
+        description:
+          'Editorial beauty portrait featuring high-shine spiced amber lip glaze and product bite pose.',
+        caption:
+          'NEW Spiced Apple Cider Pout Preserve is here. Your favorite crisp autumn treat, bottled into a clinically proven peptide lip treatment for plumper, softer lips. 🍎✨ #Olehenriksen #SpicedAppleCider',
+      },
+      {
+        id: 5,
+        filename: 'digital5.jpg',
+        title: 'Cozy Cider Close-Up',
+        category: 'editorial',
+        categoryLabel: 'Editorial & Beauty',
+        format: '4:5 & 9:16 Paid Social',
+        cta: 'Shop Now',
+        description:
+          'Intimate macro beauty shot highlighting warm caramel-cider peptide shine.',
+        caption:
+          'Coziness in a tube. 🧡 Meet your signature seasonal sheen with NEW Pout Preserve Peptide Lip Treatment in Spiced Apple Cider—deeply hydrating with a rich caramel-cider tint. #PoutPreserve #Olehenriksen #FallBeauty',
+      },
+    ];
+
+    // State
+    let activeFilter = 'all';
+    let layoutMode = 'grid'; // 'grid' (Editorial Grid) or 'spotlight' (Gallery Strip)
+    let currentLightboxIndex = 0;
+    let toastTimeout = null;
+
+    // DOM Elements
+    const galleryGrid = document.getElementById('galleryGrid');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const viewGridBtn = document.getElementById('viewGridBtn');
+    const viewSpotlightBtn = document.getElementById('viewSpotlightBtn');
+    const toastNotification = document.getElementById('toastNotification');
+    const toastMessage = document.getElementById('toastMessage');
+
+    // Lightbox Elements
+    const lightboxModal = document.getElementById('lightboxModal');
+    const lightboxMediaContainer = document.getElementById('lightboxMediaContainer');
+    const lightboxIndex = document.getElementById('lightboxIndex');
+    const lightboxFilename = document.getElementById('lightboxFilename');
+    const lightboxTitle = document.getElementById('lightboxTitle');
+    const lightboxDescription = document.getElementById('lightboxDescription');
+    const lightboxCategory = document.getElementById('lightboxCategory');
+    const lightboxCta = document.getElementById('lightboxCta');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const copyCaptionBtn = document.getElementById('copyCaptionBtn');
+
+    /**
+     * Shows a subtle toast notification when copying ad copy
+     */
+    function showToast(message) {
+      toastMessage.textContent = message;
+      toastNotification.classList.remove('opacity-0', 'translate-y-3');
+      toastNotification.classList.add('opacity-100', 'translate-y-0');
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toastNotification.classList.remove('opacity-100', 'translate-y-0');
+        toastNotification.classList.add('opacity-0', 'translate-y-3');
+      }, 2400);
+    }
+
+    /**
+     * Copies ad caption text reliably (iframe-safe execCommand fallback)
+     */
+    function copyTextToClipboard(text, label) {
+      const tempTextarea = document.createElement('textarea');
+      tempTextarea.value = text;
+      tempTextarea.style.position = 'fixed';
+      tempTextarea.style.opacity = '0';
+      document.body.appendChild(tempTextarea);
+      tempTextarea.select();
+      try {
+        document.execCommand('copy');
+        showToast(label || 'Copied ad copy to clipboard');
+      } catch (err) {
+        console.error('Copy failed', err);
+      }
+      document.body.removeChild(tempTextarea);
+    }
+
+    window.copyCardCaption = function (event, itemId) {
+      event.stopPropagation();
+      const item = CAMPAIGN_CREATIVES.find((c) => c.id === itemId);
+      if (!item) return;
+      copyTextToClipboard(item.caption, `Copied caption for ${item.filename}`);
+    };
+
+    /**
+     * Clean, frameless editorial fallback SVG graphic (NO phone frame or hardware bezel)
+     * displayed if local .jpg files are not yet present in the directory.
+     */
+    function buildFramelessFallbackMarkup(item, isLightbox = false) {
+      const containerClasses = isLightbox
+        ? 'w-full max-w-md aspect-[4/5] rounded-xl'
+        : 'w-full h-full';
+
+      return `
+        <div class="${containerClasses} bg-gradient-to-br from-cream via-sand to-golden/70 flex flex-col items-center justify-center p-8 text-center select-none relative overflow-hidden">
+          <!-- Subtle Botanical / Amber Geometric Accent -->
+          <svg class="w-16 h-16 text-amberAccent/80 mb-4" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <circle cx="32" cy="32" r="26" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3"/>
+            <path d="M32 14C32 14 43 24.5 43 34C43 40.0751 38.0751 45 32 45C25.9249 45 21 40.0751 21 34C21 24.5 32 14 32 14Z" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M32 23V39M27 31C29.5 33.5 34.5 33.5 37 31" stroke="#C66D36" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+
+          <span class="text-[11px] font-bold uppercase tracking-[0.22em] text-amberAccent mb-1.5">
+            Creative 0${item.id}
+          </span>
+
+          <h4 class="font-serif text-2xl sm:text-3xl font-semibold text-espresso leading-tight max-w-xs">
+            ${item.title}
+          </h4>
+
+          <div class="mt-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-ivory/90 border border-borderWarm shadow-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-ciderGlow"></span>
+            <span class="font-mono text-xs font-semibold text-espresso">${item.filename}</span>
+          </div>
+
+          <p class="mt-3 text-xs text-cocoa max-w-[230px] leading-relaxed">
+            Full-bleed campaign asset ready. Place <strong class="text-espresso">${item.filename}</strong> in the root folder to preview.
+          </p>
+        </div>
+      `;
+    }
+
+    /**
+     * Swaps broken image source cleanly with the frameless editorial fallback
+     */
+    window.handleCreativeError = function (imgEl, itemId, isLightbox) {
+      const item = CAMPAIGN_CREATIVES.find((p) => p.id === itemId);
+      if (!item || !imgEl.parentElement) return;
+      imgEl.parentElement.innerHTML = buildFramelessFallbackMarkup(item, isLightbox);
+    };
+
+    /**
+     * Renders the frameless editorial grid or gallery strip
+     */
+    function renderGallery() {
+      const filtered =
+        activeFilter === 'all'
+          ? CAMPAIGN_CREATIVES
+          : CAMPAIGN_CREATIVES.filter((item) => item.category === activeFilter);
+
+      if (layoutMode === 'spotlight') {
+        galleryGrid.className = 'mt-10 grid grid-cols-1 gap-10 max-w-5xl mx-auto';
+      } else {
+        galleryGrid.className = 'mt-10 grid grid-cols-1 md:grid-cols-6 gap-8 lg:gap-10';
+      }
+
+      galleryGrid.innerHTML = filtered
+        .map((item, idx) => {
+          // Balanced Editorial Grid: 3-top (col-span-2) + 2-bottom featured (col-span-3) when showing all 5
+          let spanClass = 'md:col-span-2';
+          if (layoutMode === 'spotlight') {
+            spanClass = '';
+          } else if (filtered.length === 5 && idx >= 3) {
+            spanClass = 'md:col-span-3';
+          } else if (filtered.length === 2 || filtered.length === 3) {
+            spanClass = filtered.length === 2 ? 'md:col-span-3' : 'md:col-span-2';
+          }
+
+          const cardFlexClass =
+            layoutMode === 'spotlight'
+              ? 'flex flex-col md:flex-row'
+              : 'flex flex-col';
+
+          const mediaWrapperClass =
+            layoutMode === 'spotlight'
+              ? 'md:w-7/12 aspect-[4/5] bg-sand relative overflow-hidden'
+              : 'w-full aspect-[4/5] bg-sand relative overflow-hidden';
+
+          const contentWrapperClass =
+            layoutMode === 'spotlight'
+              ? 'md:w-5/12 p-6 sm:p-10 flex flex-col justify-between'
+              : 'p-5 sm:p-6 flex-1 flex flex-col justify-between';
+
+          return `
+            <article
+              onclick="openLightboxById(${item.id})"
+              class="${spanClass} ${cardFlexClass} group bg-ivory rounded-2xl border border-borderWarm overflow-hidden shadow-editorial hover:shadow-cardHover hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+            >
+              <!-- Full-Bleed Frameless Image Container (No phone frame or hardware bezel) -->
+              <div class="${mediaWrapperClass}">
+                <img
+                  src="${item.filename}"
+                  alt="${item.title} — Olehenriksen Spiced Apple Cider Campaign (${item.filename})"
+                  loading="lazy"
+                  onerror="handleCreativeError(this, ${item.id}, false)"
+                  class="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-500"
+                />
+
+                <!-- Subtle Filename Tag -->
+                <div class="absolute top-3.5 left-3.5 z-10 px-2.5 py-1 rounded-md bg-ivory/90 backdrop-blur-sm border border-borderWarm text-[11px] font-mono font-semibold text-espresso">
+                  ${item.filename}
+                </div>
+
+                <!-- Expand Creative Hover Trigger -->
+                <div class="absolute bottom-3.5 right-3.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 px-3.5 py-1.5 rounded-full bg-espresso/95 text-ivory text-xs font-medium flex items-center gap-1.5 shadow-md">
+                  <span>Expand Creative</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Editorial Metadata Footer -->
+              <div class="${contentWrapperClass}">
+                <div>
+                  <div class="flex items-center justify-between gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-amberAccent mb-2">
+                    <span>0${item.id} &bull; ${item.categoryLabel}</span>
+                    <span class="text-cocoa font-normal normal-case tracking-normal">${item.format}</span>
+                  </div>
+
+                  <h3 class="font-serif text-2xl sm:text-3xl font-semibold text-espresso group-hover:text-amberAccent transition-colors leading-snug">
+                    ${item.title}
+                  </h3>
+
+                  <p class="text-xs sm:text-sm text-cocoa leading-relaxed mt-2">
+                    ${item.description}
+                  </p>
+                </div>
+
+                <div class="mt-5 pt-4 border-t border-borderWarm flex items-center justify-between gap-2 text-xs">
+                  <button
+                    type="button"
+                    onclick="copyCardCaption(event, ${item.id})"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-sand hover:bg-amberAccent hover:text-ivory border border-borderWarm font-semibold text-espresso transition-colors cursor-pointer"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    <span>Copy Ad Copy</span>
+                  </button>
+
+                  <span class="font-semibold text-amberAccent group-hover:translate-x-0.5 transition-transform">
+                    Expand &rarr;
+                  </span>
+                </div>
+              </div>
+            </article>
+          `;
+        })
+        .join('');
+    }
+
+    /**
+     * Opens Full-Screen Lightbox Inspector for a specific creative ID
+     */
+    window.openLightboxById = function (id) {
+      const idx = CAMPAIGN_CREATIVES.findIndex((item) => item.id === id);
+      if (idx === -1) return;
+      currentLightboxIndex = idx;
+      updateLightboxContent();
+      lightboxModal.classList.remove('hidden');
+      lightboxModal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    };
+
+    /**
+     * Updates the Lightbox modal with the active frameless creative
+     */
+    function updateLightboxContent() {
+      const item = CAMPAIGN_CREATIVES[currentLightboxIndex];
+
+      lightboxIndex.textContent = `0${item.id} / 0${CAMPAIGN_CREATIVES.length}`;
+      lightboxFilename.textContent = item.filename;
+      lightboxTitle.textContent = item.title;
+      lightboxDescription.textContent = item.description;
+      lightboxCategory.textContent = item.categoryLabel;
+      lightboxCta.textContent = item.cta;
+      lightboxCaption.textContent = item.caption;
+
+      lightboxMediaContainer.innerHTML = `
+        <img
+          src="${item.filename}"
+          alt="${item.title} (${item.filename})"
+          onerror="handleCreativeError(this, ${item.id}, true)"
+          class="max-h-[78vh] w-auto max-w-full rounded-xl object-contain shadow-lg"
+        />
+      `;
+    }
+
+    function closeLightbox() {
+      lightboxModal.classList.add('hidden');
+      lightboxModal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    function showPrevSlide() {
+      currentLightboxIndex =
+        (currentLightboxIndex - 1 + CAMPAIGN_CREATIVES.length) % CAMPAIGN_CREATIVES.length;
+      updateLightboxContent();
+    }
+
+    function showNextSlide() {
+      currentLightboxIndex = (currentLightboxIndex + 1) % CAMPAIGN_CREATIVES.length;
+      updateLightboxContent();
+    }
+
+    // Event Listeners: Category Filters
+    filterButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeFilter = btn.getAttribute('data-filter');
+
+        filterButtons.forEach((b) => {
+          b.classList.remove('bg-espresso', 'text-ivory', 'shadow-sm');
+          b.classList.add('bg-ivory', 'text-cocoa', 'border', 'border-borderWarm');
+        });
+
+        btn.classList.remove('bg-ivory', 'text-cocoa', 'border', 'border-borderWarm');
+        btn.classList.add('bg-espresso', 'text-ivory', 'shadow-sm');
+
+        renderGallery();
+      });
+    });
+
+    // Event Listeners: Layout Mode Switcher
+    viewGridBtn.addEventListener('click', () => {
+      layoutMode = 'grid';
+      viewGridBtn.classList.add('bg-ivory', 'text-espresso', 'shadow-sm');
+      viewGridBtn.classList.remove('text-cocoa');
+      viewSpotlightBtn.classList.remove('bg-ivory', 'text-espresso', 'shadow-sm');
+      viewSpotlightBtn.classList.add('text-cocoa');
+      renderGallery();
+    });
+
+    viewSpotlightBtn.addEventListener('click', () => {
+      layoutMode = 'spotlight';
+      viewSpotlightBtn.classList.add('bg-ivory', 'text-espresso', 'shadow-sm');
+      viewSpotlightBtn.classList.remove('text-cocoa');
+      viewGridBtn.classList.remove('bg-ivory', 'text-espresso', 'shadow-sm');
+      viewGridBtn.classList.add('text-cocoa');
+      renderGallery();
+    });
+
+    // Event Listeners: Lightbox Controls & Keyboard Navigation
+    document.getElementById('openFirstLightbox').addEventListener('click', () => openLightboxById(1));
+    document.getElementById('closeLightboxBtn').addEventListener('click', closeLightbox);
+    document.getElementById('prevSlideBtn').addEventListener('click', showPrevSlide);
+    document.getElementById('nextSlideBtn').addEventListener('click', showNextSlide);
+
+    lightboxModal.addEventListener('click', (e) => {
+      if (e.target === lightboxModal) closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (lightboxModal.classList.contains('hidden')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') showPrevSlide();
+      if (e.key === 'ArrowRight') showNextSlide();
+    });
+
+    // Copy Sponsored Caption in Lightbox
+    copyCaptionBtn.addEventListener('click', () => {
+      const item = CAMPAIGN_CREATIVES[currentLightboxIndex];
+      copyTextToClipboard(lightboxCaption.textContent, `Copied caption for ${item.filename}`);
+    });
+
+    // Initialize Gallery on Load
+    renderGallery();
+  </script>
+</body>
+</html>
