@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Golden Cider Hour — Olehenriksen</title>
+
+  <!-- Google Fonts: Official Olehenriksen Aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- MediaPipe FaceMesh for Real-Time Lip Landmark Detection -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandDark: '#1C1917',
+            brandSand: '#F4EBE1',
+            brandCream: '#FAF6F0',
+            brandVanilla: '#FFFDF9',
+            brandAmber: '#D97706',
+            brandCinnamon: '#4A150E',
+            brandBrown: '#78350F',
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          boxShadow: {
+            luxury: '0 25px 50px -12px rgba(74, 21, 14, 0.1)',
+            glow: '0 0 35px rgba(217, 119, 6, 0.25)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Falling Autumn Leaves Ambiance */
+    .leaves-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      overflow: hidden;
+    }
+    .leaf {
+      position: absolute;
+      top: -10%;
+      opacity: 0.7;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0.8; }
+      50% { transform: translateY(50vh) translateX(30px) rotate(180deg); }
+      100% { transform: translateY(110vh) translateX(-20px) rotate(360deg); opacity: 0; }
+    }
+
+    /* Interactive Dewy Cursor Glow inside Hero */
+    .dewy-cursor-glow {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(217, 119, 6, 0.4) 0%, rgba(251, 191, 36, 0.15) 50%, transparent 75%);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      mix-blend-mode: screen;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .hero-stage:hover .dewy-cursor-glow {
+      opacity: 1;
+    }
+
+    /* Seamless Marquee */
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      display: flex;
+      width: max-content;
+      animation: marquee 30s linear infinite;
+    }
+
+    /* Continuous Auto-Scrolling Carousels for Print & Digital Ads */
+    @keyframes autoScrollTrack {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-auto-scroll {
+      display: flex;
+      width: max-content;
+      animation: autoScrollTrack 38s linear infinite;
+    }
+    .animate-auto-scroll:hover {
+      animation-play-state: paused;
+    }
+
+    /* Cart Badge Pop Animation */
+    @keyframes cartPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.28); }
+      100% { transform: scale(1); }
+    }
+    .cart-pop {
+      animation: cartPop 0.3s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-brandVanilla text-brandDark font-sans antialiased selection:bg-brandAmber selection:text-white">
+
+  <!-- Falling Leaves Overlay -->
+  <div class="leaves-container" id="leavesContainer" aria-hidden="true"></div>
+
+  <!-- Top Announcement Bar -->
+  <div class="bg-brandCinnamon text-brandVanilla text-[11px] sm:text-xs py-2 px-4 text-center font-semibold tracking-[0.2em] uppercase">
+    ✨ Free Shipping on Orders $35+ • Limited-Edition Spiced Apple Cider Drop ✨
+  </div>
+
+  <!-- Official Header Navigation -->
+  <header class="sticky top-0 z-40 bg-brandVanilla/95 backdrop-blur-md border-b border-brandSand">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 h-20 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-brandAmber flex items-center justify-center text-brandCinnamon font-bold text-lg shadow-sm">
+          O
+        </div>
+        <div>
+          <span class="font-serif tracking-[0.22em] text-lg sm:text-xl font-bold text-brandCinnamon block leading-none">OLEHENRIKSEN</span>
+          <span class="text-[9px] font-mono tracking-[0.2em] uppercase text-brandBrown block mt-1">Skincare • Official Launch</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold uppercase tracking-[0.18em] text-brandCinnamon/80">
+        <a href="#story" class="hover:text-brandAmber transition-colors">The Story</a>
+        <a href="#digital" class="hover:text-brandAmber transition-colors">Social Drop</a>
+        <a href="#ooh" class="hover:text-brandAmber transition-colors">NYC Takeover</a>
+        <a href="#virtual-try-on" class="hover:text-brandAmber transition-colors">Virtual Try-On</a>
+      </nav>
+
+      <!-- Top-Right Shopping Cart Button -->
+      <div class="flex items-center gap-3">
+        <button
+          id="navCartBtn"
+          onclick="openBag()"
+          aria-label="Open shopping cart"
+          class="relative px-4 py-2.5 rounded-full bg-brandCinnamon hover:bg-brandAmber text-brandVanilla text-xs font-semibold tracking-wider transition-all duration-200 shadow-sm cursor-pointer flex items-center gap-2.5 group"
+        >
+          <svg class="w-4 h-4 text-amber-200 group-hover:text-white transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          <span class="hidden sm:inline">Cart</span>
+          <span id="cartCountBadge" class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-brandAmber group-hover:bg-brandCinnamon text-white text-[11px] font-bold transition-colors">
+            0
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- 1. DYNAMIC HERO STAGE                                                 -->
+  <!-- ===================================================================== -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-6 sm:pt-10 pb-12">
+    <div
+      id="heroStage"
+      onmousemove="moveDewyGlow(event)"
+      class="hero-stage relative w-full min-h-[580px] lg:h-[620px] rounded-3xl overflow-hidden border border-brandAmber/20 shadow-luxury flex flex-col justify-between lg:flex-row lg:items-center bg-brandCinnamon"
+    >
+      <img
+        src="heroimage.jpg"
+        alt="The Golden Cider Hour Hero"
+        onerror="this.onerror=null; this.src='story.jpg';"
+        class="absolute inset-0 w-full h-full object-cover object-center z-0"
+      />
+      <div class="absolute inset-0 z-10 bg-gradient-to-r from-brandDark/85 via-brandCinnamon/40 to-transparent"></div>
+      
+      <div class="dewy-cursor-glow" id="dewyGlow"></div>
+
+      <div class="relative z-20 max-w-xl p-8 sm:p-14 text-brandVanilla">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-amber-200 text-xs font-semibold uppercase tracking-[0.2em] mb-4">
+          <span>🍁 Limited Edition Flavor</span>
+        </div>
+        <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl leading-[1.05] tracking-tight mb-4 text-brandVanilla">
+          The Golden <br /><span class="italic text-amber-300 font-normal">Cider Hour</span>
+        </h1>
+        <p class="text-sm sm:text-base text-brandSand/95 leading-relaxed mb-8 font-light">
+          Contrast the crisp NYC winter frost with the warm, cushiony glow of <strong class="text-white font-medium">Pout Preserve Peptide Lip Treatment</strong> in <span class="text-amber-300 font-medium">Spiced Apple Cider</span>.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <button onclick="addToCart('Spiced Apple Cider', '#A8431A', 'Limited-Edition Fall Drop', true)" class="px-7 py-3.5 rounded-full bg-brandAmber hover:bg-amber-600 text-white font-semibold text-xs uppercase tracking-widest shadow-glow transition-all cursor-pointer">
+            Add to Cart • $22
+          </button>
+          <a href="#virtual-try-on" class="px-6 py-3.5 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/30 text-white font-semibold text-xs uppercase tracking-widest transition-all">
+            Live Lip Try-On
+          </a>
+        </div>
+      </div>
+
+      <!-- Auto-Scrolling Reel Overlay -->
+      <div class="relative lg:absolute lg:right-6 lg:bottom-6 z-20 m-6 lg:m-0 lg:w-[380px] bg-brandVanilla/90 backdrop-blur-xl rounded-2xl border border-white/50 p-4 shadow-2xl">
+        <div class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-brandCinnamon mb-3">
+          <span>Campaign Highlights</span>
+          <button onclick="toggleReelScroll()" id="reelToggleBtn" class="text-brandAmber hover:text-brandBrown cursor-pointer font-mono text-[10px]">Pause Reel</button>
+        </div>
+        <div class="overflow-hidden w-full">
+          <div id="reelTrack" class="flex gap-3 transition-transform duration-500 ease-out">
+            <div class="min-w-[105px] bg-white p-2.5 rounded-xl text-center border border-brandAmber/30 shrink-0">
+              <div class="text-lg">🍎</div>
+              <div class="text-[10px] font-bold text-brandCinnamon mt-1">Spiced Apple</div>
+              <div class="text-[9px] text-brandAmber">Hero Drop</div>
+            </div>
+            <div class="min-w-[105px] bg-white p-2.5 rounded-xl text-center border border-brandSand shrink-0">
+              <div class="text-lg">🍯</div>
+              <div class="text-[10px] font-bold text-brandCinnamon mt-1">Cider Glaze</div>
+              <div class="text-[9px] text-stone-500">Sheer Amber</div>
+            </div>
+            <div class="min-w-[105px] bg-white p-2.5 rounded-xl text-center border border-brandSand shrink-0">
+              <div class="text-lg">🗽</div>
+              <div class="text-[10px] font-bold text-brandCinnamon mt-1">NYC Takeover</div>
+              <div class="text-[9px] text-stone-500">5 OOH Sites</div>
+            </div>
+            <div class="min-w-[105px] bg-white p-2.5 rounded-xl text-center border border-brandSand shrink-0">
+              <div class="text-lg">✨</div>
+              <div class="text-[10px] font-bold text-brandCinnamon mt-1">Sephora</div>
+              <div class="text-[9px] text-stone-500">Exclusive</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee Bar -->
+  <div class="border-y border-brandSand bg-brandSand/50 py-3 overflow-hidden">
+    <div class="animate-marquee flex items-center gap-12 text-xs font-semibold uppercase tracking-[0.25em] text-brandBrown">
+      <span>✦ Spiced Apple Cider Scent</span>
+      <span>✦ Lip-Specific Peptides</span>
+      <span>✦ Cloudberry &amp; Kokum Butter</span>
+      <span>✦ 24-Hour Plush Hydration</span>
+      <span>✦ Sephora &amp; NYC Flagship Drop</span>
+      <span>✦ Spiced Apple Cider Scent</span>
+      <span>✦ Lip-Specific Peptides</span>
+      <span>✦ Cloudberry &amp; Kokum Butter</span>
+      <span>✦ 24-Hour Plush Hydration</span>
+      <span>✦ Sephora &amp; NYC Flagship Drop</span>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- 2. THE STORY SECTION (High-Contrast Overlay Text)                     -->
+  <!-- ===================================================================== -->
+  <section id="story" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-16 sm:py-24">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div class="lg:col-span-6">
+        <span class="text-xs font-bold uppercase tracking-[0.2em] text-brandAmber block mb-3">
+          Sensory Direction
+        </span>
+        <h2 class="font-serif text-3xl sm:text-5xl text-brandCinnamon leading-[1.1] mb-6">
+          Bottled warmth. Clinical bounce. Zero stickiness.
+        </h2>
+        <p class="text-brandCinnamon/90 text-base sm:text-lg leading-relaxed mb-6 font-medium">
+          Inspired by crisp autumn afternoons in New York City, <strong class="text-brandDark">Spiced Apple Cider</strong> combines comforting notes of pressed apple, cinnamon bark, and vanilla bean with our clinically proven peptide complex to plump, smooth, and lock in moisture.
+        </p>
+        <div class="grid grid-cols-2 gap-4 pt-2">
+          <div class="p-4 rounded-2xl bg-brandCream border border-brandSand shadow-sm">
+            <div class="font-serif text-3xl font-bold text-brandAmber mb-1">+40%</div>
+            <div class="text-xs font-semibold text-brandCinnamon">Plumping Hydration</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-brandCream border border-brandSand shadow-sm">
+            <div class="font-serif text-3xl font-bold text-brandAmber mb-1">12 mL</div>
+            <div class="text-xs font-semibold text-brandCinnamon">Generous Tube Size</div>
+          </div>
+        </div>
+      </div>
+      <div class="lg:col-span-6">
+        <div class="rounded-3xl overflow-hidden border border-brandSand shadow-luxury bg-brandCream relative max-w-lg mx-auto">
+          <img
+            src="story.jpg"
+            alt="Olehenriksen Pout Preserve Peptide Lip Treatment in Spiced Apple Cider"
+            class="w-full aspect-[4/5] object-cover object-center"
+            onerror="this.src='https://placehold.co/800x1000/4A150E/FFFDF9?text=story.jpg';"
+          />
+          <!-- High-Contrast Frosted Overlay Container -->
+          <div class="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-brandVanilla/95 backdrop-blur-md border border-brandSand shadow-lg flex items-center justify-between gap-3">
+            <div>
+              <div class="text-[10px] font-bold uppercase tracking-wider text-brandBrown">Limited Edition</div>
+              <div class="font-serif text-xl font-bold text-brandCinnamon">Pout Preserve Peptide Lip Treatment</div>
+            </div>
+            <button onclick="addToCart('Spiced Apple Cider', '#A8431A', 'Limited-Edition Fall Drop', true)" class="px-4 py-2 rounded-full bg-brandCinnamon text-brandVanilla text-xs font-semibold hover:bg-brandAmber transition-colors cursor-pointer shrink-0 shadow-sm">
+              Add • $22
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 3. SOCIAL DROP (Digital Ads: Auto-Scroll Carousel)                    -->
+  <!-- ===================================================================== -->
+  <section id="digital" class="border-t border-brandSand bg-brandCream py-16 sm:py-24 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mb-10">
+      <span class="text-xs font-bold uppercase tracking-[0.2em] text-brandAmber block mb-2">
+        Instagram &amp; TikTok Campaign
+      </span>
+      <h2 class="font-serif text-3xl sm:text-5xl text-brandCinnamon leading-tight">
+        The Social Drop
+      </h2>
+      <p class="text-brandCinnamon/80 text-base mt-2">
+        Larger editorial creatives styled for paid social media storytelling. (Hover to pause)
+      </p>
+    </div>
+
+    <!-- Infinite Auto-Scrolling Large Carousel -->
+    <div class="w-full overflow-hidden relative">
+      <div id="digitalTrack" class="animate-auto-scroll flex gap-8 px-4">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 4. NYC OOH TAKEOVER (Print & Billboard: Matching Background)          -->
+  <!-- ===================================================================== -->
+  <section id="ooh" class="border-t border-brandSand bg-brandCream py-16 sm:py-24 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mb-10">
+      <span class="text-xs font-bold uppercase tracking-[0.2em] text-brandAmber block mb-2">
+        Out-of-Home Advertising
+      </span>
+      <h2 class="font-serif text-3xl sm:text-5xl text-brandCinnamon leading-tight">
+        Taking Over New York City
+      </h2>
+      <p class="text-brandCinnamon/80 text-base mt-2">
+        Deployed across Spring Street subway platforms, SoHo wheatpastes, Sephora flagships, and Times Square. (Hover to pause)
+      </p>
+    </div>
+
+    <!-- Infinite Auto-Scrolling Large Carousel -->
+    <div class="w-full overflow-hidden relative">
+      <div id="oohTrack" class="animate-auto-scroll flex gap-8 px-4">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 5. VIRTUAL LIP PEPTIDE TRY-ON WITH FACE RECOGNITION (Optimized)       -->
+  <!-- ===================================================================== -->
+  <section id="virtual-try-on" class="border-t border-brandSand bg-brandVanilla py-16 sm:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brandAmber/15 border border-brandAmber/30 text-brandBrown text-xs font-bold uppercase tracking-[0.2em] mb-3">
+          AR Face Recognition Studio
+        </span>
+        <h2 class="font-serif text-3xl sm:text-5xl text-brandCinnamon leading-tight">
+          Virtual Pout Preserve Try-On
+        </h2>
+        <p class="text-brandCinnamon/80 text-base mt-2">
+          Turn on your camera or upload a selfie to experience real-time facial landmark lip tracking with our glossy Spiced Apple Cider peptide tint.
+        </p>
+      </div>
+
+      <div class="bg-brandCream rounded-3xl border border-brandSand p-6 sm:p-10 shadow-luxury grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <!-- Left: Live AR Camera / Photo Canvas -->
+        <div class="lg:col-span-7">
+          <div class="relative w-full aspect-[4/3] bg-brandDark rounded-2xl overflow-hidden border border-brandAmber/30 shadow-inner flex items-center justify-center">
+            <video id="webcamVideo" class="hidden" playsinline autoplay muted></video>
+            <img id="uploadedPhoto" class="hidden" alt="Uploaded Selfie" />
+
+            <canvas id="tryOnCanvas" class="w-full h-full object-cover"></canvas>
+
+            <!-- Initial Placeholder Overlay -->
+            <div id="tryOnPlaceholder" class="absolute inset-0 bg-gradient-to-br from-brandCinnamon via-brandDark to-stone-900 flex flex-col items-center justify-center p-6 text-center text-brandVanilla z-10">
+              <div class="w-16 h-16 rounded-full bg-brandAmber/20 border border-brandAmber/50 flex items-center justify-center text-2xl mb-4">
+                ✨
+              </div>
+              <h3 class="font-serif text-2xl sm:text-3xl mb-2">Ready for Your Golden Hour Glow?</h3>
+              <p class="text-xs sm:text-sm text-brandSand/80 max-w-sm mb-6">
+                Our facial recognition tracks 468 points in real time to apply a translucent, high-shine Spiced Apple Cider peptide glaze directly to your lips.
+              </p>
+              <div class="flex flex-wrap justify-center gap-3">
+                <button id="startCamBtn" onclick="startLiveCamera()" class="px-6 py-3 rounded-full bg-brandAmber hover:bg-amber-600 text-white text-xs font-semibold uppercase tracking-widest shadow-glow transition-all cursor-pointer">
+                  Enable Live Camera
+                </button>
+                <label class="px-6 py-3 rounded-full bg-white/15 hover:bg-white/25 border border-white/30 text-white text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer">
+                  Upload Photo
+                  <input type="file" id="photoUploadInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)" />
+                </label>
+              </div>
+            </div>
+
+            <!-- Live Tracking Status Pill -->
+            <div id="trackingBadge" class="hidden absolute top-4 left-4 z-20 px-3.5 py-1.5 rounded-full bg-brandDark/80 backdrop-blur-md border border-brandAmber/40 text-amber-300 text-[11px] font-semibold tracking-wider flex items-center gap-2">
+              <span id="trackingDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+              <span id="trackingStatusText">Initializing Face Mesh...</span>
+            </div>
+
+            <!-- Split Before / After Toggle Button -->
+            <button id="compareBtn" onclick="toggleCompareSplit()" class="hidden absolute bottom-4 right-4 z-20 px-4 py-2 rounded-full bg-brandVanilla/90 hover:bg-white text-brandCinnamon text-xs font-bold shadow cursor-pointer">
+              Split Before / After: OFF
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Shade, Gloss & Camera Controls -->
+        <div class="lg:col-span-5 space-y-6">
+          <div>
+            <label class="text-xs font-bold uppercase tracking-wider text-brandCinnamon block mb-2.5">
+              1. Select Pout Preserve Shade
+            </label>
+            <div class="grid grid-cols-2 gap-2.5">
+              <button onclick="selectTryOnShade('Spiced Apple Cider', '#A8431A', 0.48, 0.75, 'Limited-Edition Fall Drop', this)" class="shade-opt p-3 rounded-2xl border-2 border-brandAmber bg-brandVanilla text-left flex items-center gap-3 cursor-pointer">
+                <span class="w-7 h-7 rounded-full shrink-0 border border-white shadow" style="background: radial-gradient(circle at 30% 30%, #F59E0B, #9E4B23);"></span>
+                <div>
+                  <div class="text-xs font-bold text-brandCinnamon leading-tight">Spiced Apple</div>
+                  <div class="text-[10px] text-brandAmber font-semibold">Limited Edition</div>
+                </div>
+              </button>
+
+              <button onclick="selectTryOnShade('Cocoa Creme', '#5C2C1D', 0.52, 0.65, 'Rich Espresso Peptide', this)" class="shade-opt p-3 rounded-2xl border border-brandSand bg-white/60 text-left flex items-center gap-3 cursor-pointer">
+                <span class="w-7 h-7 rounded-full shrink-0 border border-white shadow" style="background: radial-gradient(circle at 30% 30%, #8D5544, #4A150E);"></span>
+                <div>
+                  <div class="text-xs font-bold text-brandCinnamon leading-tight">Cocoa Creme</div>
+                  <div class="text-[10px] text-stone-500">Rich Espresso</div>
+                </div>
+              </button>
+
+              <button onclick="selectTryOnShade('Strawberry Sorbet', '#D9536F', 0.42, 0.70, 'Sheer Hydrating Pink', this)" class="shade-opt p-3 rounded-2xl border border-brandSand bg-white/60 text-left flex items-center gap-3 cursor-pointer">
+                <span class="w-7 h-7 rounded-full shrink-0 border border-white shadow" style="background: radial-gradient(circle at 30% 30%, #FF8FA3, #C93B5B);"></span>
+                <div>
+                  <div class="text-xs font-bold text-brandCinnamon leading-tight">Strawberry</div>
+                  <div class="text-[10px] text-stone-500">Sheer Pink</div>
+                </div>
+              </button>
+
+              <button onclick="selectTryOnShade('Citrus Sunshine', '#E68A2E', 0.25, 0.85, 'Vitamin C Clear Nectar', this)" class="shade-opt p-3 rounded-2xl border border-brandSand bg-white/60 text-left flex items-center gap-3 cursor-pointer">
+                <span class="w-7 h-7 rounded-full shrink-0 border border-white shadow" style="background: radial-gradient(circle at 30% 30%, #FDE047, #D97706);"></span>
+                <div>
+                  <div class="text-xs font-bold text-brandCinnamon leading-tight">Citrus Glow</div>
+                  <div class="text-[10px] text-stone-500">Clear Nectar</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Coat Intensity Slider -->
+          <div>
+            <div class="flex justify-between text-xs font-bold uppercase tracking-wider text-brandCinnamon mb-1.5">
+              <label for="tintOpacitySlider">2. Layer Swipes (Tint &amp; Peptide Gloss)</label>
+              <span id="swipeCountLabel" class="text-brandAmber">2 Swipes</span>
+            </div>
+            <input
+              id="tintOpacitySlider"
+              type="range"
+              min="15"
+              max="80"
+              value="48"
+              oninput="updateTintIntensity(this.value)"
+              class="w-full accent-brandAmber cursor-pointer"
+            />
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="pt-2 flex flex-col sm:flex-row gap-3">
+            <button onclick="captureLook()" class="flex-1 py-3 px-4 rounded-full bg-brandVanilla hover:bg-brandSand border border-brandCinnamon/25 text-brandCinnamon text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer">
+              📸 Save Snapshot
+            </button>
+            <button onclick="addSelectedTryOnToCart()" class="flex-1 py-3 px-4 rounded-full bg-brandCinnamon hover:bg-brandAmber text-white text-xs font-bold uppercase tracking-wider shadow transition-colors cursor-pointer">
+              Add Shade to Cart • $22
+            </button>
+          </div>
+
+          <div id="activeControlsBar" class="hidden pt-2 border-t border-brandSand flex items-center justify-between text-xs">
+            <button onclick="stopLiveCamera()" class="text-brandBrown hover:text-brandCinnamon font-semibold cursor-pointer">
+              Stop Camera
+            </button>
+            <label class="text-brandAmber hover:text-brandBrown font-semibold cursor-pointer">
+              Switch to Photo Upload
+              <input type="file" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)" />
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-brandSand bg-brandVanilla py-12 px-4 sm:px-6 lg:px-10 text-center text-xs text-brandCinnamon/70">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="font-serif font-bold text-brandCinnamon text-lg">OLEHENRIKSEN — The Golden Cider Hour</div>
+      <div>© 2026 Olehenriksen Cosmetics. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- INTERACTIVE SHOPPING CART DRAWER / MODAL                              -->
+  <!-- ===================================================================== -->
+  <div id="bagModal" class="fixed inset-0 z-50 hidden justify-end bg-black/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="cartDrawerTitle">
+    <div class="bg-brandVanilla w-full max-w-md h-full p-6 sm:p-8 border-l border-brandSand shadow-2xl flex flex-col justify-between overflow-y-auto">
+      <div>
+        <!-- Cart Header -->
+        <div class="flex items-center justify-between pb-5 border-b border-brandSand">
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-brandAmber block">OLEHENRIKSEN</span>
+            <h3 id="cartDrawerTitle" class="font-serif text-2xl font-bold text-brandCinnamon">Your Shopping Cart</h3>
+          </div>
+          <button onclick="closeBag()" aria-label="Close cart" class="w-9 h-9 rounded-full bg-brandSand hover:bg-brandAmber hover:text-white flex items-center justify-center font-bold transition-colors cursor-pointer">✕</button>
+        </div>
+
+        <!-- Free Shipping Progress Bar -->
+        <div class="my-4 p-3 rounded-2xl bg-brandCream border border-brandSand text-center">
+          <p id="shippingGoalText" class="text-xs font-medium text-brandCinnamon">
+            Add <strong class="text-brandAmber">$35.00</strong> more for complimentary shipping!
+          </p>
+          <div class="w-full h-1.5 bg-brandSand rounded-full overflow-hidden mt-2">
+            <div id="shippingProgressBar" class="h-full bg-brandAmber transition-all duration-300" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Dynamic Cart Items List -->
+        <div id="cartItemsList" class="space-y-3 my-4">
+          <!-- Cart items injected here -->
+        </div>
+      </div>
+
+      <!-- Cart Summary & Checkout -->
+      <div id="cartFooter" class="pt-5 border-t border-brandSand">
+        <div class="flex items-center justify-between text-xs text-brandBrown mb-1.5">
+          <span>Estimated Shipping</span>
+          <span id="cartShippingCost" class="font-semibold">$5.00</span>
+        </div>
+        <div class="flex items-center justify-between mb-5">
+          <span class="text-sm font-bold text-brandCinnamon uppercase tracking-wider">Subtotal</span>
+          <span id="cartSubtotal" class="font-serif text-2xl font-bold text-brandCinnamon">$0.00</span>
+        </div>
+        <button id="checkoutBtn" onclick="checkout(this)" class="w-full py-3.5 rounded-full bg-brandCinnamon hover:bg-brandAmber text-white font-semibold text-xs uppercase tracking-widest transition-colors cursor-pointer shadow-sm">
+          Proceed to Checkout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Lightbox Modal -->
+  <div id="lightbox" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 p-4" role="dialog">
+    <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-2xl font-bold cursor-pointer z-20">✕</button>
+    <div class="max-w-4xl max-h-[85vh] flex flex-col items-center">
+      <img id="lightboxImg" src="" alt="Expanded View" class="max-h-[75vh] max-w-full rounded-2xl object-contain shadow-2xl" />
+      <p id="lightboxCaption" class="text-stone-300 text-xs sm:text-sm mt-4 text-center max-w-lg"></p>
+    </div>
+  </div>
+
+  <script>
+    // 1. Falling Autumn Leaves Generator
+    const leavesContainer = document.getElementById('leavesContainer');
+    const symbols = ['🍁', '🍂', '✨'];
+    for (let i = 0; i < 12; i++) {
+      const leaf = document.createElement('div');
+      leaf.className = 'leaf';
+      leaf.innerText = symbols[i % symbols.length];
+      leaf.style.left = `${Math.random() * 100}%`;
+      leaf.style.fontSize = `${1 + Math.random() * 1.2}rem`;
+      leaf.style.animationDuration = `${6 + Math.random() * 8}s`;
+      leaf.style.animationDelay = `${Math.random() * 5}s`;
+      leavesContainer.appendChild(leaf);
+    }
+
+    // 2. Dewy Glow Cursor Tracking
+    function moveDewyGlow(e) {
+      const stage = document.getElementById('heroStage');
+      const glow = document.getElementById('dewyGlow');
+      const rect = stage.getBoundingClientRect();
+      glow.style.left = `${e.clientX - rect.left}px`;
+      glow.style.top = `${e.clientY - rect.top}px`;
+    }
+
+    // Auto-Scrolling Hero Reel Loop
+    const reelTrack = document.getElementById('reelTrack');
+    let scrollPos = 0;
+    let isAutoScrolling = true;
+    const maxScroll = 220;
+
+    function autoScrollStep() {
+      if (!isAutoScrolling || !reelTrack) return;
+      scrollPos += 114;
+      if (scrollPos > maxScroll) scrollPos = 0;
+      reelTrack.style.transform = `translateX(-${scrollPos}px)`;
+    }
+
+    setInterval(autoScrollStep, 2600);
+
+    function toggleReelScroll() {
+      isAutoScrolling = !isAutoScrolling;
+      const btn = document.getElementById('reelToggleBtn');
+      if (btn) btn.innerText = isAutoScrolling ? 'Pause Reel' : 'Resume Reel';
+    }
+
+    // 3. Campaign Data Stores (Digital Ads & OOH Mockups)[cite: 2, 3]
+    const DIGITAL_ADS = [
+      { src: 'ad1.png', title: 'The Spiced Apple Stack', category: 'still', caption: 'Your perfect fall pout is here! Meet Pout Preserve in Spiced Apple Cider. #PoutPreserve' },
+      { src: 'ad2.png', title: 'Cider Cocktail Splash', category: 'still', caption: 'Cozy up with The Golden Cider Hour. Deep peptide hydration with warm cider shine.' },
+      { src: 'ad3.png', title: 'Golden Cider Claw', category: 'still', caption: 'Win the ultimate autumn lip glaze in our limited-edition arcade capsule.' },
+      { src: 'ad4.png', title: 'Glazed Cider Pout', category: 'beauty', caption: 'Editorial beauty portrait featuring high-shine spiced amber lip glaze.' },
+      { src: 'ad5.png', title: 'Cozy Cider Close-Up', category: 'beauty', caption: 'Intimate macro beauty shot highlighting warm caramel-cider peptide shine.' }
+    ];
+
+    const OOH_MOCKUPS = [
+      { src: 'mockup1.jpg', title: 'Spring St Subway Station', category: 'Transit', caption: 'Spring St Subway Platform, SoHo NYC • Backlit underground transit panel.' },
+      { src: 'mockup2.jpg', title: 'Rooftop Billboard', category: 'Spectacular', caption: 'Outfront Media Skyline Billboard, NYC • High-impact urban rooftop bulletin.' },
+      { src: 'mockup3.jpg', title: 'Sephora In-Store Lightbox', category: 'Retail', caption: 'Sephora Flagship Interior • Illuminated point-of-sale display.' },
+      { src: 'mockup4.jpg', title: 'Times Square Takeover', category: 'Spectacular', caption: 'Times Square LED Spectacular, NYC • Curved multi-panel digital takeover.' },
+      { src: 'mockup5.jpg', title: 'SoHo Wheatpaste Gallery', category: 'Transit', caption: 'Downtown Construction Fence Gallery, SoHo • Organic urban wheatpastes.' }
+    ];
+
+    // Render larger cards into continuous auto-scrolling tracks (doubled for seamless infinite loop)
+    function renderAutoScrollCarousels() {
+      const digitalContainer = document.getElementById('digitalTrack');
+      const oohContainer = document.getElementById('oohTrack');
+
+      const digitalCardsHTML = DIGITAL_ADS.map(item => `
+        <div onclick="openLightbox('${item.src}', '${item.title} — ${item.caption}')" class="group bg-brandVanilla rounded-3xl border border-brandSand overflow-hidden shadow-luxury transition-all cursor-pointer flex flex-col shrink-0 w-[320px] sm:w-[380px]">
+          <div class="aspect-[4/5] bg-brandSand overflow-hidden">
+            <img src="${item.src}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/700x875/4A150E/FFFDF9?text=Creative';" />
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <h3 class="font-serif text-xl font-bold text-brandCinnamon">${item.title}</h3>
+            <span class="text-xs font-bold uppercase tracking-wider text-brandAmber mt-2">Inspect Ad &rarr;</span>
+          </div>
+        </div>
+      `).join('');
+
+      const oohCardsHTML = OOH_MOCKUPS.map(item => `
+        <div onclick="openLightbox('${item.src}', '${item.title} — ${item.caption}')" class="group bg-brandVanilla rounded-3xl border border-brandSand overflow-hidden shadow-luxury transition-all cursor-pointer flex flex-col shrink-0 w-[320px] sm:w-[380px]">
+          <div class="aspect-[4/5] bg-brandSand overflow-hidden">
+            <img src="${item.src}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/700x875/4A150E/FFFDF9?text=NYC+OOH';" />
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <h3 class="font-serif text-xl font-bold text-brandCinnamon">${item.title}</h3>
+            <span class="text-xs font-bold uppercase tracking-wider text-brandAmber mt-2">View Mockup &rarr;</span>
+          </div>
+        </div>
+      `).join('');
+
+      // Duplicate once to achieve seamless CSS marquee looping
+      digitalContainer.innerHTML = digitalCardsHTML + digitalCardsHTML;
+      oohContainer.innerHTML = oohCardsHTML + oohCardsHTML;
+    }
+
+    // =====================================================================
+    // 4. OPTIMIZED REAL-TIME FACE RECOGNITION LIP TRY-ON ENGINE
+    // =====================================================================
+    const UPPER_LIP_OUTER = [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291];
+    const UPPER_LIP_INNER = [78, 191, 80, 81, 82, 13, 312, 311, 310, 415, 308];
+    const LOWER_LIP_OUTER = [61, 146, 91, 181, 84, 17, 314, 405, 321, 375, 291];
+    const LOWER_LIP_INNER = [78, 95, 88, 178, 87, 14, 317, 402, 318, 324, 308];
+
+    let tryOnState = {
+      shadeName: 'Spiced Apple Cider',
+      shadeTagline: 'Limited-Edition Fall Drop',
+      colorHex: '#A8431A',
+      opacity: 0.48,
+      gloss: 0.75,
+      splitCompare: false,
+      mode: 'idle',
+      stream: null,
+      animId: null,
+      isProcessing: false
+    };
+
+    const canvas = document.getElementById('tryOnCanvas');
+    const ctx = canvas.getContext('2d');
+    const videoEl = document.getElementById('webcamVideo');
+    const photoEl = document.getElementById('uploadedPhoto');
+
+    let faceMeshInstance = null;
+
+    function initFaceMesh() {
+      if (faceMeshInstance) return faceMeshInstance;
+      faceMeshInstance = new FaceMesh({
+        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+      });
+      faceMeshInstance.setOptions({
+        maxNumFaces: 1,
+        modelComplexity: 0,
+        refineLandmarks: true,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+      });
+      faceMeshInstance.onResults(onFaceMeshResults);
+      return faceMeshInstance;
+    }
+
+    function onFaceMeshResults(results) {
+      tryOnState.isProcessing = false;
+      const w = results.image.width;
+      const h = results.image.height;
+      canvas.width = w;
+      canvas.height = h;
+
+      ctx.save();
+      ctx.clearRect(0, 0, w, h);
+
+      if (tryOnState.mode === 'camera') {
+        ctx.translate(w, 0);
+        ctx.scale(-1, 1);
+      }
+
+      ctx.drawImage(results.image, 0, 0, w, h);
+
+      const statusText = document.getElementById('trackingStatusText');
+      const trackingDot = document.getElementById('trackingDot');
+
+      if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+        statusText.innerText = `Face Locked • ${tryOnState.shadeName}`;
+        trackingDot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+
+        const landmarks = results.multiFaceLandmarks[0];
+        renderPeptideLipGlaze(ctx, landmarks, w, h);
+      } else {
+        statusText.innerText = 'Center Face in Frame...';
+        trackingDot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
+      }
+
+      ctx.restore();
+
+      if (tryOnState.splitCompare) {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(255, 253, 249, 0.9)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(w / 2, 0);
+        ctx.lineTo(w / 2, h);
+        ctx.stroke();
+
+        ctx.fillStyle = 'rgba(28, 25, 23, 0.75)';
+        ctx.fillRect(w / 2 - 95, h - 42, 85, 26);
+        ctx.fillRect(w / 2 + 10, h - 42, 85, 26);
+        ctx.fillStyle = '#FFFDF9';
+        ctx.font = '600 11px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('BARE LIPS', w / 2 - 52, h - 25);
+        ctx.fillText('GLAZED', w / 2 + 52, h - 25);
+        ctx.restore();
+      }
+    }
+
+    function renderPeptideLipGlaze(ctx, landmarks, w, h) {
+      ctx.save();
+
+      if (tryOnState.splitCompare) {
+        ctx.beginPath();
+        if (tryOnState.mode === 'camera') {
+          ctx.rect(0, 0, w / 2, h);
+        } else {
+          ctx.rect(w / 2, 0, w / 2, h);
+        }
+        ctx.clip();
+      }
+
+      ctx.beginPath();
+      UPPER_LIP_OUTER.forEach((idx, i) => {
+        const pt = landmarks[idx];
+        if (i === 0) ctx.moveTo(pt.x * w, pt.y * h);
+        else ctx.lineTo(pt.x * w, pt.y * h);
+      });
+      for (let i = LOWER_LIP_OUTER.length - 1; i >= 0; i--) {
+        const pt = landmarks[LOWER_LIP_OUTER[i]];
+        ctx.lineTo(pt.x * w, pt.y * h);
+      }
+      ctx.closePath();
+
+      UPPER_LIP_INNER.forEach((idx, i) => {
+        const pt = landmarks[idx];
+        if (i === 0) ctx.moveTo(pt.x * w, pt.y * h);
+        else ctx.lineTo(pt.x * w, pt.y * h);
+      });
+      for (let i = LOWER_LIP_INNER.length - 1; i >= 0; i--) {
+        const pt = landmarks[LOWER_LIP_INNER[i]];
+        ctx.lineTo(pt.x * w, pt.y * h);
+      }
+      ctx.closePath();
+
+      ctx.filter = 'blur(2px)';
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.fillStyle = hexToRgba(tryOnState.colorHex, tryOnState.opacity);
+      ctx.fill('evenodd');
+
+      ctx.globalCompositeOperation = 'screen';
+      ctx.fillStyle = hexToRgba('#F59E0B', tryOnState.opacity * 0.4);
+      ctx.fill('evenodd');
+
+      ctx.filter = 'blur(3px)';
+      const lowerCenter = landmarks[17];
+      const innerBottom = landmarks[14];
+      const glossX = ((lowerCenter.x + innerBottom.x) / 2) * w;
+      const glossY = ((lowerCenter.y + innerBottom.y) / 2) * h;
+      const lipWidth = Math.hypot(
+        (landmarks[291].x - landmarks[61].x) * w,
+        (landmarks[291].y - landmarks[61].y) * h
+      );
+
+      const grad = ctx.createRadialGradient(glossX, glossY, 1, glossX, glossY, lipWidth * 0.28);
+      grad.addColorStop(0, `rgba(255, 253, 245, ${0.5 * tryOnState.gloss})`);
+      grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+      ctx.fillStyle = grad;
+      ctx.fill('evenodd');
+
+      ctx.restore();
+    }
+
+    function hexToRgba(hex, alpha) {
+      const clean = hex.replace('#', '');
+      const bigint = parseInt(clean, 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    async function startLiveCamera() {
+      const btn = document.getElementById('startCamBtn');
+      btn.innerText = 'Starting Camera...';
+
+      try {
+        stopLiveCamera(false);
+        const mesh = initFaceMesh();
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
+          audio: false
+        });
+
+        tryOnState.stream = stream;
+        tryOnState.mode = 'camera';
+        videoEl.srcObject = stream;
+        await videoEl.play();
+
+        document.getElementById('tryOnPlaceholder').classList.add('hidden');
+        document.getElementById('trackingBadge').classList.remove('hidden');
+        document.getElementById('compareBtn').classList.remove('hidden');
+        document.getElementById('activeControlsBar').classList.remove('hidden');
+
+        async function processVideoFrame() {
+          if (tryOnState.mode !== 'camera') return;
+          if (videoEl.readyState >= 2 && !tryOnState.isProcessing) {
+            tryOnState.isProcessing = true;
+            await mesh.send({ image: videoEl });
+          }
+          tryOnState.animId = requestAnimationFrame(processVideoFrame);
+        }
+        processVideoFrame();
+      } catch (err) {
+        btn.innerText = 'Camera Blocked — Upload Photo Instead';
+      }
+    }
+
+    function stopLiveCamera(resetUI = true) {
+      if (tryOnState.animId) cancelAnimationFrame(tryOnState.animId);
+      if (tryOnState.stream) {
+        tryOnState.stream.getTracks().forEach(t => t.stop());
+        tryOnState.stream = null;
+      }
+      if (resetUI) {
+        tryOnState.mode = 'idle';
+        document.getElementById('tryOnPlaceholder').classList.remove('hidden');
+        document.getElementById('trackingBadge').classList.add('hidden');
+        document.getElementById('compareBtn').classList.add('hidden');
+        document.getElementById('activeControlsBar').classList.add('hidden');
+        document.getElementById('startCamBtn').innerText = 'Enable Live Camera';
+      }
+    }
+
+    function handlePhotoUpload(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      stopLiveCamera(false);
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        photoEl.onload = async () => {
+          tryOnState.mode = 'photo';
+          document.getElementById('tryOnPlaceholder').classList.add('hidden');
+          document.getElementById('trackingBadge').classList.remove('hidden');
+          document.getElementById('compareBtn').classList.remove('hidden');
+          document.getElementById('activeControlsBar').classList.remove('hidden');
+          document.getElementById('trackingStatusText').innerText = 'Detecting Lip Landmarks...';
+
+          const mesh = initFaceMesh();
+          await mesh.send({ image: photoEl });
+        };
+        photoEl.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function selectTryOnShade(name, hex, defaultOpacity, gloss, tagline, btnEl) {
+      tryOnState.shadeName = name;
+      tryOnState.shadeTagline = tagline;
+      tryOnState.colorHex = hex;
+      tryOnState.gloss = gloss;
+
+      document.querySelectorAll('.shade-opt').forEach(btn => {
+        btn.className = 'shade-opt p-3 rounded-2xl border border-brandSand bg-white/60 text-left flex items-center gap-3 cursor-pointer';
+      });
+      btnEl.className = 'shade-opt p-3 rounded-2xl border-2 border-brandAmber bg-brandVanilla text-left flex items-center gap-3 cursor-pointer';
+
+      if (tryOnState.mode === 'photo' && photoEl.src) {
+        const mesh = initFaceMesh();
+        await mesh.send({ image: photoEl });
+      }
+    }
+
+    async function updateTintIntensity(val) {
+      tryOnState.opacity = val / 100;
+      const swipes = val < 35 ? '1 Swipe (Sheer)' : val < 60 ? '2 Swipes (Glazed)' : '3 Swipes (Rich)';
+      document.getElementById('swipeCountLabel').innerText = swipes;
+
+      if (tryOnState.mode === 'photo' && photoEl.src) {
+        const mesh = initFaceMesh();
+        await mesh.send({ image: photoEl });
+      }
+    }
+
+    async function toggleCompareSplit() {
+      tryOnState.splitCompare = !tryOnState.splitCompare;
+      document.getElementById('compareBtn').innerText = `Split Before / After: ${tryOnState.splitCompare ? 'ON' : 'OFF'}`;
+      if (tryOnState.mode === 'photo' && photoEl.src) {
+        const mesh = initFaceMesh();
+        await mesh.send({ image: photoEl });
+      }
+    }
+
+    function captureLook() {
+      if (tryOnState.mode === 'idle') {
+        startLiveCamera();
+        return;
+      }
+      const dataUrl = canvas.toDataURL('image/png');
+      openLightbox(dataUrl, `Olehenriksen Virtual Try-On • Pout Preserve in ${tryOnState.shadeName}`);
+    }
+
+    // =====================================================================
+    // 5. MULTI-ITEM SHOPPING CART STATE & DRAWER CONTROLS
+    // =====================================================================
+    const UNIT_PRICE = 22;
+    let cart = [];
+
+    function addToCart(shadeName, colorHex, tagline, openDrawerAfter = true) {
+      const existing = cart.find(item => item.shade === shadeName);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({
+          shade: shadeName,
+          color: colorHex,
+          tagline: tagline || 'Pout Preserve Peptide Lip Treatment',
+          price: UNIT_PRICE,
+          qty: 1
+        });
+      }
+
+      renderCart();
+
+      const badge = document.getElementById('cartCountBadge');
+      badge.classList.remove('cart-pop');
+      void badge.offsetWidth;
+      badge.classList.add('cart-pop');
+
+      if (openDrawerAfter) openBag();
+    }
+
+    function addSelectedTryOnToCart() {
+      addToCart(tryOnState.shadeName, tryOnState.colorHex, tryOnState.shadeTagline, true);
+    }
+
+    function updateItemQty(shadeName, delta) {
+      const idx = cart.findIndex(item => item.shade === shadeName);
+      if (idx === -1) return;
+      cart[idx].qty += delta;
+      if (cart[idx].qty <= 0) {
+        cart.splice(idx, 1);
+      }
+      renderCart();
+    }
+
+    function renderCart() {
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+      document.getElementById('cartCountBadge').innerText = totalItems;
+
+      const shippingGoal = 35;
+      const progressPct = Math.min(100, (subtotal / shippingGoal) * 100);
+      document.getElementById('shippingProgressBar').style.width = `${progressPct}%`;
+
+      if (subtotal >= shippingGoal) {
+        document.getElementById('shippingGoalText').innerHTML = `🎉 You unlocked <strong class="text-brandAmber">FREE Standard Shipping</strong>!`;
+        document.getElementById('cartShippingCost').innerText = 'FREE';
+      } else {
+        const remaining = (shippingGoal - subtotal).toFixed(2);
+        document.getElementById('shippingGoalText').innerHTML = `Add <strong class="text-brandAmber">$${remaining}</strong> more for complimentary shipping!`;
+        document.getElementById('cartShippingCost').innerText = totalItems === 0 ? '$0.00' : '$5.00';
+      }
+
+      document.getElementById('cartSubtotal').innerText = `$${subtotal.toFixed(2)}`;
+
+      const listEl = document.getElementById('cartItemsList');
+      const footerEl = document.getElementById('cartFooter');
+
+      if (cart.length === 0) {
+        listEl.innerHTML = `
+          <div class="py-12 text-center">
+            <div class="text-3xl mb-2">🛍️</div>
+            <p class="font-serif text-xl text-brandCinnamon mb-1">Your cart is empty</p>
+            <p class="text-xs text-brandBrown mb-5">Add the limited-edition Spiced Apple Cider Pout Preserve to get started.</p>
+            <button onclick="addToCart('Spiced Apple Cider', '#A8431A', 'Limited-Edition Fall Drop', false)" class="px-5 py-2.5 rounded-full bg-brandAmber hover:bg-amber-600 text-white text-xs font-semibold uppercase tracking-wider cursor-pointer transition-colors">
+              + Quick Add Spiced Apple Cider
+            </button>
+          </div>
+        `;
+        footerEl.classList.add('opacity-50', 'pointer-events-none');
+      } else {
+        footerEl.classList.remove('opacity-50', 'pointer-events-none');
+        listEl.innerHTML = cart.map(item => `
+          <div class="p-4 rounded-2xl bg-brandCream border border-brandSand flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-full shrink-0 border-2 border-white shadow" style="background: radial-gradient(circle at 30% 30%, #FBBF24, ${item.color});"></span>
+              <div>
+                <div class="text-xs font-bold text-brandCinnamon">${item.shade}</div>
+                <div class="text-[10px] text-brandBrown">${item.tagline}</div>
+                <div class="text-xs font-semibold text-brandAmber mt-0.5">$${(item.price * item.qty).toFixed(2)}</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 bg-brandVanilla rounded-full border border-brandSand px-2 py-1">
+              <button onclick="updateItemQty('${item.shade}', -1)" aria-label="Decrease quantity" class="w-6 h-6 rounded-full hover:bg-brandSand text-brandCinnamon font-bold text-xs cursor-pointer">−</button>
+              <span class="text-xs font-bold text-brandCinnamon min-w-[16px] text-center">${item.qty}</span>
+              <button onclick="updateItemQty('${item.shade}', 1)" aria-label="Increase quantity" class="w-6 h-6 rounded-full hover:bg-brandSand text-brandCinnamon font-bold text-xs cursor-pointer">+</button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function openBag() {
+      renderCart();
+      document.getElementById('bagModal').classList.remove('hidden');
+      document.getElementById('bagModal').classList.add('flex');
+    }
+
+    function closeBag() {
+      document.getElementById('bagModal').classList.add('hidden');
+      document.getElementById('bagModal').classList.remove('flex');
+    }
+
+    function checkout(btn) {
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      if (totalItems === 0) return;
+      btn.innerText = '✓ Redirecting to Olehenriksen Checkout...';
+      setTimeout(() => {
+        closeBag();
+        btn.innerText = 'Proceed to Checkout';
+      }, 1600);
+    }
+
+    function openLightbox(src, caption) {
+      document.getElementById('lightboxImg').src = src;
+      document.getElementById('lightboxCaption').innerText = caption;
+      document.getElementById('lightbox').classList.remove('hidden');
+      document.getElementById('lightbox').classList.add('flex');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.add('hidden');
+      document.getElementById('lightbox').classList.remove('flex');
+    }
+
+    // Initialize
+    renderAutoScrollCarousels();
+    renderCart();
+  </script>
+</body>
+</html>
