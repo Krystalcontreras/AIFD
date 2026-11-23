@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oy, A.I. Reading Response</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: DM Serif Display & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            snow: '#FFFAFA',
+            blush: '#FFDAE9',
+            lavenderPink: '#FAE6FA',
+            berry: '#D85C8A',
+            charcoal: '#2D2629',
+            muted: '#6E5E65',
+          },
+          fontFamily: {
+            display: ['"DM Serif Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          boxShadow: {
+            soft: '0 20px 50px -15px rgba(216, 92, 138, 0.08), 0 4px 20px -4px rgba(45, 38, 41, 0.03)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #FFFAFA;
+      background-image: linear-gradient(160deg, #FFFAFA 0%, #FFF5F9 50%, #FAE6FA 100%);
+      color: #2D2629;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Subtle Editorial Drop Cap */
+    .drop-cap::first-letter {
+      float: left;
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 3.6rem;
+      line-height: 0.85;
+      padding-top: 0.2rem;
+      padding-right: 0.7rem;
+      padding-bottom: 0.05rem;
+      color: #D85C8A;
+    }
+
+    ::selection {
+      background-color: #FFDAE9;
+      color: #2D2629;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased px-5 sm:px-8 py-12 sm:py-20">
+
+  <!-- Centered Editorial Wrapper -->
+  <main class="w-full max-w-[680px] mx-auto my-auto">
+    
+    <!-- Minimalist Header & Title -->
+    <header class="text-center mb-8 sm:mb-10">
+      <p class="inline-block text-[11px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-berry bg-blush/50 border border-blush px-4 py-1.5 rounded-full mb-5">
+        READING RESPONSE &mdash; JARON LANIER
+      </p>
+
+      <h1 class="font-display text-4xl sm:text-5xl text-berry leading-[1.15] tracking-tight">
+        Oy, A.I. Reading Response
+      </h1>
+
+      <!-- Delicate Decorative Divider -->
+      <div class="mt-6 flex items-center justify-center gap-3" aria-hidden="true">
+        <span class="h-px w-14 bg-blush"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-berry/70"></span>
+        <span class="h-px w-14 bg-blush"></span>
+      </div>
+    </header>
+
+    <!-- Editorial Essay Card -->
+    <article class="bg-white/90 backdrop-blur-sm rounded-3xl border border-blush shadow-soft px-7 py-9 sm:px-12 sm:py-12">
+      <div class="space-y-6 text-[1.05rem] sm:text-[1.125rem] leading-[1.85] text-charcoal font-normal">
+        <p class="drop-cap">
+          After reading Jaron Lanier’s “Oy, A.I.,” I thought his perspective on artificial intelligence was interesting, especially the way he discusses how AI depends on human creativity. I agree with his point that AI should not be seen as something that can completely replace people. AI is able to generate images, writing, and ideas, but all of that is based on information and creativity that originally came from humans. As someone studying graphic design, I think this is important because designing something is more than just creating a finished product. There is a thought process, personal experience, and individual perspective behind the work that makes it meaningful. AI can be useful as a tool, but I don't think it should take away the value of the people who create the original ideas.
+        </p>
+
+        <p>
+          I also think Lanier brings up an important point about giving credit to the people whose work helps AI develop. Artists, writers, and other creators put time and effort into their work, so their contributions should not be overlooked just because technology can now produce something similar. Personally, I don't think AI is necessarily a bad thing, and I can see how it can make certain tasks easier. However, I think there needs to be a balance between using AI and maintaining human creativity. Technology should help us develop our ideas, not replace the originality and individuality that people bring to their work.
+        </p>
+      </div>
+    </article>
+
+    <!-- Minimal Footer -->
+    <footer class="mt-8 text-center">
+      <a href="index.html" class="group inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-berry transition-colors px-4 py-2 rounded-full hover:bg-blush/40">
+        <span class="transition-transform duration-200 group-hover:-translate-x-1" aria-hidden="true">&larr;</span>
+        <span>Back to Index</span>
+      </a>
+    </footer>
+
+  </main>
+
+</body>
+</html>
